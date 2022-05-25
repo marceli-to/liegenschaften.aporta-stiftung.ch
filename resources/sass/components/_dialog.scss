@@ -1,0 +1,34 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/dialog
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+.dialog {
+  align-items: flex-start;
+  background-color: rgba(255, 255, 255, .8);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1001;
+
+  .dialog__inner {
+    transform: translateY(100px);
+    max-width: 480px;
+    width: 100%;
+
+    .message {
+      background-color: $color-primary;
+      color: $color-white;
+      @include font-size($fs-md);
+      text-align: center;
+      margin-bottom: $space-3x;
+      padding: $space-6x;
+    }
+  }
+}

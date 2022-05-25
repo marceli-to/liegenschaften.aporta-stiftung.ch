@@ -1,0 +1,53 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/icons/ui
+ * -----------------------------------------------------------------------------
+ */
+
+.icon-replace,
+.icon-trash,
+.icon-plus-small {
+  @extend %icon;
+  color: $color-medium-grey;
+  margin-top: 2px;
+  transition: color .1s ease-in;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.icon-plus-small {
+  color: $color-primary;
+}
+
+.icon-plus {
+  @extend %icon;
+  color: $color-primary;
+  height: 20px; 
+  left: 50%; 
+  position: absolute; 
+  transform: translateX(-50%);
+  top: 90px; 
+  width: 20px;
+}
+
+.icon-export {
+  @extend %icon;
+  color: $color-white;
+  margin-top: 4px;
+}
+
+.icon-filter {
+  @extend %icon;
+  color: $color-primary;
+  margin-top: 4px;
+
+  &.is-active {
+    color: $color-white !important;
+  }
+}
+
+.icon-state {
+  color: $color-primary;
+}

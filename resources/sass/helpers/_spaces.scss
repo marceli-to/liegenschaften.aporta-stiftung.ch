@@ -1,0 +1,63 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/spaces
+ * -----------------------------------------------------------------------------
+ *
+ * Helpers for inner and outer spacing
+ *
+ */
+
+// Margin
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@for $i from 1 through 50 {
+  .my-#{$i}x { margin: $i * 4px 0; }
+}
+
+@for $i from 1 through 50 {
+  .mx-#{$i}x { margin: 0 $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .mt-#{$i}x { margin-top: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .mb-#{$i}x { margin-bottom: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .ml-#{$i}x { margin-left: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .mr-#{$i}x { margin-right: $i * 4px; }
+}
+
+// Padding
+@for $i from 1 through 50 {
+  .py-#{$i}x { padding: $i * 4px 0; }
+}
+
+@for $i from 1 through 50 {
+  .px-#{$i}x { padding: 0 $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .pt-#{$i}x { padding-top: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .pb-#{$i}x { padding-bottom: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .pl-#{$i}x { padding-left: $i * 4px; }
+}
+
+@for $i from 1 through 50 {
+  .pr-#{$i}x { padding-right: $i * 4px; }
+}

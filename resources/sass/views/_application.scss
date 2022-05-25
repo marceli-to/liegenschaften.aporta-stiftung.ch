@@ -1,0 +1,53 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: views/application
+ * -----------------------------------------------------------------------------
+ */
+
+.application {
+
+  h2:not(:first-of-type) {
+    margin-top: $space-22x;
+  }
+
+  .application-grid {
+    @extend %grid-cols-12;
+
+    > div {
+      @extend %span-4;
+    }
+  }
+
+  .application-row {
+    @extend %grid-cols-4;
+
+    > div {
+      border-top: 1px solid $color-light-grey;
+      color: $color-black;
+      min-height: $space-12x;
+      padding-top: $space-1x;
+
+      label {
+        color: $color-primary;
+      }
+    }
+  }
+}
+
+.application-action {
+  left: 24px;
+  position: absolute;
+  top: 84px;
+  width: calc(100% - 48px);
+
+  > div {
+    @extend %grid-cols-12;
+  }
+}
+
+.application-state {
+  border-top: 1px solid $color-primary;
+  color: $color-primary;
+  @include font-bold();
+  padding-top: $space-2x;
+}

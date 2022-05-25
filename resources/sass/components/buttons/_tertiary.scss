@@ -1,0 +1,25 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/buttons/secondary
+ * -----------------------------------------------------------------------------
+ */
+
+%btn-tertiary,
+.btn-tertiary {
+  @extend %btn;
+  background-color: $color-dark-grey;
+  color: $color-white;
+  @include font-bold();
+  
+  &:hover {
+    background-color: $color-medium-grey;
+    color: $color-white;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: $color-medium-grey;
+    color: $color-white;
+    pointer-events: none;
+  }
+}

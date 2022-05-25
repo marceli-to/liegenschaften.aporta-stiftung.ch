@@ -1,0 +1,60 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/menu/site
+ * -----------------------------------------------------------------------------
+ */
+
+nav.site-menu {
+  width: 100%;
+ 
+  ul {
+    @extend %grid-cols-12;
+    align-items: center;
+  }
+
+  li {
+    color: $color-white;
+    @include font-size($fs-md);
+    text-transform: uppercase;
+
+    &.site-menu__pagination {
+      span {
+        @include font-bold();
+        @include font-size($fs-md);
+        margin-left: $space-8x;
+        margin-right: $space-8x;
+      }
+    }
+  }
+
+  a {
+    color: $color-white;
+    @include font-bold();
+    @include font-size($fs-md);
+    line-height: 1 !important;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-underline-offset: 3px;
+
+    &:hover,
+    &.is-active {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  li.user {
+    @extend %start-10;
+    @extend %span-3;
+    display: flex;
+    justify-content: flex-end;
+    @include font-size($fs-sm);
+    a {
+      @include font-size($fs-sm);
+      @include font-regular();
+      text-transform: none;
+      text-underline-offset: 3px;
+      text-decoration-thickness: .075em;
+    }
+  }
+}

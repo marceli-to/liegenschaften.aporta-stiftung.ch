@@ -1,0 +1,3 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.6 0 0 2.7 0 6c0 1.6.9 3.1 2.3 4.2L0 16l5.9-4.2c.7.1 1.4.2 2.1.2 4.4 0 8-2.7 8-6s-3.6-6-8-6zm0 10.5c-.6 0-1.2-.1-1.8-.2l-.4-.1-3 2.1L4 9.6 3.2 9c-1.1-.8-1.7-1.9-1.7-3 0-2.4 3-4.5 6.5-4.5s6.5 2.1 6.5 4.5-3 4.5-6.5 4.5z"/><circle fill="currentColor" cx="8" cy="5.9" r=".9"/><circle fill="currentColor" cx="5" cy="5.9" r=".9"/><circle fill="currentColor" cx="11" cy="5.9" r=".9"/></svg>
+</template>

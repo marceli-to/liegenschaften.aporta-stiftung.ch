@@ -1,0 +1,104 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: form/global
+ * -----------------------------------------------------------------------------
+ */
+
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=password],
+input[type=date],
+input[type=time],
+textarea,
+select,
+button {
+	background-color: transparent;
+	border-radius: 0;
+	border: none;
+	color: $color-black;
+	display: block;
+	@include font-regular();
+	padding: 2px;
+	position: relative;
+	outline: none !important;
+  width: 100%;
+	z-index: 1;
+	-webkit-appearance: none;
+	-webkit-tap-highlight-color: $color-white;
+
+  &.is-invalid {
+    background-color: rgba($color-danger, .1);
+  }
+}
+ 
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=password],
+input[type=date],
+input[type=time],
+textarea,
+select {
+	transition: background-color .12s ease-out;
+}
+
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=password],
+input[type=date],
+input[type=time],
+textarea {
+  background-color: $color-light-blue;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  outline: none !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
+
+textarea {
+	height: auto;
+  min-height: 60px;
+}
+ 
+select {
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+}
+ 
+select::-ms-expand {
+	display: none;
+}
+
+// Reset arrows on number fields (Chrome, Safari, Edge, Opera)
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+// Firefox
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+input[type=submit],
+button {
+	background-color: $color-white;
+	border-radius: 0;
+	color: $color-primary;
+	display: block;
+	transition: background-color .1s ease-out;
+	width: auto;
+}

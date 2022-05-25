@@ -1,0 +1,63 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/menu/page
+ * -----------------------------------------------------------------------------
+ */
+
+nav.page-menu {
+  width: 100%;
+
+  ul {
+    @extend %grid-cols-12;
+    align-items: center;
+  }
+
+  li {
+    @extend %span-2;
+    height: 60px;
+  }
+
+  &.page-menu__user {
+    li {
+      @extend %span-4;
+    }
+  }
+
+  a {
+    align-items: center;
+    border-bottom: 1px solid $color-primary;
+    color: $color-primary;
+    display: flex;
+    @include font-size($fs-md);
+    height: inherit;
+    line-height: 1 !important;
+    text-transform: uppercase;
+
+    span {
+      display: block;
+      margin-left: $space-4x;
+      line-height: 1 !important;
+    }
+
+    svg {
+      display: block;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.has-selection {
+  nav.page-menu {
+    a {
+      &:not(.is-active) {
+        border-bottom: 1px solid $color-light-grey;
+        color: $color-light-grey;
+
+        &:hover {
+        border-bottom: 1px solid $color-primary;
+        color: $color-primary;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/anchors
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+%anchor,
+.anchor {
+  text-decoration: none;
+  transition: color .1s ease-out;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.anchor-download {
+  color: $color-black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+}
+

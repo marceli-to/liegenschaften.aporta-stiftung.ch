@@ -1,0 +1,37 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: form/select
+ * -----------------------------------------------------------------------------
+ */
+
+.select-wrapper {
+  background-color: transparent;
+  display: block;
+  position: relative;
+  width: 100%;
+
+	&:after {
+    @include background-default();
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 20px auto;
+    background-color: transparent;
+    content: '';
+    height: 100%;
+    right: 0;
+    position: absolute;
+    top: 0;
+    width: 32px;
+    z-index: 0;
+	}
+
+	select {
+    background-color: transparent !important;
+    display: block;
+    width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

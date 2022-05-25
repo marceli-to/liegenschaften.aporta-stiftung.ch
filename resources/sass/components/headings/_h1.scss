@@ -1,0 +1,12 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/headings/h1
+ * -----------------------------------------------------------------------------
+ */
+
+h1 {
+  @include font-bold();
+  @include font-size($fs-md);
+  margin-bottom: $space-6x;
+  text-transform: uppercase;
+}

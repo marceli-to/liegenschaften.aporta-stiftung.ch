@@ -1,0 +1,33 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/buttons/primary
+ * -----------------------------------------------------------------------------
+ */
+
+%btn-primary,
+.btn-primary {
+  @extend %btn;
+  background-color: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-secondary;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: $color-secondary;
+    color: $color-white;
+    pointer-events: none;
+  }
+
+  &.is-filter {
+    color: $color-dark-blue;
+
+    &.is-active,
+    &:hover {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+  }
+}

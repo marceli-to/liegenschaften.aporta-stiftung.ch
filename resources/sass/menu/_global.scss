@@ -1,0 +1,30 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/menu/global
+ * -----------------------------------------------------------------------------
+ */
+
+nav {
+
+  li {
+    display: block;
+  }
+
+  a {
+    display: block;
+    transition: all .04s ease-in;
+  }
+
+}
+
+.has-selector {
+  nav {
+    a {
+      color: $color-dark-blue !important;
+
+      &:hover {
+        color: $color-white !important
+      }
+    }
+  }
+}

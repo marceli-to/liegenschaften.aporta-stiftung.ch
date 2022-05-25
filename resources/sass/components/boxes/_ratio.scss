@@ -1,0 +1,34 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/section
+ * -----------------------------------------------------------------------------
+ */
+
+.ratio-container {
+  position: relative; 
+  padding-bottom: 56.25%; /* ratio 16x9 */
+  height: 0; 
+  overflow: hidden; 
+  width: 100%;
+  height: auto;
+  margin-bottom: $space-3x;
+}
+
+.ratio-container iframe,
+.ratio-container video {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+
+/* ratio 4x3 */
+.ratio-container--4x3 {
+  padding-bottom: 75%;
+}
+
+/* ratio 4x3 */
+.ratio-container--16x9 {
+  padding-bottom: 56.25%;
+}

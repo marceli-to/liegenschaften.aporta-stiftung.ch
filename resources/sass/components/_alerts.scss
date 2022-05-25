@@ -1,0 +1,24 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/alerts
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+.alert {
+  @include font-bold();
+  @include font-size($fs-md);
+  margin-bottom: $space-12x;
+  max-width: 480px;
+  text-align: center;
+  text-transform: uppercase;
+
+  &.alert--danger {
+    color: $color-danger;
+  }
+
+  &.alert--success {
+    color: $color-success;
+  }
+}
+

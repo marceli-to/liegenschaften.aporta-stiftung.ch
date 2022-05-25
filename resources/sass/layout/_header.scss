@@ -1,0 +1,27 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/header
+ * -----------------------------------------------------------------------------
+ */
+
+header.site-header {
+  background-color: $color-primary;
+  height: $site-header-height;
+  margin-bottom: $space-15x;
+
+  &.has-selector {
+    margin-bottom: $space-4x;
+  }
+
+  &.is-detail {
+    background-color: $color-dark-grey;
+    margin-bottom: 0;
+  }
+
+  > div {
+    @extend %inner-block;
+    align-items: center;
+    display: flex;
+    height: inherit;
+  }
+}

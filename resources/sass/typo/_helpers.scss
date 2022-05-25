@@ -1,0 +1,45 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/typo/helpers
+ * -----------------------------------------------------------------------------
+ *
+ * Helper classes for typography
+ *
+ */
+
+.uc { text-transform: uppercase;}
+.lc { text-transform: lowercase; }
+.cap { text-transform: capitalize; }
+.align-center { text-align: center; }
+.align-justify { text-align: justify; }
+.align-left { text-align: left; }
+.align-right { text-align: right; }
+.nobr { white-space: nowrap; }
+
+.text-primary {
+  color: $color-primary !important;
+}
+
+.text-grey {
+  color: $color-dark-grey !important;
+}
+
+.text-danger {
+  color: $color-danger !important;
+}
+
+/**
+ * Typography - Generic elements
+ * -----------------------------------------------------------------------------
+ */
+
+strong, b {
+  @include font-bold()
+}
+
+p {
+	margin-bottom: $space-3x;
+	&:last-child {
+		margin-bottom: 0 !important;
+	}
+}

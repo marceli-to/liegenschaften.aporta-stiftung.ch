@@ -1,0 +1,22 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: form/layout
+ * -----------------------------------------------------------------------------
+ */
+
+.form-group {
+
+}
+
+.form-helper {
+  color: $color-primary;
+  display: inline-block;
+  text-decoration: none;
+  @include font-size($fs-md);
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+}

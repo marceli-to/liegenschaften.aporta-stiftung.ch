@@ -1,0 +1,55 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: layout/menu/selector
+ * -----------------------------------------------------------------------------
+ */
+
+nav.selector {
+  margin-bottom: $space-15x;
+
+  > div {
+    @extend %inner-block;
+    background-color: $color-primary;
+    color: $color-white;
+    display: block;
+    margin-bottom: $space-3x;
+    padding-top: $space-4x;
+    padding-bottom: $space-6x;
+  }
+
+  h2 {
+    color: $color-white;
+    @include font-size($fs-md);
+    margin-bottom: $space-4x;
+  }
+
+  a {
+    align-items: center;
+    color: $color-white;
+    display: flex; 
+    @include font-size($fs-md);
+    padding: $space-1x 0;
+
+    span {
+      display: block;
+      margin-left: $space-3x;
+      margin-top: 2px;
+    }
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 $space-6x;
+    position: relative;
+    
+    @include bp-sm() {
+      max-width: $site-max-width;
+    }
+  }
+
+  .btn-secondary {
+    margin-top: $space-3x;
+  }
+}

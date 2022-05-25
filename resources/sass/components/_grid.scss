@@ -1,0 +1,66 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/grid
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+@for $i from 1 through 12 {
+  %grid-cols-#{$i},
+  .grid-cols-#{$i} {
+    display: grid;
+    grid-template-columns: repeat($i, minmax(0, 1fr));
+    grid-column-gap: $space-4x;
+  }
+}
+
+%grid-cols-none,
+.grid-cols-none {
+  grid-template-columns: none;
+}
+
+%grid-gap,
+.grid-gap {
+  grid-gap: $space-4x;
+}
+
+%grid-column-gap,
+.grid-column-gap {
+  grid-column-gap: $space-4x;
+}
+
+%grid-row-gap,
+.grid-row-gap {
+  grid-row-gap: $space-4x;
+}
+
+%grid-gap-none,
+.grid-gap-none {
+  grid-column-gap: 0;
+}
+
+@for $i from 1 through 12 {
+  %span-#{$i},
+  .span-#{$i} {
+    grid-column: span $i / span $i;
+  }
+}
+
+%span-full,
+.span-full	{
+  grid-column: 1 / -1;
+}
+
+@for $i from 1 through 12 {
+  %start-#{$i},
+  .start-#{$i} {
+    grid-column-start: $i !important;
+  }
+}
+
+@for $i from 1 through 12 {
+  %end-#{$i},
+  .end-#{$i} {
+    grid-column-end: $i;
+  }
+}
