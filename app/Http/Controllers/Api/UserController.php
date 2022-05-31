@@ -15,7 +15,6 @@ class UserController extends Controller
   {
     $user = User::findOrFail(auth()->user()->id);
     $data = [
-      'uuid' => $user->uuid,
       'firstname' => $user->firstname, 
       'name' => $user->name,
       'full_name' => $user->full_name, 

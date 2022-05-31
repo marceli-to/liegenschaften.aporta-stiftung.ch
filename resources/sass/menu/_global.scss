@@ -21,10 +21,14 @@ nav {
   nav {
     a {
       color: $color-dark-blue !important;
-
       &:hover {
         color: $color-white !important
       }
+    }
+
+    .page-title,
+    .icon-logo {
+      color: $color-dark-blue !important;
     }
   }
 }

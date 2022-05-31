@@ -24,21 +24,17 @@ Route::get('/apartments', [TestController::class, 'apartments']);
 Route::get('/apartment/{apartment}', [TestController::class, 'apartment']);
 Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
 Route::get('/building/{building}', [TestController::class, 'building']);
-
 Route::get('/estates', [TestController::class, 'estates']);
 Route::get('/estate/{estate}', [TestController::class, 'estate']);
-
 Route::get('/floors/{estate}', [TestController::class, 'floors']);
 Route::get('/rooms/{estate}', [TestController::class, 'rooms']);
 Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
-
-
 
 // Logged in users
 Route::middleware('auth:sanctum', 'verified')->group(function() {
   Route::get('/administration/{any?}', function () {
     return view('layout.authenticated');
-  })->where('any', '.*')->name('applications');
+  })->where('any', '.*')->middleware('role:admin')->name('applications');
 });
 
 

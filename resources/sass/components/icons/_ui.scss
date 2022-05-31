@@ -48,6 +48,14 @@
   }
 }
 
+.icon-user {
+  @extend %icon;
+  align-items: center;
+  color: $color-primary;
+  display: flex; 
+  margin-top: 4px;
+}
+
 .icon-state {
   color: $color-primary;
 }

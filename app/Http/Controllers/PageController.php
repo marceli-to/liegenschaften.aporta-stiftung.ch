@@ -22,7 +22,7 @@ class PageController extends BaseController
   {
     if (auth()->user()) 
     {
-      return redirect('/');
+      return redirect('/administration/objekte');
     }
     return redirect(route('login'));
   }

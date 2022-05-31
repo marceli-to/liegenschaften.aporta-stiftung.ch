@@ -4,14 +4,33 @@
     <div>
       <nav class="site-menu">
         <ul>
-          <li class="span-1">
-            Gesuche
+          <li class="span-2">
+            <icon-logo class="icon-logo" />
           </li>
-          <li class="span-1">
-            <router-link :to="{name: 'applications-current', params: { type: 'aktuell' }}" :active-class="'is-active'">
-              Aktuell
-            </router-link>
+          <li class="span-2 page-title">
+            Eglistrasse
           </li>
+          <li class="span-4 flex justify-center" v-if="$props.view != 'show'">
+            <a href="" :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" @click.prevent="toggleFilter()">
+              <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
+              <icon-cross v-if="$parent.hasFilter" />
+            </a>
+          </li>
+          <li class="user">
+            <a href="/logout" class="user icon-user">
+            {{user.email}}
+              <icon-user class="ml-4x"/>
+            </a>
+          </li>
+          <li class="span-1 flex items-center justify-end">
+            <a href="">
+              <icon-list />
+            </a>
+          </li>
+        </ul>
+        <!-- 
+        <ul>
+
           <template v-if="user.admin">
             <li class="span-1">
               <router-link :to="{name: 'applications-archive', params: { type: 'archiv' }}" :active-class="'is-active'">
@@ -68,6 +87,7 @@
             </a>
           </li>
         </ul>
+        -->
       </nav>
     </div>
   </header>
@@ -75,6 +95,8 @@
 </div>
 </template>
 <script>
+import IconLogo from "@/components/ui/icons/Logo.vue";
+import IconList from "@/components/ui/icons/List.vue";
 import IconExport from "@/components/ui/icons/Export.vue";
 import IconUser from "@/components/ui/icons/User.vue";
 import IconFilter from "@/components/ui/icons/Filter.vue";
@@ -89,7 +111,9 @@ export default {
     IconCross,
     IconUser,
     IconArrowLeft,
-    IconArrowRight
+    IconArrowRight,
+    IconLogo,
+    IconList
   },
 
   props: {
