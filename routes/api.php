@@ -27,8 +27,8 @@ Route::middleware('auth:sanctum')->group(function() {
   // Apartments
   Route::post('apartments/filter', [ApartmentController::class, 'filter']);
   Route::get('apartments', [ApartmentController::class, 'get']);
-  Route::get('apartment/{apartment:uuid}', [ApartmentController::class, 'find']);
-  Route::put('apartment/update/{apartment:uuid}', [ApartmentController::class, 'update']);
+  Route::get('apartment/{apartment}', [ApartmentController::class, 'find']);
+  Route::put('apartment/update/{apartment}', [ApartmentController::class, 'update']);
 
   // Settings
   Route::get('settings/buildings', [SettingsController::class, 'buildings']);

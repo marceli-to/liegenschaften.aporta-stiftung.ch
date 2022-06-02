@@ -5,10 +5,11 @@
  */
 
 nav.page-menu {
+  @extend %content-block;
   width: 100%;
 
   ul {
-    @extend %grid-cols-12;
+    @extend %grid-cols-10;
     align-items: center;
   }
 

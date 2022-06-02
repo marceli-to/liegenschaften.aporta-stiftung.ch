@@ -1,0 +1,69 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: views/apartments
+ * -----------------------------------------------------------------------------
+ */
+
+.iso-wrapper {
+  margin-bottom: $space-15x;
+}
+
+.iso {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  max-width: 600px;
+  width: 100%;
+}
+
+.apartment {
+  @extend %content-block;
+  width: 100%;
+  h2 {
+    em {
+      @include font-regular();
+    }
+  }
+
+  .apartment-grid {
+    @extend %grid-cols-10;
+  }
+
+  .apartment-row {
+    @extend %grid-cols-4;
+
+    > div {
+      border-top: 1px solid $color-light-grey;
+      color: $color-black;
+      min-height: $space-12x;
+      padding-top: $space-1x;
+
+      label {
+        color: $color-primary;
+      }
+    }
+  }
+
+  .apartment-floorplan {
+    padding: 0 $space-3x;
+  }
+}
+
+.apartment-action {
+  left: 24px;
+  position: absolute;
+  top: 84px;
+  width: calc(100% - 48px);
+
+  > div {
+    @extend %grid-cols-12;
+  }
+}
+
+.apartment-state {
+  border-top: 1px solid $color-primary;
+  color: $color-primary;
+  @include font-bold();
+  padding-top: $space-2x;
+}

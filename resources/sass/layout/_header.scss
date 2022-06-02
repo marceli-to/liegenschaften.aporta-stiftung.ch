@@ -9,9 +9,9 @@ header.site-header {
   height: $site-header-height;
   margin-bottom: $space-15x;
 
-  &.has-selector {
-    margin-bottom: $space-4x;
-  }
+  // &.has-selector {
+  //   margin-bottom: $space-4x;
+  // }
 
   &.is-detail {
     background-color: $color-dark-grey;

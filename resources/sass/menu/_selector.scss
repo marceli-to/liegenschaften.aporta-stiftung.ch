@@ -5,7 +5,12 @@
  */
 
 nav.selector {
-  margin-bottom: $space-15x;
+  //margin-bottom: $space-15x;
+  left: 0;
+  position: absolute;
+  top: calc(#{$site-header-height} + #{$space-4x});
+  width: 100%;
+  z-index: 500;
 
   > div {
     @extend %inner-block;

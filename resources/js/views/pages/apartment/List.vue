@@ -148,6 +148,7 @@
     </nav> -->
   </site-header>
   <site-main v-if="isFetched">
+    <isometrie />
     <list v-if="sortedData">
       <list-row-header>
         <list-item :cls="'span-2 list-item-header line-after'">
@@ -213,7 +214,11 @@
           </div>
         </list-item>
       </list-row-header>
-      <list-row v-for="apartment in sortedData" :key="apartment.id">
+      <div 
+        v-for="apartment in sortedData" 
+        class="list-row" :key="apartment.id" 
+        @mouseover="show(apartment.number)" 
+        @mouseleave="hide(apartment.number)">
         <list-item :cls="'span-2 list-item line-after'">
           <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
             {{ apartment.building.street }}
@@ -264,7 +269,7 @@
             <icon-state :id="apartment.state_id" />
           </router-link>
         </list-item>
-      </list-row>
+      </div>
     </list>
     <list-empty v-else>
       {{messages.emptyData}}
@@ -292,6 +297,7 @@ import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
+import Isometrie from '@/views/pages/apartment/components/Isometrie.vue';
 
 export default {
 
@@ -309,7 +315,8 @@ export default {
     ListRowHeader,
     ListItem,
     ListAction,
-    ListEmpty
+    ListEmpty,
+    Isometrie
   },
 
   mixins: [ErrorHandling, Helpers, Sort, Filter, Selector],
@@ -416,6 +423,16 @@ export default {
         this.isFetched = true;
         NProgress.done();
       });
+    },
+
+    show(number) {
+      let apt = document.querySelector(`[data-id="${number}"]`);
+      apt.classList.add('is-visible');
+    },
+
+    hide(number) {
+      let apt = document.querySelector(`[data-id="${number}"]`);
+      apt.classList.remove('is-visible');
     },
   },
 
