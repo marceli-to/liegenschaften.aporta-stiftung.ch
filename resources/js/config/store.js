@@ -8,8 +8,10 @@ export default new Vuex.Store({
     user: false,
     filter: {
       set: false,
-      state: null,
-      amount: null,
+      state_id: null,
+      building_id: null,
+      room_id: null,
+      exterior: null,
       items: [],
       menu: {
         index: 1,

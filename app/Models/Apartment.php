@@ -84,4 +84,48 @@ class Apartment extends Base
   {
     return $query->where('state_id', State::SOLD);
   }
+
+  /**
+   * Get the formated size of an apartment
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getSizeAttribute($value)
+  {
+    return $value > 0 ? $value : '–';
+  }
+
+  /**
+   * Get the formated size of an apartment terrace
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getSizeTerraceAttribute($value)
+  {
+    return $value > 0 ? $value : '–';
+  }
+
+  /**
+   * Get the formated size of an apartment patio
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getSizePatioAttribute($value)
+  {
+    return $value > 0 ? $value : '–';
+  }
+
+  /**
+   * Get the formated size of an apartment balcony
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getSizeBalconyAttribute($value)
+  {
+    return $value > 0 ? $value : '–';
+  }
 }

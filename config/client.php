@@ -32,7 +32,7 @@ return [
   |
   */
 
-  'domain' => env('APORTA_DOMAIN', 'https://gesuche.aporta-stiftung.ch'),
+  'domain' => env('APORTA_DOMAIN', 'https://liegenschaften.aporta-stiftung.ch'),
 
   /*
   |--------------------------------------------------------------------------

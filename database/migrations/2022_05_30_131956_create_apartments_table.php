@@ -18,10 +18,10 @@ class CreateApartmentsTable extends Migration
           $table->string('uuid', 36);
           $table->string('number', 20);
           $table->string('description', 255)->nullable();
-          $table->decimal('size', 8, 2)->nullable()->default(0.00);
-          $table->decimal('size_terrace', 8, 2)->nullable()->default(0.00);
-          $table->decimal('size_patio', 8, 2)->nullable()->default(0.00);
-          $table->decimal('size_balcony', 8, 2)->nullable()->default(0.00);
+          $table->decimal('size', 8, 1)->nullable()->default(0.0);
+          $table->decimal('size_terrace', 8, 1)->nullable()->default(0.0);
+          $table->decimal('size_patio', 8, 1)->nullable()->default(0.0);
+          $table->decimal('size_balcony', 8, 1)->nullable()->default(0.0);
           $table->tinyInteger('order')->default(-1);
           $table->tinyInteger('publish')->default(1);
           $table->foreignId('room_id')->constrained();

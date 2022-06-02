@@ -25,8 +25,11 @@ export default {
     resetFilter() {
       let filter = {
         set: false,
-        state: null,
-        amount: null,
+        state_id: null,
+        building_id: null,
+        room_id: null,
+        floor_id: null,
+        exterior: null,
         items: [],
         menu: {
           index: 1,
@@ -45,13 +48,14 @@ export default {
       filter[type] = value;
       filter['set'] = true;
       this.$store.commit('filter', filter);
+      console.log(this.$store.state.filter);
       this.fetchFiltered();
     },
 
     setFilterMenu(data) {
       let items = [];
       this.data.forEach(function(item){
-        items.push(item.uuid);
+        items.push(item.id);
       });
       let filter = this.$store.state.filter;
       filter.items = items;
@@ -70,9 +74,9 @@ export default {
       this.$store.commit('filter', filter);
     },
 
-    updateFilterMenu(uuid) {
+    updateFilterMenu(id) {
       let filter = this.$store.state.filter;
-      const index = filter.items.findIndex(x => x === uuid);
+      const index = filter.items.findIndex(x => x === id);
 
       filter.menu.current = filter.items[index];
 
@@ -97,7 +101,7 @@ export default {
   watch: {
     '$route'() {
       this.hasFilter = false;
-      this.updateFilterMenu(this.$route.params.uuid);
+      this.updateFilterMenu(this.$route.params.id);
     }
   }
 }

@@ -2,6 +2,7 @@ export default {
 
   data() {
     return {
+      hasSort: false,
       sortBy: '',
       sortDirection: 'asc'
     };
@@ -12,6 +13,7 @@ export default {
       if (s === this.sortBy) {
         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
       }
+      this.hasSort = true;
       this.sortBy = s;
     }
   },

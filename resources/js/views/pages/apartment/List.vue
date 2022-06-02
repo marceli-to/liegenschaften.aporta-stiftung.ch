@@ -1,43 +1,67 @@
 <template>
 <div>
   <site-header :user="$store.state.user">
-    <nav class="selector" v-if="hasFilter && isFetchedStates">
+    <nav class="selector" v-if="hasFilter && isFetchedFilterItems">
       <div>
         <div class="grid-cols-12">
-          <div class="span-4 start-2">
-            <h2>Status</h2>
-            <div class="grid-cols-2">
-              <div v-for="state in dataStates" :key="state.id">
-                <a href="javascript:;" @click.prevent="setFilterItem('state', state.id)">
-                  <icon-radio-active v-if="$store.state.filter.state == state.id" />
-                  <icon-radio v-else />
-                  <span>{{state.description}}</span>
-                </a>
-              </div>
+          <div class="span-1 start-2">
+            <h2>Haus</h2>
+            <div v-for="building in filterItems.buildings" :key="building.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
+                <icon-radio-active v-if="$store.state.filter.building_id == building.id" />
+                <icon-radio v-else />
+                <span>{{building.description}}</span>
+              </a>
             </div>
           </div>
-          <div class="span-4 start-7">
-            <h2>Betrag</h2>
-            <a href="" @click.prevent="setFilterItem('amount', 'lt:20000')">
-              <icon-radio-active v-if="$store.state.filter.amount == 'lt:20000'" />
-              <icon-radio v-else />
-              <span>&lt; 20000</span>
-            </a>
-            <a href="" @click.prevent="setFilterItem('amount', 'gt:20000')">
-              <icon-radio-active v-if="$store.state.filter.amount == 'gt:20000'" />
-              <icon-radio v-else />
-              <span>&gt; 20000</span>
-            </a>
+          <div class="span-2">
+            <h2>Zimmer</h2>
+            <div v-for="room in filterItems.rooms" :key="room.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
+                <icon-radio-active v-if="$store.state.filter.room_id == room.id" />
+                <icon-radio v-else />
+                <span>{{room.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Geschoss</h2>
+            <div v-for="floor in filterItems.floors" :key="floor.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
+                <icon-radio-active v-if="$store.state.filter.floor_id == floor.id" />
+                <icon-radio v-else />
+                <span>{{floor.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Aussenraum</h2>
+            <div v-for="(value, key) in filterItems.exteriors" :key="key">
+              <a href="javascript:;" @click.prevent="setFilterItem('exterior', key)">
+                <icon-radio-active v-if="$store.state.filter['exterior'] == key" />
+                <icon-radio v-else />
+                <span>{{value}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Status</h2>
+            <div v-for="state in filterItems.states" :key="state.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('state_id', state.id)">
+                <icon-radio-active v-if="$store.state.filter.state_id == state.id" />
+                <icon-radio v-else />
+                <span>{{state.description}}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
       <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen</a>
       <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetFilter()">Zurücksetzen</a>
     </nav>
-    <nav class="selector" v-if="hasSelector">
+    <!-- <nav class="selector" v-if="hasSelector">
       <div>
         <div class="grid-cols-12">
-          <!--
           <div class="span-3 start-2">
             <h2>Zusagen/Absagen</h2>
             <div>
@@ -78,7 +102,6 @@
               </a>
             </div>
           </div>
-          -->
           <div class="span-3 start-2">
             <h2>Exportieren</h2>
             <div>
@@ -101,112 +124,151 @@
           </div>
         </div>
       </div>
-        <a 
-          :href="'/export/?v=' + cachebuster" 
-          target="_blank"
-          class="btn-primary is-filter" 
-          @click="hideSelector()"
-          v-if="$store.state.selector.type && $store.state.selector.type.includes('export_')">
-          Exportieren
-        </a>
-        <a
-          href="javascript:;" 
-          class="btn-primary is-filter" 
-          @click.prevent="hideSelector()"
-          v-else>
-          Anzeigen
-        </a>
-        <a 
-          href="javascript:;" 
-          class="btn-secondary is-outline" 
-          @click.prevent="resetSelector()">
-          Abbrechen
-        </a>
-    </nav>
+      <a 
+        :href="'/export/?v=' + cachebuster" 
+        target="_blank"
+        class="btn-primary is-filter" 
+        @click="hideSelector()"
+        v-if="$store.state.selector.type && $store.state.selector.type.includes('export_')">
+        Exportieren
+      </a>
+      <a
+        href="javascript:;" 
+        class="btn-primary is-filter" 
+        @click.prevent="hideSelector()"
+        v-else>
+        Anzeigen
+      </a>
+      <a 
+        href="javascript:;" 
+        class="btn-secondary is-outline" 
+        @click.prevent="resetSelector()">
+        Abbrechen
+      </a>
+    </nav> -->
   </site-header>
   <site-main v-if="isFetched">
-    <!-- <list v-if="data.length">
+    <list v-if="sortedData">
       <list-row-header>
-        <list-item :cls="'span-1 list-item-header'">&nbsp;</list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
-          Eingang
-          <a href="" @click.prevent="sort('created_at_timestamp')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :cls="'span-3 list-item-header line-after'">
-          Organisation
-          <a href="" @click.prevent="sort('name')">
+        <list-item :cls="'span-2 list-item-header line-after'">
+          Adresse
+          <a href="" @click.prevent="sort('building.street')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :cls="'span-1 list-item-header line-after'">
-          Beantragt
-          <a href="" @click.prevent="sort('requested_contribution')">
+          Bezeichnung
+          <a href="" @click.prevent="sort('description')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :cls="'span-2 list-item-header line-after'">
+          Mieter*in
+          <a href="" @click.prevent="sort('tenant.name')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :cls="'span-1 list-item-header line-after'">
-          Bewilligt
-          <a href="" @click.prevent="sort('project_contribution_approved')">
+          Zimmer
+          <a href="" @click.prevent="sort('room.abbreviation')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-2 list-item-header line-after'">Kontakt</list-item>
-        <list-item :cls="'span-2 list-item-header'">E-Mail</list-item>
+        <list-item :cls="'span-1 list-item-header line-after'">
+          M<sup>2</sup>
+          <a href="" @click.prevent="sort('size')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :cls="'span-1 list-item-header line-after'">
+          Terrasse
+          <a href="" @click.prevent="sort('size_terrace')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :cls="'span-1 list-item-header line-after'">
+          Sitzplatz
+          <a href="" @click.prevent="sort('size_patio')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :cls="'span-1 list-item-header line-after'">
+          Balkon
+          <a href="" @click.prevent="sort('size_balcony')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :cls="'span-1 list-item-header'">
+          Nummer
+          <a href="" @click.prevent="sort('number')">
+            <icon-sort />
+          </a>
+        </list-item>
         <list-item :cls="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
-            <a href="" @click.prevent="sort('application_state_id')">
+            <a href="" @click.prevent="sort('state_id')">
               <icon-sort />
             </a>
           </div>
         </list-item>
       </list-row-header>
-      <list-row v-for="d in sortedData" :key="d.uuid" :class="">
-        <list-item :cls="'span-1 list-item-bullet'">
-
-        </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.created_at }}
-          </router-link>
-        </list-item>
-        <list-item :cls="'span-3 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.name }}
+      <list-row v-for="apartment in sortedData" :key="apartment.id">
+        <list-item :cls="'span-2 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.building.street }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.project_contribution_requested | currency }}
-          </router-link>
-        </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.project_contribution_approved | currency }}
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.description }}
           </router-link>
         </list-item>
         <list-item :cls="'span-2 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.applicant_name }}
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.tenant ? apartment.tenant.full_name : '–' }}
           </router-link>
         </list-item>
-        <list-item :cls="'span-2 list-item line-after'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}">
-            {{ d.applicant_email }}
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.room.abbreviation }}
+          </router-link>
+        </list-item>
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.size }} m<sup>2</sup>
+          </router-link>
+        </list-item>
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.size_terrace }} <span v-if="apartment.size_terrace > 0">m<sup>2</sup></span>
+          </router-link>
+        </list-item>
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.size_patio }} <span v-if="apartment.size_patio > 0">m<sup>2</sup></span>
+          </router-link>
+        </list-item>
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
+          </router-link>
+        </list-item>
+        <list-item :cls="'span-1 list-item line-after'">
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+            {{ apartment.number }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item-state flex justify-center'">
-          <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: d.uuid }}" class="icon-state">
-            <icon-state :id="d.application_state_id" />
+          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}" class="icon-state">
+            <icon-state :id="apartment.state_id" />
           </router-link>
         </list-item>
       </list-row>
     </list>
     <list-empty v-else>
       {{messages.emptyData}}
-    </list-empty> -->
+    </list-empty>
   </site-main>
 </div>
 </template>
@@ -247,7 +309,7 @@ export default {
     ListRowHeader,
     ListItem,
     ListAction,
-    ListEmpty,
+    ListEmpty
   },
 
   mixins: [ErrorHandling, Helpers, Sort, Filter, Selector],
@@ -258,20 +320,31 @@ export default {
       // Data
       data: [],
 
-      // Data states
-      dataStates: [],
+      // Filter items
+      filterItems: {
+        buildings: [],
+        rooms: [],
+        floors: [],
+        exteriors: [],
+        states: [],
+      },
 
       // Routes
       routes: {
         list: '/api/apartments',
-        listFilter: '/api/apartments/filter',
-        listStates: '/api/apartments/states',
-        toggle: '/api/apartment/state',
+        filter: '/api/apartments/filter',
+        settings: {
+          buildings: '/api/settings/buildings',
+          rooms: '/api/settings/rooms',
+          floors: '/api/settings/floors',
+          exteriors: '/api/settings/exteriors',
+          states: '/api/settings/states'
+        }
       },
 
       // States
       isFetched: false,
-      isFetchedStates: false,
+      isFetchedFilterItems: false,
 
       // Messages
       messages: {
@@ -284,7 +357,6 @@ export default {
   mounted() {
     NProgress.configure({ showBar: false });
     this.beforeFetch()
-    //this.fetchStates();
   },
 
   methods: {
@@ -294,6 +366,7 @@ export default {
         this.fetchFiltered();
         return;
       }
+      this.fetchFilterItems();
       this.fetch()
     },
 
@@ -307,24 +380,37 @@ export default {
       });
     },
 
-    fetchStates() {
-      this.isFetchedStates = false;
-      NProgress.start();
-      this.axios.get(`${this.routes.listStates}`).then(response => {
-        this.dataStates = response.data.data;
-        this.isFetchedStates = true;
-        NProgress.done();
-      });
+    fetchFilterItems() {
+      this.isFetchedFilterItems = false;
+      this.axios.all([
+        this.axios.get(this.routes.settings.buildings),
+        this.axios.get(this.routes.settings.rooms),
+        this.axios.get(this.routes.settings.floors),
+        this.axios.get(this.routes.settings.exteriors),
+        this.axios.get(this.routes.settings.states),
+      ]).then(axios.spread((...responses) => {
+        this.filterItems = {
+          buildings: responses[0].data,
+          rooms: responses[1].data,
+          floors: responses[2].data,
+          exteriors: responses[3].data,
+          states: responses[4].data,
+        };
+        this.isFetchedFilterItems = true;
+      }));
     },
 
     fetchFiltered() {
       let param = {
-        state: this.$store.state.filter.state ? this.$store.state.filter.state : null,
-        amount: this.$store.state.filter.amount ? this.$store.state.filter.amount : null
+        building_id: this.$store.state.filter.building_id ? this.$store.state.filter.building_id : null,
+        room_id: this.$store.state.filter.room_id ? this.$store.state.filter.room_id : null,
+        floor_id: this.$store.state.filter.floor_id ? this.$store.state.filter.floor_id : null,
+        exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
+        state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
       };
       NProgress.start();
       this.isFetched = false;
-      this.axios.post(`${this.routes.listFilter}`, param).then(response => {
+      this.axios.post(`${this.routes.filter}`, param).then(response => {
         this.data = response.data.data;
         this.setFilterMenu(this.data);
         this.isFetched = true;

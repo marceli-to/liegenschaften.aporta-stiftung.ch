@@ -10,15 +10,15 @@
   .list-row-header {
     @extend %grid-cols-12;
     background-color: transparent;
+    min-height: 60px;
+  }
+
+  .list-row-header {
     min-height: 80px;
   }
 
   .list-row {
     transition: background-color .06s ease-in;
-
-    &.is-new {
-      @include font-bold();
-    }
 
     &:hover {
       background-color: $color-light-blue;
@@ -48,11 +48,23 @@
     border-top: 1px solid $color-primary;
     margin-top: -1px;
 
+    &.list-item__empty {
+      border-top: none;
+    }
+    
+    &.list-item__hidden {
+      border-top: none;
+
+      * {
+        opacity: 0;
+      }
+    }
+
     > a, 
     > span {
       color: $color-primary;
       display: block;
-      min-height: 80px;
+      min-height: inherit;
       padding-top: $space-2x;
     }
 
@@ -101,6 +113,4 @@
       width: 16px;
     }
   }
-
-
 }
