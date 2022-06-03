@@ -58,7 +58,10 @@ class Apartment extends Base
 
 	public function tenant()
 	{
-		return $this->hasOne(Tenant::class, 'id', 'tenant_id');
+		return $this->hasOne(Tenant::class, 'id', 'tenant_id')->withDefault([
+      'firstname' => null,
+      'name' => null
+    ]);
 	}
 
   /**

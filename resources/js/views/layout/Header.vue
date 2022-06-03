@@ -10,6 +10,15 @@
           <li class="span-2 page-title">
             Eglistrasse
           </li>
+          <li class="span-4 flex justify-center site-menu__pagination" v-if="$store.state.filter.items.length && $props.view == 'show'">
+            <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
+              <icon-arrow-left />
+            </router-link>
+              <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.next }}">
+              <icon-arrow-right />
+            </router-link>
+          </li>
           <li class="span-4 flex justify-center" v-if="$props.view != 'show'">
             <a href="" :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" @click.prevent="toggleFilter()">
               <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
@@ -28,66 +37,6 @@
             </a>
           </li>
         </ul>
-        <!-- 
-        <ul>
-
-          <template v-if="user.admin">
-            <li class="span-1">
-              <router-link :to="{name: 'applications-archive', params: { type: 'archiv' }}" :active-class="'is-active'">
-                Archiv
-              </router-link>
-            </li>
-            <li class="span-1">
-              <a href="" class="icon-export" @click.prevent="toggleSelector()" v-if="$props.view != 'show' && $route.params.type != 'archiv'">
-                <icon-export />
-              </a>
-            </li>
-            <li class="span-4 flex justify-center site-menu__pagination" v-if="$store.state.filter.items.length && $props.view == 'show'">
-              <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: $store.state.filter.menu.prev }}">
-                <icon-arrow-left />
-              </router-link>
-                <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
-              <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: $store.state.filter.menu.next }}">
-                <icon-arrow-right />
-              </router-link>
-            </li>
-            <li class="span-4 flex justify-center" v-else-if="$props.view != 'show'">
-              <a href="" :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" @click.prevent="toggleFilter()">
-                <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
-                <icon-cross v-if="$parent.hasFilter" />
-              </a>
-            </li>
-          </template>
-          <template v-else>
-            <li class="span-1">
-              <a href="" class="icon-export" @click.prevent="toggleSelector()" v-if="$props.view != 'show' && $route.params.type != 'archiv'">
-                <icon-export />
-              </a>
-            </li>
-            <li class="span-4 start-5 flex justify-center site-menu__pagination" v-if="$store.state.filter.items.length && $props.view == 'show'">
-              <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: $store.state.filter.menu.prev }}">
-                <icon-arrow-left />
-              </router-link>
-                <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
-              <router-link :to="{name: 'application-show', params: { type: $route.params.type, uuid: $store.state.filter.menu.next }}">
-                <icon-arrow-right />
-              </router-link>
-            </li>
-            <li class="span-4 start-5 flex justify-center" v-else-if="$props.view != 'show'">
-              <a href="" class="icon-filter" @click.prevent="toggleFilter()">
-                <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
-                <icon-cross v-if="$parent.hasFilter" />
-              </a>
-            </li>
-          </template>
-          <li class="user">
-            <a href="/logout" class="user icon-filter" style="display: flex; align-items: center">
-            {{user.email}}
-              <icon-user class="ml-4x"/>
-            </a>
-          </li>
-        </ul>
-        -->
       </nav>
     </div>
   </header>

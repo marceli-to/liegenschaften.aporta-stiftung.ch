@@ -61,7 +61,7 @@ export default {
     setFilterMenu(data) {
       let items = [];
       this.data.forEach(function(item){
-        items.push(item.id);
+        items.push(item.uuid);
       });
       let filter = this.$store.state.filter;
       filter.items = items;
@@ -108,7 +108,7 @@ export default {
   watch: {
     '$route'() {
       this.hasFilter = false;
-      this.updateFilterMenu(this.$route.params.id);
+      this.updateFilterMenu(this.$route.params.uuid);
     }
   }
 }

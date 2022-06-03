@@ -6,7 +6,7 @@
   </site-header>
   <site-main v-if="isFetched">
     <page-menu 
-      :id="$route.params.id"
+      :id="$route.params.uuid"
       :apartment="apartment" 
     ></page-menu>
     <apartment-wrapper>
@@ -59,11 +59,11 @@
           <h2>Hauptmieter*in</h2>
           <apartment-row>
             <div class="span-1"><label>Name</label></div>
-            <div class="span-3">{{ apartment.tenant ? apartment.tenant.name : '–' }}</div>
+            <div class="span-3">{{ apartment.tenant_id ? apartment.tenant.name : '–' }}</div>
           </apartment-row>
           <apartment-row>
             <div class="span-1"><label>Vorname</label></div>
-            <div class="span-3">{{ apartment.tenant ? apartment.tenant.firstname : '–' }}</div>
+            <div class="span-3">{{ apartment.tenant_id ? apartment.tenant.firstname : '–' }}</div>
           </apartment-row>
           <h2 class="mt-15x">Angeboten</h2>
         </div>
@@ -135,10 +135,10 @@ export default {
     fetch() {
       this.isFetched = false;
       NProgress.start();
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.id}`).then(response => {
+      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.apartment = response.data;
         this.isFetched = true;
-        this.updateFilterMenu(this.$route.params.id);
+        this.updateFilterMenu(this.$route.params.uuid);
         NProgress.done();
       });
     },

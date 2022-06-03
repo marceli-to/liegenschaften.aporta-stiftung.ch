@@ -11,13 +11,13 @@ const routes = [
   
   {
     name: 'apartment-show',
-    path: '/administration/objekt/:id/anzeigen',
+    path: '/administration/objekt/:uuid/anzeigen',
     component: ApartmentShow,
   },
 
   {
     name: 'apartment-edit',
-    path: '/administration/objekt/:id/bearbeiten',
+    path: '/administration/objekt/:uuid/bearbeiten',
     component: ApartmentUpdate,
   },
 ];

@@ -5,6 +5,7 @@ use App\Http\Resources\DataCollection;
 use App\Models\Estate;
 use App\Models\Building;
 use App\Models\Apartment;
+use App\Models\Tenant;
 use App\Http\Requests\ApartmentStoreRequest;
 use Illuminate\Http\Request;
 
@@ -71,13 +72,41 @@ class ApartmentController extends Controller
    * Update a apartment
    *
    * @param Apartment $apartment
-   * @param  \Illuminate\Http\ApartmentStoreRequest $request
+   * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
-  public function update(Apartment $apartment, ApartmentStoreRequest $request)
+  public function update(Apartment $apartment, Request $request)
   {
-    $apartment->update($request->all());
-    $apartment->save();
+    $apartment = Apartment::with('tenant')->find($apartment->id);
+
+    if (!$request->input('tenant.firstname') && !$request->input('tenant.name'))
+    {
+      $apartment->tenant_id = null;
+      $apartment->save();
+      return response()->json('successfully updated');
+    }
+
+    if ($request->input('tenant.firstname') && $request->input('tenant.name'))
+    {
+      $tenant = Tenant::where('firstname', $request->input('tenant.firstname'))
+                      ->where('name', $request->input('tenant.name'))
+                      ->get()->first();
+      if (!$tenant)
+      {
+        $tenant = Tenant::create([
+          'uuid' => \Str::uuid(),
+          'firstname' => $request->input('tenant.firstname'),
+          'name' => $request->input('tenant.name'),
+        ]);
+        $apartment->tenant_id = $tenant->id;
+        $apartment->save();
+      }
+      else
+      {
+        $apartment->tenant_id = $tenant->id;
+        $apartment->save();
+      }
+    }
     return response()->json('successfully updated');
   }
 

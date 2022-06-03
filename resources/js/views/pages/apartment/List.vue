@@ -216,56 +216,56 @@
       </list-row-header>
       <div 
         v-for="apartment in sortedData" 
-        class="list-row" :key="apartment.id" 
+        class="list-row" :key="apartment.uuid" 
         @mouseover="show(apartment.number)" 
         @mouseleave="hide(apartment.number)">
         <list-item :cls="'span-2 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.building.street }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.description }}
           </router-link>
         </list-item>
         <list-item :cls="'span-2 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.tenant ? apartment.tenant.full_name : '–' }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.room.abbreviation }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size }} m<sup>2</sup>
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_terrace }} <span v-if="apartment.size_terrace > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_patio }} <span v-if="apartment.size_patio > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item line-after'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.number }}
           </router-link>
         </list-item>
         <list-item :cls="'span-1 list-item-state flex justify-center'">
-          <router-link :to="{name: 'apartment-show', params: { id: apartment.id }}" class="icon-state">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
           </router-link>
         </list-item>
@@ -282,8 +282,8 @@ import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
-import Filter from "@/views/pages/application/mixins/Filter";
-import Selector from "@/views/pages/application/mixins/Selector";
+import Filter from "@/views/pages/apartment/mixins/Filter";
+import Selector from "@/views/pages/apartment/mixins/Selector";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
@@ -369,12 +369,12 @@ export default {
   methods: {
 
     beforeFetch() {
+      this.fetchFilterItems();
       if (this.$store.state.filter.set) {
         this.fetchFiltered();
         return;
       }
-      this.fetchFilterItems();
-      this.fetch()
+      this.fetch();
     },
 
     fetch() {

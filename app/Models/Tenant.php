@@ -11,7 +11,7 @@ class Tenant extends Base
   protected $fillable = [
     'uuid',
     'firstname',
-    'lastname',
+    'name',
     'publish'
   ];
 
