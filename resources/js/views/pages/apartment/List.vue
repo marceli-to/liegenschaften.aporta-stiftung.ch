@@ -151,61 +151,64 @@
     <isometrie />
     <list v-if="sortedData">
       <list-row-header>
-        <list-item :cls="'span-2 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header'">
+          &nbsp;
+        </list-item>
+        <list-item :class="'span-2 list-item-header line-after'">
           Adresse
           <a href="" @click.prevent="sort('building.street')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header line-after'">
           Bezeichnung
           <a href="" @click.prevent="sort('description')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-2 list-item-header line-after'">
+        <list-item :class="'span-2 list-item-header line-after'">
           Mieter*in
           <a href="" @click.prevent="sort('tenant.name')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header line-after'">
           Zimmer
           <a href="" @click.prevent="sort('room.abbreviation')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header line-after'">
           M<sup>2</sup>
           <a href="" @click.prevent="sort('size')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header line-after'">
           Terrasse
           <a href="" @click.prevent="sort('size_terrace')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header line-after'">
           Sitzplatz
           <a href="" @click.prevent="sort('size_patio')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header line-after'">
+        <list-item :class="'span-1 list-item-header'">
           Balkon
           <a href="" @click.prevent="sort('size_balcony')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :cls="'span-1 list-item-header'">
+        <!-- <list-item :class="'span-1 list-item-header'">
           Nummer
           <a href="" @click.prevent="sort('number')">
             <icon-sort />
           </a>
-        </list-item>
-        <list-item :cls="'span-1 list-item-header flex direction-column align-center'">
+        </list-item> -->
+        <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
             <a href="" @click.prevent="sort('state_id')">
@@ -215,56 +218,65 @@
         </list-item>
       </list-row-header>
       <div 
-        v-for="apartment in sortedData" 
-        class="list-row" :key="apartment.uuid" 
+        v-for="(apartment, index) in sortedData" 
+        class="list-row" 
+        :key="apartment.uuid" 
         @mouseover="show(apartment.number)" 
         @mouseleave="hide(apartment.number)">
-        <list-item :cls="'span-2 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
+          <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
+           <icon-plus class="icon"  />
+          </a>
+          <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
+           <icon-trash class="icon" />
+          </a>
+        </list-item>
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.building.street }}
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.description }}
           </router-link>
         </list-item>
-        <list-item :cls="'span-2 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.tenant ? apartment.tenant.full_name : '–' }}
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.room.abbreviation }}
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size }} m<sup>2</sup>
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_terrace }} <span v-if="apartment.size_terrace > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_patio }} <span v-if="apartment.size_patio > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-        <list-item :cls="'span-1 list-item line-after'">
+        <!-- <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.number }}
           </router-link>
-        </list-item>
-        <list-item :cls="'span-1 list-item-state flex justify-center'">
+        </list-item> -->
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
           </router-link>
@@ -284,10 +296,13 @@ import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/pages/apartment/mixins/Filter";
 import Selector from "@/views/pages/apartment/mixins/Selector";
+import Collection from "@/views/pages/apartment/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconRadioActive from "@/components/ui/icons/RadioActive.vue";
+import IconPlus from "@/components/ui/icons/Plus-sm.vue";
+import IconTrash from "@/components/ui/icons/Trash-sm.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
@@ -310,6 +325,8 @@ export default {
     IconState,
     IconRadio,
     IconRadioActive,
+    IconPlus,
+    IconTrash,
     List,
     ListRow,
     ListRowHeader,
@@ -319,7 +336,7 @@ export default {
     Isometrie
   },
 
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Selector],
+  mixins: [ErrorHandling, Helpers, Sort, Filter, Selector, Collection],
 
   data() {
     return {

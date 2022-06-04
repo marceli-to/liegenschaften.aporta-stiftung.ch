@@ -20,6 +20,9 @@ export default new Vuex.Store({
         next: null
       }
     },
+    collection: {
+      items: [],
+    },
     selector: {
       set: false,
       type: null,
@@ -34,6 +37,9 @@ export default new Vuex.Store({
     },
     selector(state, selector) {
       state.selector = selector;
+    },
+    collection(state, collection) {
+      state.collection = collection;
     }
   }
 });

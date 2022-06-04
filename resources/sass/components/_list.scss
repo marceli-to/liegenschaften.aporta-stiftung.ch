@@ -33,11 +33,13 @@
     }
   }
 
+  .list-item-action,
   .list-item-bullet,
   .list-item-state {
     padding-top: $space-2x;
   }
 
+  .list-item-action,
   .list-item-bullet,
   .list-item-state {
     display: flex;
@@ -45,8 +47,12 @@
   }
 
   .list-item {
-    border-top: 1px solid $color-primary;
+    border-top: 1px solid $color-secondary;
     margin-top: -1px;
+
+    &.is-first {
+      border-top: 1px solid $color-primary;
+    }
 
     &.list-item__empty {
       border-top: none;
@@ -99,6 +105,7 @@
     }
   }
 
+  .list-item-action,
   .list-item-bullet {
     background-color: $color-white;
     position: relative;

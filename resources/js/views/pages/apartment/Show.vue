@@ -14,7 +14,7 @@
         <div class="span-6 line-after">
           <h2>{{ apartment.description }}&nbsp;&nbsp;<em>{{ apartment.room.description }} {{ apartment.size }} M<sup>2</sup></em></h2>
           <apartment-row>
-            <div class="span-4">
+            <div class="span-4 is-first">
               <h3>Grundriss</h3>
               <figure class="apartment-floorplan">
                 <img :src="`/assets/media/${apartment.number}.svg`" height="600" width="600" class="is-responsive">
@@ -22,7 +22,7 @@
             </div>
           </apartment-row>
           <apartment-row class="mt-15x">
-            <div class="span-4">
+            <div class="span-4 is-first">
               <h3>Lage / Details</h3>
               <div class="grid-cols-12">
                 <div class="span-6">
@@ -58,8 +58,8 @@
         <div class="span-4">
           <h2>Hauptmieter*in</h2>
           <apartment-row>
-            <div class="span-1"><label>Name</label></div>
-            <div class="span-3">{{ apartment.tenant_id ? apartment.tenant.name : '–' }}</div>
+            <div class="span-1 is-first"><label>Name</label></div>
+            <div class="span-3 is-first">{{ apartment.tenant_id ? apartment.tenant.name : '–' }}</div>
           </apartment-row>
           <apartment-row>
             <div class="span-1"><label>Vorname</label></div>
