@@ -1,11 +1,9 @@
 <template>
 <div>
-  <site-header :user="$store.state.user">
-
-  </site-header>
+  <site-header :user="$store.state.user"></site-header>
   <site-main v-if="isFetched">
     <list v-if="sortedData.length">
-      <list-row-header>
+      <list-header>
         <list-item :class="'span-1 list-item-header'">
           &nbsp;
         </list-item>
@@ -65,13 +63,11 @@
             </a>
           </div>
         </list-item>
-      </list-row-header>
+      </list-header>
       <div 
         v-for="(apartment, index) in sortedData" 
         class="list-row" 
-        :key="apartment.uuid" 
-        @mouseover="show(apartment.number)" 
-        @mouseleave="hide(apartment.number)">
+        :key="apartment.uuid">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
            <icon-trash class="icon" />
@@ -117,7 +113,6 @@
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
@@ -129,22 +124,53 @@
       {{messages.emptyData}}
     </list-empty>
     <form @submit.prevent="submit" class="collection" v-if="sortedData.length">
-      <nav class="page-menu page-menu__collection">
+      <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
         <ul>
-          <li class="span-4 start-3">
+          <li class="start-4">
             <a href="">
               <icon-cross />
               <span>Zurücksetzen</span>
             </a>
           </li>
-          <li class="span-4">
+          <li>
             <a href="">
-              <icon-cross />
+              <icon-arrow-right />
               <span>Senden</span>
             </a>
           </li>
         </ul>
+        <div class="flex justify-center mt-6x">
+          <a href="" @click.prevent="addCandidate()">
+            <icon-plus class="icon" />
+          </a>
+        </div>
       </nav>
+      <list class="mt-8x">
+        <list-header class="is-narrow">
+          <list-item :class="'span-2 start-4 list-item-header line-after'">Vorname</list-item>
+          <list-item :class="'span-2 list-item-header line-after'">Nachname</list-item>
+          <list-item :class="'span-2 list-item-header'">E-Mail</list-item>
+        </list-header>
+        <list-row 
+          v-for="(candidate, index) in candidates"
+          :key="index"
+          class="no-hover is-narrow mb-5x">
+          <list-item class="span-2 start-4 list-item is-first line-after">
+            <input type="text" v-model="candidate.firstname" required @blur="validate($event, candidate)">
+          </list-item>
+          <list-item class="span-2 list-item is-first line-after">
+            <input type="text" v-model="candidate.name" required @blur="validate($event, candidate)">
+          </list-item>
+          <list-item class="span-2 list-item is-first">
+            <input type="email" v-model="candidate.email" required @blur="validate($event, candidate)">
+          </list-item>
+        </list-row>
+      </list>
+      <div class="flex justify-center mt-6x" v-if="candidates.length > 1">
+        <a href="" @click.prevent="removeCandidate()">
+          <icon-trash class="icon" />
+        </a>
+      </div>
     </form>
   </site-main>
 </div>
@@ -155,20 +181,19 @@ import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/pages/apartment/mixins/Filter";
-import Selector from "@/views/pages/apartment/mixins/Selector";
 import Collection from "@/views/pages/apartment/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconRadioActive from "@/components/ui/icons/RadioActive.vue";
-import IconPlus from "@/components/ui/icons/Plus-sm.vue";
+import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash-sm.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
-import Bullet from "@/components/ui/misc/Bullet.vue";
+import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
-import ListRowHeader from "@/components/ui/layout/ListRowHeader.vue";
+import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
@@ -180,7 +205,6 @@ export default {
     NProgress,
     SiteHeader,
     SiteMain,
-    Bullet,
     IconSort,
     IconState,
     IconRadio,
@@ -188,15 +212,16 @@ export default {
     IconPlus,
     IconTrash,
     IconCross,
+    IconArrowRight,
     List,
     ListRow,
-    ListRowHeader,
+    ListHeader,
     ListItem,
     ListAction,
     ListEmpty,
   },
-
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Selector, Collection],
+ 
+  mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
 
   data() {
     return {
@@ -204,6 +229,14 @@ export default {
       // Data
       data: [],
 
+      // Candidates
+      candidates: [
+        {
+          name: null,
+          firstname: null,
+          email: null
+        }
+      ],
 
       // Routes
       routes: {
@@ -212,6 +245,8 @@ export default {
 
       // States
       isFetched: false,
+      isValid: false,
+      hasErrors: false,
 
       // Messages
       messages: {
@@ -223,6 +258,7 @@ export default {
 
   mounted() {
     NProgress.configure({ showBar: false });
+    this.hasCollection = true;
     this.fetch();
   },
 
@@ -236,7 +272,42 @@ export default {
         NProgress.done();
       });
     },
-    
+
+    addCandidate() {
+      this.candidates.push({
+        name: null,
+        firstname: null,
+        email: null,
+      });
+      this.isValid = false;
+    },
+
+    removeCandidate() {
+      this.candidates.pop();
+      this.isValid = true;
+    },
+
+    validate(event, candidate) {
+
+      if (this.validateRequired(candidate.name) && this.validateRequired(candidate.firstname) && this.validateEmail(candidate.email)) {
+        event.target.classList.remove('is-invalid');
+        this.isValid = true;
+        return true;
+      }
+      else {
+        if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
+          event.target.classList.remove('is-invalid');
+          return;
+        }
+        if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
+          event.target.classList.remove('is-invalid');
+          return;
+        }
+      }
+      event.target.classList.add('is-invalid');
+      this.isValid = false;
+      return;
+    },
   },
 
   watch: {

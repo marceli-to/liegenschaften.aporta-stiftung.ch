@@ -21,19 +21,30 @@
               <icon-arrow-right />
             </router-link>
           </li>
-
-          <li class="span-4 flex justify-center items-center mt-1x" v-if="$props.view != 'show'">
-            <a href="" :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" @click.prevent="toggleFilter()">
-              <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
-              <icon-cross v-if="$parent.hasFilter" />
-            </a>
-            <router-link 
-              :to="{name: 'collection'}" 
-              class="icon-collection" 
-              v-if="$store.state.collection.set">
-              <icon-collection :active="$route.name == 'collection' ? true : false" />
-            </router-link>
-          </li>
+          <template  v-if="$props.view != 'show'">
+            <li class="span-4 flex justify-center items-center mt-1x">
+              <router-link 
+                :to="{name: 'apartments'}"
+                class="icon-filter"
+                v-if="$route.name == 'collection'">
+                <icon-filter :active="$store.state.filter.set" />
+              </router-link>
+              <a 
+                href="" 
+                :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" 
+                @click.prevent="toggleFilter()"
+                v-else>
+                <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
+                <icon-cross v-if="$parent.hasFilter" />
+              </a>
+              <router-link 
+                :to="{name: 'collection'}" 
+                class="icon-collection" 
+                v-if="$store.state.collection.set">
+                <icon-collection :active="$route.name == 'collection' ? true : false" />
+              </router-link>
+            </li>
+          </template>
            <li class="user">
             <a href="/logout" class="user icon-user">
               {{user.email}}
@@ -101,8 +112,11 @@ export default {
   computed: {
     cls() {
       let cls = 'site-header';
-      if (this.$parent.hasFilter || this.$parent.hasSelector) {
-        cls = cls + ' has-selector';
+      if (this.$parent.hasFilter) {
+        cls = cls + ' has-filter';
+      }
+      if (this.$parent.hasCollection) {
+        cls = cls + ' has-collection';
       }
       if (this.$props.view == 'show') {
         cls = cls + ' is-detail';

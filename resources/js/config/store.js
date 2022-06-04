@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: false,
+
     filter: {
       set: false,
       state_id: null,
@@ -20,12 +21,10 @@ export default new Vuex.Store({
         next: null
       }
     },
+
     collection: {
-      items: [],
-    },
-    selector: {
       set: false,
-      type: null,
+      items: [],
     },
   },
   mutations: {
@@ -34,9 +33,6 @@ export default new Vuex.Store({
     },
     filter(state, filter) {
       state.filter = filter;
-    },
-    selector(state, selector) {
-      state.selector = selector;
     },
     collection(state, collection) {
       state.collection = collection;

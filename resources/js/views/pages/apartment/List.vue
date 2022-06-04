@@ -63,7 +63,7 @@
   <site-main v-if="isFetched">
     <isometrie />
     <list v-if="sortedData">
-      <list-row-header>
+      <list-header>
         <list-item :class="'span-1 list-item-header'">
           &nbsp;
         </list-item>
@@ -129,7 +129,7 @@
             </a>
           </div>
         </list-item>
-      </list-row-header>
+      </list-header>
       <div 
         v-for="(apartment, index) in sortedData" 
         class="list-row" 
@@ -208,7 +208,6 @@ import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/pages/apartment/mixins/Filter";
-import Selector from "@/views/pages/apartment/mixins/Selector";
 import Collection from "@/views/pages/apartment/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
@@ -220,7 +219,7 @@ import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
-import ListRowHeader from "@/components/ui/layout/ListRowHeader.vue";
+import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
@@ -242,14 +241,14 @@ export default {
     IconTrash,
     List,
     ListRow,
-    ListRowHeader,
+    ListHeader,
     ListItem,
     ListAction,
     ListEmpty,
     Isometrie
   },
 
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Selector, Collection],
+  mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
 
   data() {
     return {

@@ -5,7 +5,6 @@
  */
 
 nav.page-menu {
-  @extend %content-block;
   width: 100%;
 
   ul {
@@ -16,33 +15,47 @@ nav.page-menu {
   li {
     @extend %span-2;
     height: 60px;
+
+    a {
+      align-items: center;
+      border-bottom: 1px solid $color-primary;
+      color: $color-primary;
+      display: flex;
+      @include font-size($fs-md);
+      height: inherit;
+      line-height: 1 !important;
+      text-transform: uppercase;
+  
+      span {
+        display: block;
+        margin-left: $space-4x;
+        line-height: 1 !important;
+      }
+  
+      svg {
+        display: block;
+        margin-bottom: 2px;
+      }
+    }
+
   }
 
   &.page-menu__collection {
+    
+    ul {
+      @extend %grid-cols-12;
+    }
+
     li {
       @extend %span-3;
     }
-  }
 
-  a {
-    align-items: center;
-    border-bottom: 1px solid $color-primary;
-    color: $color-primary;
-    display: flex;
-    @include font-size($fs-md);
-    height: inherit;
-    line-height: 1 !important;
-    text-transform: uppercase;
-
-    span {
-      display: block;
-      margin-left: $space-4x;
-      line-height: 1 !important;
-    }
-
-    svg {
-      display: block;
-      margin-bottom: 2px;
+    &.is-disabled {
+      * {
+        border-color: $color-light-grey;
+        color: $color-light-grey;
+        pointer-events: none;
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
 <div class="mb-15x">
-  <nav class="page-menu">
+  <nav class="page-menu content-block">
     <ul>
       <li>
         <router-link :to="{name: 'apartments'}">

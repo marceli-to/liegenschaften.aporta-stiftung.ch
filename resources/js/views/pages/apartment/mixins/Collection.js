@@ -10,10 +10,8 @@ export default {
 
     resetCollection() {
       let collection = {
-        set: false,
         items: [],
       };
-      this.hasCollection = false;
       this.$store.commit('collection', collection);
     },
 
@@ -46,6 +44,5 @@ export default {
       let collection = this.$store.state.collection;
       return collection.items.find(item => item === uuid) !== undefined ? true : false;
     }
-
   },
 }

@@ -20,23 +20,42 @@ nav {
     display: block;
     transition: all .04s ease-in;
   }
-
-
-
 }
 
-.has-selector {
+.has-collection,
+.has-filter {
   nav {
-    a {
+
+    a:not(.icon-collection):not(.icon-filter) {
       color: $color-dark-blue !important;
       &:hover {
         color: $color-white !important
       }
     }
 
-    .page-title,
     .icon-logo {
       color: $color-dark-blue !important;
     }
+  }
+}
+
+
+.has-filter {
+
+  .icon-collection {
+    color: $color-dark-blue !important;
+    path {
+      fill: $color-dark-blue !important;
+    }
+  }
+}
+
+.has-collection {
+  .icon-filter {
+    color: $color-dark-blue !important;
+    &:hover {
+      color: $color-white !important
+    }
+    // pointer-events: none;
   }
 }

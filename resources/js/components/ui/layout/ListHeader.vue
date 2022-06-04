@@ -1,5 +1,5 @@
 <template>
-  <div class="list-row-header">
+  <div class="list-header">
     <slot />
   </div>
 </template>

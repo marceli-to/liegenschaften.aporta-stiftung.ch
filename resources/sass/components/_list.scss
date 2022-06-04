@@ -7,22 +7,30 @@
 .list {
 
   .list-row,
-  .list-row-header {
+  .list-header {
     @extend %grid-cols-12;
     background-color: transparent;
-    min-height: 60px;
   }
 
-  .list-row-header {
-    min-height: 80px;
+  .list-header {
+    min-height: 72px;
+
+    &.is-narrow {
+      min-height: 48px;
+    }
   }
 
   .list-row {
+    min-height: 40px;
     transition: background-color .06s ease-in;
 
     &:hover {
       background-color: $color-light-blue;
       cursor: pointer;
+    }
+
+    &.is-narrow {
+      min-height: auto;
     }
 
     &.no-hover {

@@ -10,12 +10,10 @@ export default {
   methods: {
     toggleFilter() {
       this.hasFilter = this.hasFilter ? false : true;
-      this.hideSelector();
     },
 
     showFilter() {
       this.hasFilter = true;
-      this.hideSelector();
     },
 
     hideFilter() {

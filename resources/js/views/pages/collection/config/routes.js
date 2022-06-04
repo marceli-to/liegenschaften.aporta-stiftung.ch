@@ -1,10 +1,10 @@
-import CollectionShow from '@/views/pages/collection/Show.vue';
+import CollectionForm from '@/views/pages/collection/Form.vue';
 
 const routes = [
   {
     name: 'collection',
     path: '/administration/kollektion/',
-    component: CollectionShow,
+    component: CollectionForm,
   },
 
 ];
