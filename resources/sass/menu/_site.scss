@@ -15,6 +15,7 @@ nav.site-menu {
   li {
     color: $color-white;
     @include font-size($fs-md);
+    position: relative;
     text-transform: uppercase;
 
     &.site-menu__pagination {

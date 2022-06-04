@@ -1,68 +1,10 @@
 <template>
 <div>
   <site-header :user="$store.state.user">
-    <nav class="selector" v-if="hasFilter && isFetchedFilterItems">
-      <div>
-        <div class="grid-cols-12">
-          <div class="span-1 start-2">
-            <h2>Haus</h2>
-            <div v-for="building in filterItems.buildings" :key="building.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
-                <icon-radio-active v-if="$store.state.filter.building_id == building.id" />
-                <icon-radio v-else />
-                <span>{{building.description}}</span>
-              </a>
-            </div>
-          </div>
-          <div class="span-2">
-            <h2>Zimmer</h2>
-            <div v-for="room in filterItems.rooms" :key="room.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
-                <icon-radio-active v-if="$store.state.filter.room_id == room.id" />
-                <icon-radio v-else />
-                <span>{{room.description}}</span>
-              </a>
-            </div>
-          </div>
-          <div class="span-2">
-            <h2>Geschoss</h2>
-            <div v-for="floor in filterItems.floors" :key="floor.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
-                <icon-radio-active v-if="$store.state.filter.floor_id == floor.id" />
-                <icon-radio v-else />
-                <span>{{floor.description}}</span>
-              </a>
-            </div>
-          </div>
-          <div class="span-2">
-            <h2>Aussenraum</h2>
-            <div v-for="(value, key) in filterItems.exteriors" :key="key">
-              <a href="javascript:;" @click.prevent="setFilterItem('exterior', key)">
-                <icon-radio-active v-if="$store.state.filter['exterior'] == key" />
-                <icon-radio v-else />
-                <span>{{value}}</span>
-              </a>
-            </div>
-          </div>
-          <div class="span-2">
-            <h2>Status</h2>
-            <div v-for="state in filterItems.states" :key="state.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('state_id', state.id)">
-                <icon-radio-active v-if="$store.state.filter.state_id == state.id" />
-                <icon-radio v-else />
-                <span>{{state.description}}</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen</a>
-      <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetFilter()">Zurücksetzen</a>
-    </nav>
+
   </site-header>
   <site-main v-if="isFetched">
-    <isometrie />
-    <list v-if="sortedData">
+    <list v-if="sortedData.length">
       <list-row-header>
         <list-item :class="'span-1 list-item-header'">
           &nbsp;
@@ -115,12 +57,6 @@
             <icon-sort />
           </a>
         </list-item>
-        <!-- <list-item :class="'span-1 list-item-header'">
-          Nummer
-          <a href="" @click.prevent="sort('number')">
-            <icon-sort />
-          </a>
-        </list-item> -->
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
@@ -137,10 +73,7 @@
         @mouseover="show(apartment.number)" 
         @mouseleave="hide(apartment.number)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
-          <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
-           <icon-plus class="icon"  />
-          </a>
-          <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
+          <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
            <icon-trash class="icon" />
           </a>
         </list-item>
@@ -184,11 +117,7 @@
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-        <!-- <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
-            {{ apartment.number }}
-          </router-link>
-        </list-item> -->
+
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
@@ -199,6 +128,24 @@
     <list-empty v-else>
       {{messages.emptyData}}
     </list-empty>
+    <form @submit.prevent="submit" class="collection" v-if="sortedData.length">
+      <nav class="page-menu page-menu__collection">
+        <ul>
+          <li class="span-4 start-3">
+            <a href="">
+              <icon-cross />
+              <span>Zurücksetzen</span>
+            </a>
+          </li>
+          <li class="span-4">
+            <a href="">
+              <icon-cross />
+              <span>Senden</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </form>
   </site-main>
 </div>
 </template>
@@ -216,6 +163,7 @@ import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconRadioActive from "@/components/ui/icons/RadioActive.vue";
 import IconPlus from "@/components/ui/icons/Plus-sm.vue";
 import IconTrash from "@/components/ui/icons/Trash-sm.vue";
+import IconCross from "@/components/ui/icons/Cross.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
@@ -225,7 +173,6 @@ import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-import Isometrie from '@/views/pages/apartment/components/Isometrie.vue';
 
 export default {
 
@@ -240,13 +187,13 @@ export default {
     IconRadioActive,
     IconPlus,
     IconTrash,
+    IconCross,
     List,
     ListRow,
     ListRowHeader,
     ListItem,
     ListAction,
     ListEmpty,
-    Isometrie
   },
 
   mixins: [ErrorHandling, Helpers, Sort, Filter, Selector, Collection],
@@ -257,35 +204,18 @@ export default {
       // Data
       data: [],
 
-      // Filter items
-      filterItems: {
-        buildings: [],
-        rooms: [],
-        floors: [],
-        exteriors: [],
-        states: [],
-      },
 
       // Routes
       routes: {
-        list: '/api/apartments',
-        filter: '/api/apartments/filter',
-        settings: {
-          buildings: '/api/settings/buildings',
-          rooms: '/api/settings/rooms',
-          floors: '/api/settings/floors',
-          exteriors: '/api/settings/exteriors',
-          states: '/api/settings/states'
-        }
+        get: '/api/apartments',
       },
 
       // States
       isFetched: false,
-      isFetchedFilterItems: false,
 
       // Messages
       messages: {
-        emptyData: 'Es sind noch keine Wohnungen vorhanden...',
+        emptyData: 'Es sind noch keine Daten vorhanden...',
         updated: 'Status geändert',
       },
     };
@@ -293,83 +223,24 @@ export default {
 
   mounted() {
     NProgress.configure({ showBar: false });
-    this.beforeFetch()
+    this.fetch();
   },
 
   methods: {
-
-    beforeFetch() {
-      this.fetchFilterItems();
-      if (this.$store.state.filter.set) {
-        this.fetchFiltered();
-        return;
-      }
-      this.fetch();
-    },
-
     fetch() {
-      this.isFetched = false;
       NProgress.start();
-      this.axios.get(`${this.routes.list}`).then(response => {
+      this.isFetched = false;
+      this.axios.post(`${this.routes.get}`, this.$store.state.collection).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
         NProgress.done();
       });
     },
-
-    fetchFilterItems() {
-      this.isFetchedFilterItems = false;
-      this.axios.all([
-        this.axios.get(this.routes.settings.buildings),
-        this.axios.get(this.routes.settings.rooms),
-        this.axios.get(this.routes.settings.floors),
-        this.axios.get(this.routes.settings.exteriors),
-        this.axios.get(this.routes.settings.states),
-      ]).then(axios.spread((...responses) => {
-        this.filterItems = {
-          buildings: responses[0].data,
-          rooms: responses[1].data,
-          floors: responses[2].data,
-          exteriors: responses[3].data,
-          states: responses[4].data,
-        };
-        this.isFetchedFilterItems = true;
-      }));
-    },
-
-    fetchFiltered() {
-      let param = {
-        building_id: this.$store.state.filter.building_id ? this.$store.state.filter.building_id : null,
-        room_id: this.$store.state.filter.room_id ? this.$store.state.filter.room_id : null,
-        floor_id: this.$store.state.filter.floor_id ? this.$store.state.filter.floor_id : null,
-        exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
-        state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
-      };
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.post(`${this.routes.filter}`, param).then(response => {
-        this.data = response.data.data;
-        this.setFilterMenu(this.data);
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    show(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.add('is-visible');
-    },
-
-    hide(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.remove('is-visible');
-    },
+    
   },
 
   watch: {
-    '$route'() {
-      this.beforeFetch()
-    }
+
   },
 }
 </script>

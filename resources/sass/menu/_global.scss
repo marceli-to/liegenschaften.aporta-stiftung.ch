@@ -8,12 +8,20 @@ nav {
 
   li {
     display: block;
+    &.page-title {
+      a {
+        @include font-regular();
+        text-decoration: none !important;
+      }
+    }
   }
 
   a {
     display: block;
     transition: all .04s ease-in;
   }
+
+
 
 }
 

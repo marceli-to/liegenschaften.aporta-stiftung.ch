@@ -18,9 +18,9 @@ nav.page-menu {
     height: 60px;
   }
 
-  &.page-menu__user {
+  &.page-menu__collection {
     li {
-      @extend %span-4;
+      @extend %span-3;
     }
   }
 
@@ -55,8 +55,8 @@ nav.page-menu {
         color: $color-light-grey;
 
         &:hover {
-        border-bottom: 1px solid $color-primary;
-        color: $color-primary;
+          border-bottom: 1px solid $color-primary;
+          color: $color-primary;
         }
       }
     }

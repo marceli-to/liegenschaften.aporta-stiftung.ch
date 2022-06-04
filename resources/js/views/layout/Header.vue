@@ -8,7 +8,9 @@
             <icon-logo class="icon-logo" />
           </li>
           <li class="span-2 page-title">
-            Eglistrasse
+            <router-link :to="{name: 'apartments'}">
+              Eglistrasse
+            </router-link>
           </li>
           <li class="span-4 flex justify-center site-menu__pagination" v-if="$store.state.filter.items.length && $props.view == 'show'">
             <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
@@ -19,15 +21,22 @@
               <icon-arrow-right />
             </router-link>
           </li>
-          <li class="span-4 flex justify-center" v-if="$props.view != 'show'">
+
+          <li class="span-4 flex justify-center items-center mt-1x" v-if="$props.view != 'show'">
             <a href="" :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" @click.prevent="toggleFilter()">
               <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
               <icon-cross v-if="$parent.hasFilter" />
             </a>
+            <router-link 
+              :to="{name: 'collection'}" 
+              class="icon-collection" 
+              v-if="$store.state.collection.set">
+              <icon-collection :active="$route.name == 'collection' ? true : false" />
+            </router-link>
           </li>
-          <li class="user">
+           <li class="user">
             <a href="/logout" class="user icon-user">
-            {{user.email}}
+              {{user.email}}
               <icon-user class="ml-4x"/>
             </a>
           </li>
@@ -46,7 +55,7 @@
 <script>
 import IconLogo from "@/components/ui/icons/Logo.vue";
 import IconList from "@/components/ui/icons/List.vue";
-import IconExport from "@/components/ui/icons/Export.vue";
+import IconCollection from "@/components/ui/icons/Collection.vue";
 import IconUser from "@/components/ui/icons/User.vue";
 import IconFilter from "@/components/ui/icons/Filter.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
@@ -55,7 +64,7 @@ import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 
 export default {
   components: {
-    IconExport,
+    IconCollection,
     IconFilter,
     IconCross,
     IconUser,

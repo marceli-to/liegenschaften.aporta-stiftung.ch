@@ -24,6 +24,19 @@ class ApartmentController extends Controller
   }
 
   /**
+   * Get a list of selected apartments
+   * 
+   * @todo Get estate_id from session
+   * @param  \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\Response
+   */
+  public function fetch(Request $request)
+  { 
+    $data = Apartment::with('building', 'floor', 'room', 'tenant')->orderBy('order')->whereIn('uuid', $request->input('items'))->get();
+    return new DataCollection($data->sortBy('building.order'));
+  }
+
+  /**
    * Get a filtered ist of apartments
    * 
    * @param  \Illuminate\Http\Request $request

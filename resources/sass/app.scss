@@ -51,6 +51,7 @@
 
 // Forms
 @import 'form/global';
+@import 'form/forms';
 @import 'form/input';
 @import 'form/label';
 @import 'form/layout';
@@ -73,5 +74,6 @@
 // Views
 @import 'views/auth';
 @import 'views/apartments';
+@import 'views/collection';
 
 

@@ -45,11 +45,16 @@
 .icon-filter {
   @extend %icon;
   color: $color-primary;
-  margin-top: 4px;
-
   &.is-active {
     color: $color-white !important;
   }
+}
+
+.icon-collection {
+  @extend %icon;
+  color: $color-white;
+  right: 25%;
+  position: absolute;
 }
 
 .icon-user {

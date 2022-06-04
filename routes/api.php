@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function() {
   // Apartments
   Route::post('apartments/filter', [ApartmentController::class, 'filter']);
   Route::get('apartments', [ApartmentController::class, 'get']);
+  Route::post('apartments', [ApartmentController::class, 'fetch']);
   Route::put('apartment/{apartment:uuid}', [ApartmentController::class, 'update']);
   Route::get('apartment/{apartment:uuid}', [ApartmentController::class, 'find']);
 

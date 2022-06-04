@@ -10,8 +10,10 @@ export default {
 
     resetCollection() {
       let collection = {
+        set: false,
         items: [],
       };
+      this.hasCollection = false;
       this.$store.commit('collection', collection);
     },
 
@@ -20,17 +22,24 @@ export default {
       let index = collection.items.findIndex(item => item === uuid);
       if (index == -1) {
         collection.items.push(uuid);
+        collection.set = true;
       }
       this.$store.commit('collection', collection);
     },
 
-    removeFromCollection(uuid) {
+    removeFromCollection(uuid, refetch = false) {
       let collection = this.$store.state.collection;
       let index = collection.items.findIndex(item => item === uuid);
       if (index > -1) {
         collection.items.splice(index, 1);
       }
+      collection.set = collection.items.length > 0 ? true : false;
       this.$store.commit('collection', collection);
+      
+      if (refetch) {
+        this.fetch();
+      }
+
     },
 
     isInCollection(uuid) {
