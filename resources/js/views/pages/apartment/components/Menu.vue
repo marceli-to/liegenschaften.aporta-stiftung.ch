@@ -4,7 +4,7 @@
     <ul>
       <li>
         <router-link :to="{name: 'apartments'}">
-          <icon-arrow-left />
+          <icon-arrow-left :size="'md'" />
           <span>Zurück</span>
         </router-link>
       </li>
@@ -39,7 +39,7 @@
 </template>
 <script>
 //import DialogWrapper from "@/components/ui/misc/Dialog.vue";
-import IconArrowLeft from "@/components/ui/icons/ArrowLeft-sm.vue";
+import IconArrowLeft from "@/components/ui/icons/ArrowLeft.vue";
 import IconReset from "@/components/ui/icons/Reset.vue";
 import IconPencil from "@/components/ui/icons/Pencil.vue";
 import IconBubble from "@/components/ui/icons/Bubble.vue";

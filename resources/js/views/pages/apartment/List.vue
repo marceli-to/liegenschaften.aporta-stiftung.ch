@@ -8,8 +8,7 @@
             <h2>Haus</h2>
             <div v-for="building in filterItems.buildings" :key="building.id">
               <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
-                <icon-radio-active v-if="$store.state.filter.building_id == building.id" />
-                <icon-radio v-else />
+                <icon-radio :active="$store.state.filter.building_id == building.id" />
                 <span>{{building.description}}</span>
               </a>
             </div>
@@ -18,8 +17,7 @@
             <h2>Zimmer</h2>
             <div v-for="room in filterItems.rooms" :key="room.id">
               <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
-                <icon-radio-active v-if="$store.state.filter.room_id == room.id" />
-                <icon-radio v-else />
+                <icon-radio :active="$store.state.filter.room_id == room.id" />
                 <span>{{room.description}}</span>
               </a>
             </div>
@@ -28,8 +26,7 @@
             <h2>Geschoss</h2>
             <div v-for="floor in filterItems.floors" :key="floor.id">
               <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
-                <icon-radio-active v-if="$store.state.filter.floor_id == floor.id" />
-                <icon-radio v-else />
+                <icon-radio :active="$store.state.filter.floor_id == floor.id" />
                 <span>{{floor.description}}</span>
               </a>
             </div>
@@ -38,8 +35,7 @@
             <h2>Aussenraum</h2>
             <div v-for="(value, key) in filterItems.exteriors" :key="key">
               <a href="javascript:;" @click.prevent="setFilterItem('exterior', key)">
-                <icon-radio-active v-if="$store.state.filter['exterior'] == key" />
-                <icon-radio v-else />
+                <icon-radio :active="$store.state.filter['exterior'] == key" />
                 <span>{{value}}</span>
               </a>
             </div>
@@ -48,8 +44,7 @@
             <h2>Status</h2>
             <div v-for="state in filterItems.states" :key="state.id">
               <a href="javascript:;" @click.prevent="setFilterItem('state_id', state.id)">
-                <icon-radio-active v-if="$store.state.filter.state_id == state.id" />
-                <icon-radio v-else />
+                <icon-radio :active="$store.state.filter.state_id == state.id" />
                 <span>{{state.description}}</span>
               </a>
             </div>
@@ -138,7 +133,7 @@
         @mouseleave="hide(apartment.number)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
-           <icon-plus class="icon"  />
+           <icon-plus :size="'md'" class="icon"  />
           </a>
           <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
            <icon-trash class="icon" />
@@ -212,8 +207,7 @@ import Collection from "@/views/pages/apartment/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
-import IconRadioActive from "@/components/ui/icons/RadioActive.vue";
-import IconPlus from "@/components/ui/icons/Plus-sm.vue";
+import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash-sm.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/layout/Header.vue';
@@ -236,7 +230,6 @@ export default {
     IconSort,
     IconState,
     IconRadio,
-    IconRadioActive,
     IconPlus,
     IconTrash,
     List,

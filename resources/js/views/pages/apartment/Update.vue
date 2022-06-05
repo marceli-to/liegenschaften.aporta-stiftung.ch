@@ -102,7 +102,6 @@ import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
 import IconReplace from "@/components/ui/icons/Replace.vue";
 import IconTrash from "@/components/ui/icons/Trash-sm.vue";
-import IconPlus from "@/components/ui/icons/Plus-sm.vue";
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
@@ -120,7 +119,6 @@ export default {
     DialogWrapper,
     IconReplace,
     IconTrash,
-    IconPlus,
     SiteHeader,
     SiteMain,
     PageMenu,

@@ -128,13 +128,13 @@
         <ul>
           <li class="start-4">
             <a href="">
-              <icon-cross />
+              <icon-cross :size="'md'" />
               <span>Zurücksetzen</span>
             </a>
           </li>
           <li>
             <a href="">
-              <icon-arrow-right />
+              <icon-arrow-right :size="'md'" />
               <span>Senden</span>
             </a>
           </li>
@@ -185,7 +185,6 @@ import Collection from "@/views/pages/apartment/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
-import IconRadioActive from "@/components/ui/icons/RadioActive.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash-sm.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
@@ -208,7 +207,6 @@ export default {
     IconSort,
     IconState,
     IconRadio,
-    IconRadioActive,
     IconPlus,
     IconTrash,
     IconCross,
