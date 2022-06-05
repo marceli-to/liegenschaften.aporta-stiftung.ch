@@ -27,7 +27,7 @@ class CollectionController extends Controller
    */
   public function getItems()
   { 
-    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->get());
+    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->orderBy('created_at', 'DESC')->get());
   }
 
 
@@ -65,6 +65,7 @@ class CollectionController extends Controller
       {
         $apartment = Apartment::where('uuid', $item)->first();
         $collectionItem = CollectionItem::create([
+          'uuid' => \Str::uuid(),
           'collection_id' => $collection->id,
           'apartment_id'  => $apartment->id
         ]);

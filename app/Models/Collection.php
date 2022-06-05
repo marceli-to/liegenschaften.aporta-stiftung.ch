@@ -22,12 +22,8 @@ class Collection extends Base
     'firstname',
     'name',
     'email',
-    'sent_at',
-    'read_at',
-    'replied_at',
-    'accepted',
-    'comment',
     'error',
+    'processed',
     'estate_id'
   ];
 

@@ -19,12 +19,8 @@ class CreateCollectionsTable extends Migration
             $table->string('name', 255);
             $table->string('firstname', 255);
             $table->string('email', 255);
-            $table->date('sent_at')->nullable();
-            $table->date('read_at')->nullable();
-            $table->date('replied_at')->nullable();
-            $table->tinyInteger('accepted')->default(0);
-            $table->text('comment')->nullable();
             $table->text('error')->nullable();
+            $table->tinyInteger('processed')->default(0);
             $table->foreignId('estate_id')->constrained();
             $table->softDeletes();
             $table->timestamps();

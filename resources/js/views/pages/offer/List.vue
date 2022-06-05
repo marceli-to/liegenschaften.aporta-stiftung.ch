@@ -23,7 +23,7 @@
       <list-header>
         <list-item :class="'span-2 list-item-header line-after'">
           Name
-          <a href="" @click.prevent="sort('building.street')">
+          <a href="" @click.prevent="sort('collection.name')">
             <icon-sort />
           </a>
         </list-item>
@@ -35,27 +35,24 @@
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Gesendet
-          <a href="" @click.prevent="sort('room.abbreviation')">
+          <a href="" @click.prevent="sort('sent_at')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Gelesen
-          <a href="" @click.prevent="sort('size')">
+          <a href="" @click.prevent="sort('read_at')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Beantwortet
-          <a href="" @click.prevent="sort('size_terrace')">
+          <a href="" @click.prevent="sort('replied_at')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-2 list-item-header'">
           Kommentar
-          <a href="" @click.prevent="sort('size_patio')">
-            <icon-sort />
-          </a>
         </list-item>
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
@@ -81,13 +78,13 @@
           <span>{{ d.apartment.description }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.collection.sent_at }}</span>
+          <span>{{ d.sent_at ? d.sent_at : '–' }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.collection.read_at }}</span>
+          <span>{{ d.read_at ? d.read_at : '–' }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.collection.replied_at }}</span>
+          <span>{{ d.replied_at ? d.replied_at : '–' }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
           <span>{{ d.collection.comment }}</span>
