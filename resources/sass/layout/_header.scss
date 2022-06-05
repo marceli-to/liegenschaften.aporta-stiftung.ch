@@ -9,12 +9,12 @@ header.site-header {
   height: $site-header-height;
   margin-bottom: $space-15x;
 
-  // &.has-selector {
-  //   margin-bottom: $space-4x;
-  // }
-
   &.is-detail {
     background-color: $color-dark-grey;
+    margin-bottom: 0;
+  }
+
+  &.is-offer {
     margin-bottom: 0;
   }
 

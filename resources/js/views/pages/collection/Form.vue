@@ -70,7 +70,7 @@
         :key="apartment.uuid">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
-           <icon-trash class="icon" />
+           <icon-trash :size="'md'" class="icon" />
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
@@ -213,7 +213,7 @@ import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
-import IconTrash from "@/components/ui/icons/Trash-sm.vue";
+import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import SiteHeader from '@/views/layout/Header.vue';
@@ -258,14 +258,9 @@ export default {
       // Candidates
       candidates: [
         {
-          name: 'Stadelmann',
-          firstname: 'Marcel',
-          email: 'm@marceli.to'
-        },
-        {
-          name: 'Meier',
-          firstname: 'Peter',
-          email: 'pm@pm.ch'
+          name: null,
+          firstname: null,
+          email: null
         },
       ],
 
@@ -295,6 +290,7 @@ export default {
   },
 
   methods: {
+    
     fetch() {
       NProgress.start();
       this.isFetched = false;

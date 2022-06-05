@@ -52,9 +52,19 @@
             </a>
           </li>
           <li class="span-1 flex items-center justify-end">
-            <a href="">
-              <icon-list />
-            </a>
+            <router-link 
+              :to="{name: 'apartments'}"
+              class="icon-offer"
+              v-if="$route.name == 'offer'">
+              <icon-cross />
+            </router-link>
+            <router-link 
+              :to="{name: 'offer'}" 
+              class="icon-offer"
+              v-else>
+              <icon-cross v-if="$route.name == 'offer'" />
+              <icon-list v-else />
+            </router-link>
           </li>
         </ul>
       </nav>
@@ -120,6 +130,9 @@ export default {
       }
       if (this.$props.view == 'show') {
         cls = cls + ' is-detail';
+      }
+      if (this.$route.name == 'offer') {
+        cls = cls + ' is-offer';
       }
       return cls; 
     }

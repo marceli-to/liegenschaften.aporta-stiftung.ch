@@ -14,4 +14,9 @@ class CollectionItem extends Base
 	{
 		return $this->hasOne(Apartment::class, 'id', 'apartment_id');
 	}
+
+	public function collection()
+	{
+		return $this->belongsTo(Collection::class, 'collection_id', 'id');
+	}
 }

@@ -40,6 +40,26 @@ nav.page-menu {
 
   }
 
+  &.page-menu__offer {
+    
+    ul {
+      @extend %grid-cols-12;
+    }
+
+    li {
+      @extend %span-2;
+    }
+
+    &.is-disabled {
+      * {
+        border-color: $color-light-grey;
+        color: $color-light-grey;
+        pointer-events: none;
+      }
+    }
+  }
+
+
   &.page-menu__collection {
     
     ul {

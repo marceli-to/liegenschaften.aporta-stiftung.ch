@@ -17,8 +17,19 @@ class CollectionController extends Controller
    */
   public function get()
   { 
-    return new DataCollection();
+    return new DataCollection(Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->get());
   }
+
+  /**
+   * Get a list of collection items
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getItems()
+  { 
+    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->get());
+  }
+
 
   /**
    * Get a single collection

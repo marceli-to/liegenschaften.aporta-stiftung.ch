@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('settings/states', [SettingsController::class, 'states']);
 
   // Collections
+  Route::get('collections', [CollectionController::class, 'get']);
+  Route::get('collection/items', [CollectionController::class, 'getItems']);
   Route::post('collection', [CollectionController::class, 'store']);
 
 

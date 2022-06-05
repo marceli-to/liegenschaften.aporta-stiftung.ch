@@ -82,6 +82,10 @@
       padding-top: $space-2x;
     }
 
+    > span + span {
+      border-top: 1px solid $color-secondary;
+    }
+
     > a {
       text-decoration: none;
     }

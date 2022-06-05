@@ -22,11 +22,12 @@ nav {
   }
 }
 
+.is-offer,
 .has-collection,
 .has-filter {
   nav {
 
-    a:not(.icon-collection):not(.icon-filter) {
+    a:not(.icon-collection):not(.icon-filter):not(.icon-offer) {
       color: $color-dark-blue !important;
       &:hover {
         color: $color-white !important
@@ -41,7 +42,6 @@ nav {
 
 
 .has-filter {
-
   .icon-collection {
     color: $color-dark-blue !important;
     path {
@@ -57,5 +57,21 @@ nav {
       color: $color-white !important
     }
     // pointer-events: none;
+  }
+}
+
+.is-offer {
+  .icon-filter {
+    color: $color-dark-blue !important;
+    &:hover {
+      color: $color-white !important
+    }
+    // pointer-events: none;
+  }
+  .icon-collection {
+    color: $color-dark-blue !important;
+    path {
+      fill: $color-dark-blue !important;
+    }
   }
 }

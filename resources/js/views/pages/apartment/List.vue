@@ -136,7 +136,7 @@
            <icon-plus :size="'md'" class="icon"  />
           </a>
           <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
-           <icon-trash class="icon" />
+           <icon-trash :size="'md'" class="icon" />
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
@@ -208,7 +208,7 @@ import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
-import IconTrash from "@/components/ui/icons/Trash-sm.vue";
+import IconTrash from "@/components/ui/icons/Trash.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
