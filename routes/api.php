@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ApartmentController;
 use App\Http\Controllers\Api\SettingsController;
-use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\CollectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,5 +37,9 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('settings/floors', [SettingsController::class, 'floors']);
   Route::get('settings/exteriors', [SettingsController::class, 'exteriors']);
   Route::get('settings/states', [SettingsController::class, 'states']);
+
+  // Collections
+  Route::post('collection', [CollectionController::class, 'store']);
+
 
 });

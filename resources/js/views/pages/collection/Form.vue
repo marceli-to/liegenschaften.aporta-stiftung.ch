@@ -133,7 +133,7 @@
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="" @click.prevent="store()">
               <icon-arrow-right :size="'md'" />
               <span>Senden</span>
             </a>
@@ -230,15 +230,21 @@ export default {
       // Candidates
       candidates: [
         {
-          name: null,
-          firstname: null,
-          email: null
-        }
+          name: 'Stadelmann',
+          firstname: 'Marcel',
+          email: 'm@marceli.to'
+        },
+        {
+          name: 'Meier',
+          firstname: 'Peter',
+          email: 'pm@pm.ch'
+        },
       ],
 
       // Routes
       routes: {
         get: '/api/apartments',
+        post: '/api/collection'
       },
 
       // States
@@ -267,6 +273,18 @@ export default {
       this.axios.post(`${this.routes.get}`, this.$store.state.collection).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
+        NProgress.done();
+      });
+    },
+
+    store() {
+      const data = {
+        candidates: this.candidates,
+        items: this.$store.state.collection.items
+      };
+      
+      NProgress.start();
+      this.axios.post(`${this.routes.post}`, data).then(response => {
         NProgress.done();
       });
     },
