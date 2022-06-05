@@ -18,6 +18,7 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/', [PageController::class, 'index'])->name('home');
 
 // Routes for testing
+Route::get('/notify', [TestController::class, 'notify']);
 Route::get('/tenants', [TestController::class, 'tenants']);
 Route::get('/tenant/{tenant}', [TestController::class, 'tenant']);
 Route::get('/apartments', [TestController::class, 'apartments']);
