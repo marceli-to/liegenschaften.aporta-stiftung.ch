@@ -133,7 +133,7 @@
             </a>
           </li>
           <li>
-            <a href="" @click.prevent="store()">
+            <a href="" @click.prevent="showStoreConfirm()">
               <icon-arrow-right :size="'md'" />
               <span>Senden</span>
             </a>
@@ -173,6 +173,32 @@
       </div>
     </form>
   </site-main>
+  <dialog-wrapper ref="dialogStoreConfirm">
+    <template #message>
+      <div>
+        <strong>
+          Möchten Sie die ausgewählten Angebote an {{ candidateList }} senden?
+        </strong>
+      </div>
+    </template>
+    <template #actions>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="store()">Senden</a>
+    </template>
+  </dialog-wrapper>
+  <dialog-wrapper ref="dialogStoreSuccess">
+    <template #message>
+      <div>
+        <strong>
+          Die ausgewählten Angebote wurden an an den/die Empfänger:in versendet.
+        </strong>
+      </div>
+    </template>
+    <template #button>
+      <router-link :to="{name: 'apartments'}" class="btn-primary mb-3x">
+        Schliessen
+      </router-link>
+    </template>
+  </dialog-wrapper>
 </div>
 </template>
 <script>
@@ -182,6 +208,7 @@ import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/pages/apartment/mixins/Filter";
 import Collection from "@/views/pages/apartment/mixins/Collection";
+import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
@@ -204,6 +231,7 @@ export default {
     NProgress,
     SiteHeader,
     SiteMain,
+    DialogWrapper,
     IconSort,
     IconState,
     IconRadio,
@@ -278,6 +306,7 @@ export default {
     },
 
     store() {
+      this.$refs.dialogStoreConfirm.hide();
       const data = {
         candidates: this.candidates,
         items: this.$store.state.collection.items
@@ -285,8 +314,15 @@ export default {
       
       NProgress.start();
       this.axios.post(`${this.routes.post}`, data).then(response => {
+        this.reset();
+        this.showStoreSuccess();
         NProgress.done();
       });
+    },
+
+    reset() {
+      this.resetCollection();
+      this.resetCandidates();
     },
 
     addCandidate() {
@@ -301,6 +337,16 @@ export default {
     removeCandidate() {
       this.candidates.pop();
       this.isValid = true;
+    },
+
+    resetCandidates() {
+      this.candidates = [
+        {
+          name: null,
+          firstname: null,
+          email: null,
+        },
+      ]
     },
 
     validate(event, candidate) {
@@ -324,10 +370,33 @@ export default {
       this.isValid = false;
       return;
     },
+
+    showStoreConfirm() {
+      this.$refs.dialogStoreConfirm.show();
+    },
+
+    showStoreSuccess() {
+      this.$refs.dialogStoreSuccess.show();
+    },
   },
 
-  watch: {
-
+  computed: {
+    candidateList() {
+      if (this.candidates.length == 1) {
+        return this.candidates[0].email;
+      }
+      
+      if (this.candidates.length == 2) {
+        return Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(" und ");
+      }
+      
+      if (this.candidates.length > 2) {
+        let candidates = this.candidates;
+        const last_candidate = candidates.pop();
+        const candidate_list = Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(", ");
+        return `${candidate_list} und ${last_candidate.email}`;
+      }
+    }
   },
 }
 </script>

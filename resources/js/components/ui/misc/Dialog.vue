@@ -12,6 +12,11 @@
           <a href="javascript:;" class="btn-secondary is-outline" @click="hide()">Abbrechen</a>
         </div>
       </template>
+      <template v-if="$slots.button">
+        <div class="actions">
+          <slot name="button" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
