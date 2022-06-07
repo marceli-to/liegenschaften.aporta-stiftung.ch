@@ -1,5 +1,5 @@
-import ErrorForbidden from '@/views/errors/Forbidden.vue';
-import ErrorNotFound from '@/views/errors/NotFound.vue';
+import ErrorForbidden from '@/views/backend/errors/Forbidden.vue';
+import ErrorNotFound from '@/views/backend/errors/NotFound.vue';
 
 const routes = [
   // {

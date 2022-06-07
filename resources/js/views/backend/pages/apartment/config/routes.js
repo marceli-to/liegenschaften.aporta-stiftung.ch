@@ -1,6 +1,6 @@
-import ApartmentIndex from '@/views/pages/apartment/List.vue';
-import ApartmentShow from '@/views/pages/apartment/Show.vue';
-import ApartmentUpdate from '@/views/pages/apartment/Update.vue';
+import ApartmentIndex from '@/views/backend/pages/apartment/List.vue';
+import ApartmentShow from '@/views/backend/pages/apartment/Show.vue';
+import ApartmentUpdate from '@/views/backend/pages/apartment/Update.vue';
 
 const routes = [
   {

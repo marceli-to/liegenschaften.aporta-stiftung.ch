@@ -1,5 +1,5 @@
-import CollectionForm from '@/views/pages/collection/Form.vue';
-import CollectionList from '@/views/pages/collection/List.vue';
+import CollectionForm from '@/views/backend/pages/collection/Form.vue';
+import CollectionList from '@/views/backend/pages/collection/List.vue';
 
 const routes = [
   {

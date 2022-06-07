@@ -1,8 +1,63 @@
 <template>
 <div>
-  <site-header :user="$store.state.user"></site-header>
+  <site-header :user="$store.state.user">
+    <nav class="selector" v-if="hasFilter && isFetchedFilterItems">
+      <div>
+        <div class="grid-cols-12">
+          <div class="span-1 start-2">
+            <h2>Haus</h2>
+            <div v-for="building in filterItems.buildings" :key="building.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
+                <icon-radio :active="$store.state.filter.building_id == building.id" />
+                <span>{{building.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Zimmer</h2>
+            <div v-for="room in filterItems.rooms" :key="room.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
+                <icon-radio :active="$store.state.filter.room_id == room.id" />
+                <span>{{room.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Geschoss</h2>
+            <div v-for="floor in filterItems.floors" :key="floor.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
+                <icon-radio :active="$store.state.filter.floor_id == floor.id" />
+                <span>{{floor.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Aussenraum</h2>
+            <div v-for="(value, key) in filterItems.exteriors" :key="key">
+              <a href="javascript:;" @click.prevent="setFilterItem('exterior', key)">
+                <icon-radio :active="$store.state.filter['exterior'] == key" />
+                <span>{{value}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Status</h2>
+            <div v-for="state in filterItems.states" :key="state.id">
+              <a href="javascript:;" @click.prevent="setFilterItem('state_id', state.id)">
+                <icon-radio :active="$store.state.filter.state_id == state.id" />
+                <span>{{state.description}}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen</a>
+      <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetFilter()">Zurücksetzen</a>
+    </nav>
+  </site-header>
   <site-main v-if="isFetched">
-    <list v-if="sortedData.length">
+    <isometrie />
+    <list v-if="sortedData">
       <list-header>
         <list-item :class="'span-1 list-item-header'">
           &nbsp;
@@ -55,6 +110,12 @@
             <icon-sort />
           </a>
         </list-item>
+        <!-- <list-item :class="'span-1 list-item-header'">
+          Nummer
+          <a href="" @click.prevent="sort('number')">
+            <icon-sort />
+          </a>
+        </list-item> -->
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
@@ -67,9 +128,14 @@
       <div 
         v-for="(apartment, index) in sortedData" 
         class="list-row" 
-        :key="apartment.uuid">
+        :key="apartment.uuid" 
+        @mouseover="show(apartment.number)" 
+        @mouseleave="hide(apartment.number)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
-          <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
+          <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
+           <icon-plus :size="'md'" class="icon"  />
+          </a>
+          <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
            <icon-trash :size="'md'" class="icon" />
           </a>
         </list-item>
@@ -113,6 +179,11 @@
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
+        <!-- <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+            {{ apartment.number }}
+          </router-link>
+        </list-item> -->
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
@@ -123,82 +194,7 @@
     <list-empty v-else>
       {{messages.emptyData}}
     </list-empty>
-    <form @submit.prevent="submit" class="collection" v-if="sortedData.length">
-      <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
-        <ul>
-          <li class="start-4">
-            <a href="">
-              <icon-cross :size="'md'" />
-              <span>Zurücksetzen</span>
-            </a>
-          </li>
-          <li>
-            <a href="" @click.prevent="showStoreConfirm()">
-              <icon-arrow-right :size="'md'" />
-              <span>Senden</span>
-            </a>
-          </li>
-        </ul>
-        <div class="flex justify-center mt-6x">
-          <a href="" @click.prevent="addCandidate()">
-            <icon-plus class="icon" />
-          </a>
-        </div>
-      </nav>
-      <list class="mt-8x">
-        <list-header class="is-narrow">
-          <list-item :class="'span-2 start-4 list-item-header line-after'">Vorname</list-item>
-          <list-item :class="'span-2 list-item-header line-after'">Nachname</list-item>
-          <list-item :class="'span-2 list-item-header'">E-Mail</list-item>
-        </list-header>
-        <list-row 
-          v-for="(candidate, index) in candidates"
-          :key="index"
-          class="no-hover is-narrow mb-5x">
-          <list-item class="span-2 start-4 list-item is-first line-after">
-            <input type="text" v-model="candidate.firstname" required @blur="validate($event, candidate)">
-          </list-item>
-          <list-item class="span-2 list-item is-first line-after">
-            <input type="text" v-model="candidate.name" required @blur="validate($event, candidate)">
-          </list-item>
-          <list-item class="span-2 list-item is-first">
-            <input type="email" v-model="candidate.email" required @blur="validate($event, candidate)">
-          </list-item>
-        </list-row>
-      </list>
-      <div class="flex justify-center mt-6x" v-if="candidates.length > 1">
-        <a href="" @click.prevent="removeCandidate()">
-          <icon-trash class="icon" />
-        </a>
-      </div>
-    </form>
   </site-main>
-  <dialog-wrapper ref="dialogStoreConfirm">
-    <template #message>
-      <div>
-        <strong>
-          Möchten Sie die ausgewählten Angebote an {{ candidateList }} senden?
-        </strong>
-      </div>
-    </template>
-    <template #actions>
-      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="store()">Senden</a>
-    </template>
-  </dialog-wrapper>
-  <dialog-wrapper ref="dialogStoreSuccess">
-    <template #message>
-      <div>
-        <strong>
-          Die ausgewählten Angebote wurden an an den/die Empfänger:in versendet.
-        </strong>
-      </div>
-    </template>
-    <template #button>
-      <router-link :to="{name: 'apartments'}" class="btn-primary mb-3x">
-        Schliessen
-      </router-link>
-    </template>
-  </dialog-wrapper>
 </div>
 </template>
 <script>
@@ -206,24 +202,23 @@ import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
-import Filter from "@/views/pages/mixins/Filter";
-import Collection from "@/views/pages/mixins/Collection";
-import DialogWrapper from "@/components/ui/misc/Dialog.vue";
+import Filter from "@/views/backend/pages/mixins/Filter";
+import Collection from "@/views/backend/pages/mixins/Collection";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
-import IconCross from "@/components/ui/icons/Cross.vue";
-import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
-import SiteHeader from '@/views/layout/Header.vue';
-import SiteMain from '@/views/layout/Main.vue';
+import Bullet from "@/components/ui/misc/Bullet.vue";
+import SiteHeader from '@/views/backend/layout/Header.vue';
+import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
+import Isometrie from '@/views/backend/pages/apartment/components/Isometrie.vue';
 
 export default {
 
@@ -231,22 +226,21 @@ export default {
     NProgress,
     SiteHeader,
     SiteMain,
-    DialogWrapper,
+    Bullet,
     IconSort,
     IconState,
     IconRadio,
     IconPlus,
     IconTrash,
-    IconCross,
-    IconArrowRight,
     List,
     ListRow,
     ListHeader,
     ListItem,
     ListAction,
     ListEmpty,
+    Isometrie
   },
- 
+
   mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
 
   data() {
@@ -255,29 +249,35 @@ export default {
       // Data
       data: [],
 
-      // Candidates
-      candidates: [
-        {
-          name: null,
-          firstname: null,
-          email: null
-        },
-      ],
+      // Filter items
+      filterItems: {
+        buildings: [],
+        rooms: [],
+        floors: [],
+        exteriors: [],
+        states: [],
+      },
 
       // Routes
       routes: {
-        get: '/api/apartments',
-        post: '/api/collection'
+        list: '/api/apartments',
+        filter: '/api/apartments/filter',
+        settings: {
+          buildings: '/api/settings/buildings',
+          rooms: '/api/settings/rooms',
+          floors: '/api/settings/floors',
+          exteriors: '/api/settings/exteriors',
+          states: '/api/settings/states'
+        }
       },
 
       // States
       isFetched: false,
-      isValid: false,
-      hasErrors: false,
+      isFetchedFilterItems: false,
 
       // Messages
       messages: {
-        emptyData: 'Es sind noch keine Daten vorhanden...',
+        emptyData: 'Es sind noch keine Wohnungen vorhanden...',
         updated: 'Status geändert',
       },
     };
@@ -285,113 +285,82 @@ export default {
 
   mounted() {
     NProgress.configure({ showBar: false });
-    this.hasCollection = true;
-    this.fetch();
+    this.beforeFetch()
   },
 
   methods: {
-    
+
+    beforeFetch() {
+      this.fetchFilterItems();
+      if (this.$store.state.filter.set) {
+        this.fetchFiltered();
+        return;
+      }
+      this.fetch();
+    },
+
     fetch() {
-      NProgress.start();
       this.isFetched = false;
-      this.axios.post(`${this.routes.get}`, this.$store.state.collection).then(response => {
+      NProgress.start();
+      this.axios.get(`${this.routes.list}`).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
         NProgress.done();
       });
     },
 
-    store() {
-      this.$refs.dialogStoreConfirm.hide();
-      const data = {
-        candidates: this.candidates,
-        items: this.$store.state.collection.items
+    fetchFilterItems() {
+      this.isFetchedFilterItems = false;
+      this.axios.all([
+        this.axios.get(this.routes.settings.buildings),
+        this.axios.get(this.routes.settings.rooms),
+        this.axios.get(this.routes.settings.floors),
+        this.axios.get(this.routes.settings.exteriors),
+        this.axios.get(this.routes.settings.states),
+      ]).then(axios.spread((...responses) => {
+        this.filterItems = {
+          buildings: responses[0].data,
+          rooms: responses[1].data,
+          floors: responses[2].data,
+          exteriors: responses[3].data,
+          states: responses[4].data,
+        };
+        this.isFetchedFilterItems = true;
+      }));
+    },
+
+    fetchFiltered() {
+      let param = {
+        building_id: this.$store.state.filter.building_id ? this.$store.state.filter.building_id : null,
+        room_id: this.$store.state.filter.room_id ? this.$store.state.filter.room_id : null,
+        floor_id: this.$store.state.filter.floor_id ? this.$store.state.filter.floor_id : null,
+        exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
+        state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
       };
-      
       NProgress.start();
-      this.axios.post(`${this.routes.post}`, data).then(response => {
-        this.reset();
-        this.showStoreSuccess();
+      this.isFetched = false;
+      this.axios.post(`${this.routes.filter}`, param).then(response => {
+        this.data = response.data.data;
+        this.setFilterMenu(this.data);
+        this.isFetched = true;
         NProgress.done();
       });
     },
 
-    reset() {
-      this.resetCollection();
-      this.resetCandidates();
+    show(number) {
+      let apt = document.querySelector(`[data-id="${number}"]`);
+      apt.classList.add('is-visible');
     },
 
-    addCandidate() {
-      this.candidates.push({
-        name: null,
-        firstname: null,
-        email: null,
-      });
-      this.isValid = false;
-    },
-
-    removeCandidate() {
-      this.candidates.pop();
-      this.isValid = true;
-    },
-
-    resetCandidates() {
-      this.candidates = [
-        {
-          name: null,
-          firstname: null,
-          email: null,
-        },
-      ]
-    },
-
-    validate(event, candidate) {
-
-      if (this.validateRequired(candidate.name) && this.validateRequired(candidate.firstname) && this.validateEmail(candidate.email)) {
-        event.target.classList.remove('is-invalid');
-        this.isValid = true;
-        return true;
-      }
-      else {
-        if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-      }
-      event.target.classList.add('is-invalid');
-      this.isValid = false;
-      return;
-    },
-
-    showStoreConfirm() {
-      this.$refs.dialogStoreConfirm.show();
-    },
-
-    showStoreSuccess() {
-      this.$refs.dialogStoreSuccess.show();
+    hide(number) {
+      let apt = document.querySelector(`[data-id="${number}"]`);
+      apt.classList.remove('is-visible');
     },
   },
 
-  computed: {
-    candidateList() {
-      if (this.candidates.length == 1) {
-        return this.candidates[0].email;
-      }
-      
-      if (this.candidates.length == 2) {
-        return Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(" und ");
-      }
-      
-      if (this.candidates.length > 2) {
-        let candidates = this.candidates;
-        const last_candidate = candidates.pop();
-        const candidate_list = Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(", ");
-        return `${candidate_list} und ${last_candidate.email}`;
-      }
+  watch: {
+    '$route'() {
+      this.beforeFetch()
     }
   },
 }

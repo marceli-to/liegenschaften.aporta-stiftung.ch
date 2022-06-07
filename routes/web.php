@@ -2,7 +2,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
-
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\TestController;
 
 /*
@@ -15,6 +15,10 @@ use App\Http\Controllers\TestController;
 // Auth routes
 Auth::routes(['verify' => true, 'register' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
+
+Route::get('/angebot/{collection:uuid}', [CollectionController::class, 'show'])->name('offer');
+Route::get('/angebot/{collection:uuid}/detail/{any}', [CollectionController::class, 'show'])->name('offer');
+
 Route::get('/', [PageController::class, 'index'])->name('home');
 
 // Routes for testing

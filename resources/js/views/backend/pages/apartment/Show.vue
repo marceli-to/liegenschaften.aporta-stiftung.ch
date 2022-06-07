@@ -94,18 +94,18 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import Filter from "@/views/pages/mixins/Filter";
+import Filter from "@/views/backend/pages/mixins/Filter";
 import ErrorHandling from "@/mixins/ErrorHandling";
-import SiteHeader from '@/views/layout/Header.vue';
-import SiteMain from '@/views/layout/Main.vue';
-import PageMenu from '@/views/pages/apartment/components/Menu.vue';
-import ApartmentWrapper from '@/views/pages/apartment/components/Wrapper.vue';
-import ApartmentGrid from '@/views/pages/apartment/components/Grid.vue';
-import ApartmentRow from '@/views/pages/apartment/components/Row.vue';
-import ApartmentRowHeader from '@/views/pages/apartment/components/RowHeader.vue';
-import ApartmentLabel from '@/views/pages/apartment/components/Label.vue';
-import ApartmentInput from '@/views/pages/apartment/components/Input.vue';
-import Isometrie from '@/views/pages/apartment/components/Isometrie.vue';
+import SiteHeader from '@/views/backend/layout/Header.vue';
+import SiteMain from '@/views/backend/layout/Main.vue';
+import PageMenu from '@/views/backend/pages/apartment/components/Menu.vue';
+import ApartmentWrapper from '@/views/backend/pages/apartment/components/Wrapper.vue';
+import ApartmentGrid from '@/views/backend/pages/apartment/components/Grid.vue';
+import ApartmentRow from '@/views/backend/pages/apartment/components/Row.vue';
+import ApartmentRowHeader from '@/views/backend/pages/apartment/components/RowHeader.vue';
+import ApartmentLabel from '@/views/backend/pages/apartment/components/Label.vue';
+import ApartmentInput from '@/views/backend/pages/apartment/components/Input.vue';
+import Isometrie from '@/views/backend/pages/apartment/components/Isometrie.vue';
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from "@/components/ui/icons/Checkmark.vue";
 
