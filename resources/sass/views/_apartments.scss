@@ -30,8 +30,23 @@
     @extend %grid-cols-10;
   }
 
+  .apartment-row-header,
   .apartment-row {
     @extend %grid-cols-4;
+  }
+
+  .apartment-row-header {
+
+    > div {
+      border-top: 1px solid $color-grey;
+      color: $color-primary;
+      @include font-bold();
+      min-height: $space-12x;
+      padding-top: $space-1x;
+    }
+  }
+
+  .apartment-row {
 
     > div {
       border-top: 1px solid $color-light-grey;

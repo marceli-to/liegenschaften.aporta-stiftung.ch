@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ApartmentController;
 use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\CollectionController;
+use App\Http\Controllers\Api\CollectionItemController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +40,13 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('settings/exteriors', [SettingsController::class, 'exteriors']);
   Route::get('settings/states', [SettingsController::class, 'states']);
 
+  // Collection items
+  Route::get('collection-items', [CollectionItemController::class, 'get']);
+  Route::get('collection-items/{item}', [CollectionItemController::class, 'find']);
+
   // Collections
   Route::get('collections', [CollectionController::class, 'get']);
-  Route::get('collection/items', [CollectionController::class, 'getItems']);
+  Route::get('collection/{collection}', [CollectionController::class, 'find']);
   Route::post('collection', [CollectionController::class, 'store']);
 
 

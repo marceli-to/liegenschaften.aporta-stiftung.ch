@@ -77,7 +77,7 @@ class ApartmentController extends Controller
    */
   public function find(Apartment $apartment)
   {
-    $apartment = Apartment::with('building', 'floor', 'room', 'tenant', 'estate')->findOrFail($apartment->id);
+    $apartment = Apartment::with('building', 'floor', 'room', 'tenant', 'estate', 'collectionItems.collection')->findOrFail($apartment->id);
     return response()->json($apartment);
   }
 

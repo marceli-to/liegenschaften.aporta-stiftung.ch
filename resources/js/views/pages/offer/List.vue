@@ -105,8 +105,8 @@ import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
-import Filter from "@/views/pages/apartment/mixins/Filter";
-import Collection from "@/views/pages/apartment/mixins/Collection";
+import Filter from "@/views/pages/mixins/Filter";
+import Collection from "@/views/pages/mixins/Collection";
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
@@ -154,8 +154,7 @@ export default {
 
       // Routes
       routes: {
-        get: '/api/collections',
-        getItems: '/api/collection/items',
+        get: '/api/collection-items',
       },
 
       // States
@@ -178,7 +177,7 @@ export default {
     fetch() {
       NProgress.start();
       this.isFetched = false;
-      this.axios.get(`${this.routes.getItems}`).then(response => {
+      this.axios.get(`${this.routes.get}`).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
         NProgress.done();

@@ -64,6 +64,12 @@ class Apartment extends Base
     ]);
 	}
 
+  public function collectionItems()
+  {
+    return $this->hasMany(CollectionItem::class, 'apartment_id', 'id')->orderBy('sent_at', 'DESC');
+  }
+
+
   /**
    * Scopes 
    */

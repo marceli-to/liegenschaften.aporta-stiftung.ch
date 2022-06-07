@@ -56,6 +56,7 @@
           </apartment-row>
         </div>
         <div class="span-4">
+
           <h2>Hauptmieter*in</h2>
           <apartment-row>
             <div class="span-1 is-first"><label>Name</label></div>
@@ -65,7 +66,25 @@
             <div class="span-1"><label>Vorname</label></div>
             <div class="span-3">{{ apartment.tenant_id ? apartment.tenant.firstname : '–' }}</div>
           </apartment-row>
-          <h2 class="mt-15x">Angeboten</h2>
+          
+          <template v-if="apartment.collection_items.length">
+            <h2 class="mt-15x">Angeboten</h2>
+            <apartment-row-header>
+              <div class="span-2">Name</div>
+              <div class="span-1">Datum</div>
+              <div class="span-1 align-center">Interesse</div>
+            </apartment-row-header>
+            <apartment-row
+              v-for="item in apartment.collection_items" 
+              :key="item.uuid">
+              <div class="span-2 border-light-blue">{{ item.collection.firstname }} {{ item.collection.name }}</div>
+              <div class="span-1">{{ item.sent_at }}</div>
+              <div class="span-1 flex justify-center text-primary">
+                <icon-checkmark v-if="item.accepted" />
+                <icon-cross :size="'md'" v-else />
+              </div>
+            </apartment-row>
+          </template>
         </div>
       </apartment-grid>
     </apartment-wrapper>
@@ -75,18 +94,20 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import Filter from "@/views/pages/apartment/mixins/Filter";
+import Filter from "@/views/pages/mixins/Filter";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
-// import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import PageMenu from '@/views/pages/apartment/components/Menu.vue';
 import ApartmentWrapper from '@/views/pages/apartment/components/Wrapper.vue';
 import ApartmentGrid from '@/views/pages/apartment/components/Grid.vue';
 import ApartmentRow from '@/views/pages/apartment/components/Row.vue';
+import ApartmentRowHeader from '@/views/pages/apartment/components/RowHeader.vue';
 import ApartmentLabel from '@/views/pages/apartment/components/Label.vue';
 import ApartmentInput from '@/views/pages/apartment/components/Input.vue';
 import Isometrie from '@/views/pages/apartment/components/Isometrie.vue';
+import IconCross from "@/components/ui/icons/Cross.vue";
+import IconCheckmark from "@/components/ui/icons/Checkmark.vue";
 
 export default {
   components: {
@@ -99,11 +120,13 @@ export default {
     ApartmentRow,
     ApartmentInput,
     ApartmentLabel,
-    Isometrie
+    ApartmentRowHeader,
+    Isometrie,
+    IconCross,
+    IconCheckmark
   },
 
   mixins: [ErrorHandling, Filter],
-
 
   data() {
     return {
@@ -154,6 +177,7 @@ export default {
     },
 
   },
+
   watch: {
     '$route'() {
       this.fetch();

@@ -30,7 +30,6 @@ class CollectionController extends Controller
     return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->orderBy('created_at', 'DESC')->get());
   }
 
-
   /**
    * Get a single collection
    * 
