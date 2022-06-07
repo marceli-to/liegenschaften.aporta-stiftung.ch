@@ -55,14 +55,14 @@
             <router-link 
               :to="{name: 'apartments'}"
               class="icon-offer"
-              v-if="$route.name == 'offer'">
+              v-if="$route.name == 'collections'">
               <icon-cross />
             </router-link>
             <router-link 
-              :to="{name: 'offer'}" 
+              :to="{name: 'collections'}" 
               class="icon-offer"
               v-else>
-              <icon-cross v-if="$route.name == 'offer'" />
+              <icon-cross v-if="$route.name == 'collections'" />
               <icon-list v-else />
             </router-link>
           </li>
@@ -131,8 +131,8 @@ export default {
       if (this.$props.view == 'show') {
         cls = cls + ' is-detail';
       }
-      if (this.$route.name == 'offer') {
-        cls = cls + ' is-offer';
+      if (this.$route.name == 'collections') {
+        cls = cls + ' is-collection';
       }
       return cls; 
     }

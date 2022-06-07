@@ -2,18 +2,18 @@
 <div>
   <site-header :user="$store.state.user"></site-header>
   <site-main v-if="isFetched">
-    <nav :class="[!isActive ? 'is-disabled' : '', 'page-menu page-menu__offer']">
+    <nav :class="[marked.length == 0 ? 'is-disabled' : '', 'page-menu page-menu__offer']">
       <ul>
         <li class="start-5">
-          <a href="">
+          <a href="" @click.prevent="archive()">
             <icon-download />
-            <span>Archivieren</span>
+            <span>Archivieren {{ marked.length > 0 ? '(' + marked.length +')' : ''}}</span>
           </a>
         </li>
         <li>
-          <a href="">
+          <a href="" @click.prevent="destroy()">
             <icon-trash :size="'lg'" />
-            <span>Löschen</span>
+            <span>Löschen {{ marked.length > 0 ? '(' + marked.length +')' : ''}}</span>
           </a>
         </li>
       </ul>
@@ -57,7 +57,7 @@
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
-            <a href="" @click.prevent="sort('state_id')">
+            <a href="" @click.prevent="sort('accepted')">
               <icon-sort />
             </a>
           </div>
@@ -65,8 +65,9 @@
       </list-header>
       <div 
         v-for="(d, index) in sortedData" 
-        class="list-row" 
-        :key="d.id">
+        :class="[isMarked(d.uuid) ? 'is-marked' : '', 'list-row']" 
+        :key="d.id"
+        @click="mark(d.uuid)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <span>{{ d.collection.firstname }} {{ d.collection.name }}</span>
         </list-item>
@@ -90,7 +91,9 @@
           <span>{{ d.collection.comment }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
-          <!-- <icon-state :id="collection.state_id" /> -->
+          <icon-checkmark v-if="d.accepted == 1"/>
+          <icon-cross :size="'lg'" v-else-if="d.replied_at != null && d.accepted == 0" />
+          <icon-hourglass v-else-if="d.replied_at == null && d.accepted == 0"/>
         </list-item>
       </div>
     </list>
@@ -113,6 +116,8 @@ import IconState from "@/components/ui/icons/State.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
+import IconCheckmark from "@/components/ui/icons/Checkmark.vue";
+import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 import IconDownload from "@/components/ui/icons/Download.vue";
 import SiteHeader from '@/views/layout/Header.vue';
 import SiteMain from '@/views/layout/Main.vue';
@@ -136,6 +141,8 @@ export default {
     IconTrash,
     IconCross,
     IconDownload,
+    IconCheckmark,
+    IconHourglass,
     List,
     ListRow,
     ListHeader,
@@ -155,11 +162,14 @@ export default {
       // Routes
       routes: {
         get: '/api/collection-items',
+        archive: '/api/collection-items/archive',
+        delete: '/api/collection-items/delete',
       },
+
+      marked: [],
 
       // States
       isFetched: false,
-      isActive: false,
 
       // Messages
       messages: {
@@ -174,6 +184,7 @@ export default {
   },
 
   methods: {
+
     fetch() {
       NProgress.start();
       this.isFetched = false;
@@ -183,7 +194,40 @@ export default {
         NProgress.done();
       });
     },
-  },
 
+    archive() {
+      NProgress.start();
+      this.isFetched = true;
+      this.axios.put(`${this.routes.archive}`, {items: this.marked}).then(response => {
+        this.marked = [];
+        this.fetch();
+        NProgress.done();
+      });
+    },
+
+    destroy() {
+      NProgress.start();
+      this.isFetched = true;
+      this.axios.put(`${this.routes.delete}`, {items: this.marked}).then(response => {
+        this.marked = [];
+        this.fetch();
+        NProgress.done();
+      });
+    },
+
+    mark(uuid) {
+      let index = this.marked.findIndex(item => item === uuid);
+      if (index > -1) {
+        this.marked.splice(index, 1);
+      }
+      else if (index == -1) {
+       this.marked.push(uuid);
+      }
+    },
+
+    isMarked(uuid) {
+      return this.marked.find(item => item === uuid) !== undefined ? true : false;
+    }
+  },
 }
 </script>

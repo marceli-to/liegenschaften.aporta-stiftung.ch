@@ -33,7 +33,6 @@ Vue.use(VueRouter);
 import baseRoutes from '@/config/routes';
 import apartmentRoutes from '@/views/pages/apartment/config/routes';
 import collectionRoutes from '@/views/pages/collection/config/routes';
-import offerRoutes from '@/views/pages/offer/config/routes';
 
 const router = new VueRouter(
   { 
@@ -42,7 +41,6 @@ const router = new VueRouter(
       ...baseRoutes,
       ...apartmentRoutes,
       ...collectionRoutes,
-      ...offerRoutes,
     ]
   }
 );

@@ -35,6 +35,6 @@ class CreateCollectionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collection_items');
+      Schema::dropIfExists('collection_items');
     }
 }

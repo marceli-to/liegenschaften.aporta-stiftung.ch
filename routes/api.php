@@ -41,8 +41,12 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('settings/states', [SettingsController::class, 'states']);
 
   // Collection items
+  Route::put('collection-items/delete', [CollectionItemController::class, 'destroy']);
+  Route::put('collection-items/archive', [CollectionItemController::class, 'archive']);
   Route::get('collection-items', [CollectionItemController::class, 'get']);
   Route::get('collection-items/{item}', [CollectionItemController::class, 'find']);
+
+
 
   // Collections
   Route::get('collections', [CollectionController::class, 'get']);

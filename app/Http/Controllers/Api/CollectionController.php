@@ -21,16 +21,6 @@ class CollectionController extends Controller
   }
 
   /**
-   * Get a list of collection items
-   * 
-   * @return \Illuminate\Http\Response
-   */
-  public function getItems()
-  { 
-    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->orderBy('created_at', 'DESC')->get());
-  }
-
-  /**
    * Get a single collection
    * 
    * @param Collection $collection

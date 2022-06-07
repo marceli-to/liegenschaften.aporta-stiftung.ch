@@ -6,6 +6,8 @@ use App\Models\Base;
 
 class CollectionItem extends Base
 {
+  use SoftDeletes;
+
   protected $casts = [
     'created_at' => 'date:d.m.Y',
     'updated_at' => 'date:d.m.Y',
@@ -22,6 +24,7 @@ class CollectionItem extends Base
     'replied_at',
     'accepted',
     'comment',
+    'archive',
     'collection_id',
     'apartment_id',
   ];
