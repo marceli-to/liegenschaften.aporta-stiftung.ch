@@ -12,6 +12,9 @@ class Estate extends Base
     'uuid',
     'domain',
     'description',
+    'description_long',
+    'city',
+    'maps',
     'order',
     'publish',
   ];

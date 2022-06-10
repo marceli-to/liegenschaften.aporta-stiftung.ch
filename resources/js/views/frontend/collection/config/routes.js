@@ -9,7 +9,7 @@ const routes = [
   },
   {
     name: 'collection-show',
-    path: '/angebot/:uuid/detail/:collectionUuid',
+    path: '/angebot/:uuid/detail/:itemUuid',
     component: CollectionShow,
   },
 ];

@@ -46,8 +46,6 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('collection-items', [CollectionItemController::class, 'get']);
   Route::get('collection-items/{item}', [CollectionItemController::class, 'find']);
 
-
-
   // Collections
   Route::get('collections', [CollectionController::class, 'get']);
   Route::get('collection/{collection}', [CollectionController::class, 'find']);

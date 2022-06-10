@@ -203,7 +203,7 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import ErrorHandling from "@/mixins/ErrorHandling";
+import ErrorHandling from '@/mixins/ErrorHandling';
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/backend/pages/mixins/Filter";

@@ -23,6 +23,10 @@ class CollectionController extends BaseController
 
   public function show(Collection $collection)
   {
-    return view($this->viewPath . 'collection');
+    $collection = Collection::with('items.apartment.room', 'items.apartment.building', 'items.apartment.floor', 'estate')
+                            ->findOrFail($collection->id);
+    
+    // dd($collection);
+    return view($this->viewPath . 'collection', ['collection' => $collection]);
   }
 }

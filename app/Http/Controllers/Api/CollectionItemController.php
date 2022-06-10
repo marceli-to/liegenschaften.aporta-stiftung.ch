@@ -15,7 +15,7 @@ class CollectionItemController extends Controller
    */
   public function get()
   { 
-    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building')->where('archive', 0)->orderBy('created_at', 'DESC')->get());
+    return new DataCollection(CollectionItem::with('collection.estate', 'apartment.room', 'apartment.floor', 'apartment.building', 'apartment.estate')->where('archive', 0)->orderBy('created_at', 'DESC')->get());
   }
 
   /**

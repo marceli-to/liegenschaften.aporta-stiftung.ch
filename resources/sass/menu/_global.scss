@@ -8,11 +8,22 @@ nav {
 
   li {
     display: block;
+
     &.page-title {
-      a {
+      a, h1 {
         @include font-regular();
         text-decoration: none !important;
       }
+
+      h1, h2 {
+        color: $color-white;
+        margin: 0;
+      }
+
+      h2 {
+        @include font-bold();
+      }
+
     }
   }
 

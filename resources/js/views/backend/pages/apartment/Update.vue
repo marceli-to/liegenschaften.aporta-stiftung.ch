@@ -49,7 +49,7 @@
                     <apartment-row>
                       <div class="span-2"><label>Adresse</label></div>
                       <div class="span-2">{{ apartment.building.street }}</div>
-                      <div class="span-2 start-3">{{ apartment.building.city }}</div>
+                      <div class="span-2 start-3">{{ apartment.estate.city }}</div>
                     </apartment-row>
                     <apartment-row>
                       <div class="span-2"><label>Bezeichnung</label></div>
@@ -99,18 +99,18 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import ErrorHandling from "@/mixins/ErrorHandling";
+import ErrorHandling from '@/mixins/ErrorHandling';
 import IconReplace from "@/components/ui/icons/Replace.vue";
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
-import PageMenu from '@/views/backend/pages/apartment/components/Menu.vue';
-import ApartmentWrapper from '@/views/backend/pages/apartment/components/Wrapper.vue';
-import ApartmentGrid from '@/views/backend/pages/apartment/components/Grid.vue';
-import ApartmentRow from '@/views/backend/pages/apartment/components/Row.vue';
-import ApartmentLabel from '@/views/backend/pages/apartment/components/Label.vue';
-import ApartmentInput from '@/views/backend/pages/apartment/components/Input.vue';
-import Isometrie from '@/views/backend/pages/apartment/components/Isometrie.vue';
+import PageMenu from '@/components/ui/apartment/Menu.vue';
+import ApartmentWrapper from '@/components/ui/apartment/Wrapper.vue';
+import ApartmentGrid from '@/components/ui/apartment/Grid.vue';
+import ApartmentRow from '@/components/ui/apartment/Row.vue';
+import ApartmentLabel from '@/components/ui/apartment/Label.vue';
+import ApartmentInput from '@/components/ui/apartment/Input.vue';
+import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
 export default {
   components: {

@@ -4,8 +4,8 @@
 <script>
 export default {
   props: {
-    uuid: {
-      type: String,
+    collection: {
+      type: Object,
       default: null,
     }
   },

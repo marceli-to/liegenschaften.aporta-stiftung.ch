@@ -18,6 +18,10 @@ header.site-header {
     margin-bottom: 0;
   }
 
+  &.is-collection-list {
+    margin-bottom: $space-5x;
+  }
+
   > div {
     @extend %inner-block;
     align-items: center;

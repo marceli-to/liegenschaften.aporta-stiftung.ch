@@ -199,7 +199,7 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import ErrorHandling from "@/mixins/ErrorHandling";
+import ErrorHandling from '@/mixins/ErrorHandling';
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/backend/pages/mixins/Filter";
@@ -218,7 +218,7 @@ import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-import Isometrie from '@/views/backend/pages/apartment/components/Isometrie.vue';
+import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
 export default {
 

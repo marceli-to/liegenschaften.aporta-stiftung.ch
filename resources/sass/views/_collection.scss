@@ -9,3 +9,23 @@ form.collection {
   border-top: 2px solid $color-primary;
   display: block;
 }
+
+.collection {
+  @include font-size($fs-md);
+
+  .collection__intro {
+    @extend %pr-6x;
+    color: $color-black;
+    
+    p {
+      @extend %mb-2x;
+      line-height: 1.4 !important;
+    }
+  }
+  
+  .collection__iso {
+    @extend %pt-8x;
+  }
+
+}
+

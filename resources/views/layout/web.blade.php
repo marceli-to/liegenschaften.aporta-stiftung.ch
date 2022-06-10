@@ -17,9 +17,7 @@
 <link href="{{ mix('assets/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-<div id="collection">
-  <collection-component uuid="4e2311ca-d53b-480a-a302-3a00d8199644" />
-</div>
+@yield('content')
 <script src="{{ mix('assets/js/collection.js') }}" defer></script>
 </body>
 </html>

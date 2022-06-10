@@ -75,7 +75,7 @@
           <span>{{ d.collection.email }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <span>{{ d.apartment.building.street }}, {{ d.apartment.building.city }}</span>
+          <span>{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</span>
           <span>{{ d.apartment.description }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
@@ -105,7 +105,7 @@
 </template>
 <script>
 import NProgress from 'nprogress';
-import ErrorHandling from "@/mixins/ErrorHandling";
+import ErrorHandling from '@/mixins/ErrorHandling';
 import Helpers from "@/mixins/Helpers";
 import Sort from "@/mixins/Sort";
 import Filter from "@/views/backend/pages/mixins/Filter";
@@ -116,7 +116,7 @@ import IconState from "@/components/ui/icons/State.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
-import IconCheckmark from "@/components/ui/icons/Checkmark.vue";
+import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 import IconDownload from "@/components/ui/icons/Download.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';

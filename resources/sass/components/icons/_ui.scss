@@ -68,3 +68,10 @@
 .icon-state {
   color: $color-primary;
 }
+
+.icon-browse {
+  align-items: center;
+  color: $color-primary;
+  height: inherit;
+  display: flex;
+}

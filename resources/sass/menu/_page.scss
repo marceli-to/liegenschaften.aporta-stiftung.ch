@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 
+// Backend
 nav.page-menu {
   width: 100%;
 
@@ -78,7 +79,71 @@ nav.page-menu {
       }
     }
   }
+
+  &.page-menu__apartments {
+    
+    ul {
+      @extend %grid-cols-12;
+    }
+
+  }
 }
+
+// Frontend
+nav.page-menu-collection {
+  width: 100%;
+
+  ul {
+    @extend %grid-cols-10;
+    align-items: center;
+  }
+
+  li {
+    height: 60px;
+
+    &.page-menu-collection__browse {
+      align-items: center;
+      border-bottom: 1px solid $color-primary;
+      display: flex;
+      @include font-size($fs-md);
+      justify-content: space-between;
+    }
+
+    a:not(.icon-browse) {
+      align-items: center;
+      border-bottom: 1px solid $color-primary;
+      color: $color-primary;
+      display: flex;
+      @include font-size($fs-md);
+      height: inherit;
+      line-height: 1 !important;
+      text-transform: uppercase;
+  
+      span {
+        display: block;
+        line-height: 1 !important;
+      }
+  
+      svg {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      svg + span,
+      div + span {
+        margin-left: $space-4x;
+      }
+
+      span + svg,
+      span + div {
+        margin-left: $space-4x;
+      }
+    }
+
+  }
+}
+
+
 
 .has-selection {
   nav.page-menu {
