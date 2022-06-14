@@ -1,7 +1,7 @@
 <?php
 namespace App\Tasks;
 
-class Notification
+class Offer
 {
   public function __invoke()
   {
@@ -10,7 +10,7 @@ class Notification
     foreach($collection->all() as $c)
     {
       try {
-        \Mail::to($c->email)->send(new \App\Mail\Notification($c));
+        \Mail::to($c->email)->send(new \App\Mail\Offer($c));
         $c->processed = 1;
         $c->save();
 

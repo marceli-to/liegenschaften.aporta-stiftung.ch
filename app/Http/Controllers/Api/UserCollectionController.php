@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\CollectionItem;
+use App\Models\ReplyQueue;
 use Illuminate\Http\Request;
 
 class UserCollectionController extends Controller
@@ -63,9 +64,28 @@ class UserCollectionController extends Controller
       'size_terrace' => $item->apartment->size_terrace,
       'size_patio' => $item->apartment->size_patio,
       'size_balcony' => $item->apartment->size_balcony,
+      'has_reply' => $item->replied_at == NULL ? FALSE : TRUE
     ];
 
     return response()->json(['item' => $data, 'pagination' => $this->getPagination($collection, $collectionItemUuid)]);
+  }
+
+  /**
+   * Handle a reply on an collection item
+   * 
+   * @param  \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\Response
+   */
+  public function reply(Request $request)
+  {
+    $item = CollectionItem::where('uuid', $request->input('uuid'))->firstOrFail();
+    $item->update([
+      'comment' => $request->input('comment'),
+      'accepted' => $request->input('accepted'),
+      'replied_at'  => \Carbon\Carbon::now()
+    ]);
+    ReplyQueue::create(['collection_item_id' => $item->id]);
+    return response()->json('success');
   }
 
   /**

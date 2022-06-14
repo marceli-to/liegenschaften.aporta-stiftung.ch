@@ -37,5 +37,4 @@
 @endforeach
 </tbody>
 </table>
-
 @endcomponent

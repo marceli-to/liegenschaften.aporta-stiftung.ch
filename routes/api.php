@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\UserCollectionController;
 
 Route::get('/user-collection/{collection:uuid}/item/{collectionItem:uuid}', [UserCollectionController::class, 'show']);
 Route::get('/user-collection/{collection:uuid}', [UserCollectionController::class, 'list']);
+Route::post('/user-collection', [UserCollectionController::class, 'reply']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();

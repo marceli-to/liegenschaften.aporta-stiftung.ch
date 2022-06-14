@@ -4,11 +4,13 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Collection;
+use App\Models\ReplyQueue;
 
-class Notification extends Mailable
+class Reply extends Mailable
 {
   use Queueable, SerializesModels;
+
+  protected $reply;
 
   /**
    * Create a new message instance.
@@ -16,10 +18,9 @@ class Notification extends Mailable
    * @param Collection $collection
    * @return void
    */
-  public function __construct(Collection $collection)
+  public function __construct(ReplyQueue $reply)
   {
-    $this->collection = $collection;
-    $this->subject = 'Wohnungsangebot '. $collection->estate->description .' – Dr. Stephan à Porta-Stiftung';
+    $this->reply = $reply;
   }
 
   /**
@@ -30,8 +31,8 @@ class Notification extends Mailable
   public function build()
   {
     return $this->from(\Config::get('client.email.from'), 'Dr. Stephan à Porta-Stiftung')
-                ->subject($this->subject)
-                ->with(['collection' => $this->collection])
-                ->markdown('mails.notification');
+                ->subject('Antwort Wohnungsangebot '. $this->reply->item->collection->estate->description .' – Dr. Stephan à Porta-Stiftung')
+                ->with(['item' => $this->reply->item])
+                ->markdown('mails.reply');
   }
 }

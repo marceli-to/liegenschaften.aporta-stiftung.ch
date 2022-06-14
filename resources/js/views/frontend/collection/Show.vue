@@ -51,7 +51,7 @@
         </div>
         <div class="span-4">
           <apartment-row>
-            <div class="span-4 is-first">
+            <div class="span-4 is-first" v-if="!data.has_reply">
               <h3>An-/Abmeldung</h3>
               <form>
                 <apartment-row>
@@ -74,17 +74,19 @@
                   <div class="collection-text my-6x">
                     <p>Sie haben kein Interesse an der Wohnung? Bitte teilen Sie uns ihre Gründe mit.</p>
                   </div>
-                  <textarea name="comment" class="is-outline" placeholder="Kommentar"></textarea>
+                  <textarea name="comment" class="is-outline" placeholder="Kommentar" v-model="form.comment"></textarea>
                 </div>
                 <div class="mt-12x" v-if="form.accept != null">
                   <a 
                     href="javascript:;" 
-                    class="btn-primary is-small mb-3x">
+                    class="btn-primary is-small mb-3x"
+                    @click="reply()">
                     <span>Antworten</span>
                   </a>
                   <a 
                     href="javascript:;" 
-                    class="btn-secondary is-outline is-small">
+                    class="btn-secondary is-outline is-small"
+                    @click="reset()">
                     <span>Abbrechen</span>
                   </a>
                 </div>
@@ -93,6 +95,9 @@
                   <p>Giancarlo Esempio steht Ihnen für weitere Informationen gerne zur Verfügung:<br>043 222 60 00<br><a href="mailo:esempio@test.ch">esempio@aporta-stiftung.ch</a></p>
                 </div>
               </form>
+            </div>
+            <div class="span-4 is-first collection-text" v-else>
+              <p>Sie haben dieses Angebot bereits beantwortet.</p>
             </div>
           </apartment-row>
         </div>
@@ -155,7 +160,8 @@ export default {
 
       // Routes
       routes: {
-        show: '/api/user-collection'
+        show: '/api/user-collection',
+        reply: '/api/user-collection'
       },
 
       // States
@@ -169,6 +175,7 @@ export default {
   },
 
   methods: {
+
     fetch() {
       NProgress.start();
       this.isFetched = false;
@@ -180,10 +187,29 @@ export default {
       });
     },
 
+    reply() {
+      let data = {
+        'uuid': this.$route.params.itemUuid,
+        'accepted': this.form.accept,
+        'comment': this.form.comment,
+      };
+      NProgress.start();
+      this.axios.post(`${this.routes.reply}`, data).then(response => {
+        this.reset();
+        this.data.has_reply = true;
+        NProgress.done();
+      });
+    },
+
     toggleAccept(value) {
       this.form.accept = value;
+    },
+
+    reset() {
+      this.form.accept = null;
     }
   },
+
   watch: {
     '$route'() {
       this.fetch();
