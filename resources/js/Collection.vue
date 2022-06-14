@@ -4,10 +4,14 @@
 <script>
 export default {
   props: {
-    collection: {
-      type: Object,
+    estate: {
+      type: String,
       default: null,
     }
   },
+
+  mounted() {
+    //console.log(this.$props.estate);
+  }
 }
 </script>

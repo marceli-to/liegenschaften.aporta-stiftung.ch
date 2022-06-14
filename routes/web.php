@@ -17,7 +17,7 @@ Auth::routes(['verify' => true, 'register' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/angebot/{collection:uuid}', [CollectionController::class, 'show'])->name('offer');
-Route::get('/angebot/{collection:uuid}/detail/{any}', [CollectionController::class, 'show'])->name('offer');
+Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [CollectionController::class, 'show'])->name('offer');
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 

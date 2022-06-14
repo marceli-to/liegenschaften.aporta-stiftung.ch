@@ -3,6 +3,6 @@
 @section('seo_description', '')
 @section('content')
 <div id="collection">
-  <collection-component :collection="{{ $collection }}" />
+  <collection-component :estate="'{{ $collection->estate->description_long }}, {{ $collection->estate->city }}'" />
 </div>
 @endsection

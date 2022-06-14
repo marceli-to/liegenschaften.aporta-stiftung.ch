@@ -1,6 +1,6 @@
 <template>
 <div>
-  <header :class="cls" v-if="isMounted">
+  <header :class="cls">
     <div>
       <nav class="site-menu">
         <ul>
@@ -8,7 +8,7 @@
             <icon-logo class="icon-logo" />
           </li>
           <li class="span-6 page-title">
-            <h1>{{ collection.estate.description_long }}, {{ collection.estate.city }}</h1>
+            <h1>{{ $parent.$parent.$props.estate }}</h1>
           </li>
           <li class="span-4 page-title flex justify-end">
             <h2>Ihre Wohnungsangebote</h2>
@@ -29,26 +29,11 @@ export default {
   },
 
   props: {
+
     view: {
       type: String,
       default: 'list'
     },
-  },
-
-  data() {
-    return {
-      collection: {},
-      isMounted: false,
-    }
-  },
-
-  mounted() {
-    this.collection = this.$parent.$parent.$props.collection;
-    this.isMounted = true;
-  },
-
-  methods: {
-
   },
 
   computed: {

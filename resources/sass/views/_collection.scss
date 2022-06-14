@@ -11,12 +11,12 @@ form.collection {
 }
 
 .collection {
-  @include font-size($fs-md);
 
   .collection__intro {
     @extend %pr-6x;
     color: $color-black;
-    
+    @include font-size($fs-md);
+
     p {
       @extend %mb-2x;
       line-height: 1.4 !important;
@@ -26,6 +26,24 @@ form.collection {
   .collection__iso {
     @extend %pt-8x;
   }
-
 }
 
+.collection-text {
+
+  p {
+    @extend %mb-2x;
+    @include font-size($fs-md);
+    line-height: 1.4 !important;
+  }
+
+  a {
+    color: $color-black;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 1px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

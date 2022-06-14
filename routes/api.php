@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\ApartmentController;
 use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\CollectionItemController;
-
+use App\Http\Controllers\Api\UserCollectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\CollectionItemController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/user-collection/{collection:uuid}/item/{collectionItem:uuid}', [UserCollectionController::class, 'show']);
+Route::get('/user-collection/{collection:uuid}', [UserCollectionController::class, 'list']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
@@ -50,6 +53,5 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('collections', [CollectionController::class, 'get']);
   Route::get('collection/{collection}', [CollectionController::class, 'find']);
   Route::post('collection', [CollectionController::class, 'store']);
-
 
 });

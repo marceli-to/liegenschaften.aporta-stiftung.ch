@@ -36,6 +36,10 @@
   border-color: $color-secondary !important;
 }
 
+.text-md {
+  @include font-size($fs-md);
+}
+
 
 /**
  * Typography - Generic elements

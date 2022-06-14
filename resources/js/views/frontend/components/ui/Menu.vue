@@ -2,23 +2,23 @@
 <div class="mb-15x">
   <nav class="page-menu-collection content-block">
     <ul>
-      <li class="span-4">
-        <router-link :to="{name: 'collection-list', params: { uuid: $props.uuid }}">
+      <li :class="[pagination.count > 1 ? 'span-4' : 'span-5']">
+        <router-link :to="{name: 'collection-list', params: { uuid: $route.params.uuid }}">
           <icon-arrow-left :size="'md'" />
           <span>Zurück zur Übersicht</span>
         </router-link>
       </li>
-      <li class="span-2 page-menu-collection__browse">
-        <router-link :to="{name: 'collection-show', params: { uuid: ''  }}" class="icon-browse">
+      <li class="span-2 page-menu-collection__browse" v-if="pagination.count > 1">
+        <router-link :to="{name: 'collection-show', params: { uuid: $route.params.uuid, itemUuid: pagination.prev }}" class="icon-browse">
           <icon-arrow-left :size="'md'" />
         </router-link>
-          <span>{{1 | padStart}} / {{2 | padStart}}</span>
-        <router-link :to="{name: 'collection-show', params: { uuid: '' }}" class="icon-browse">
+          <span>{{ pagination.index | padStart}} / {{ pagination.count | padStart }}</span>
+        <router-link :to="{name: 'collection-show', params: { uuid: $route.params.uuid, itemUuid: pagination.next }}" class="icon-browse">
           <icon-arrow-right :size="'md'" />
         </router-link>
       </li>
-      <li class="span-4">
-        <router-link :to="{name: 'collection-list', params: { uuid: $props.uuid }}" class=" flex justify-end">
+      <li :class="[pagination.count > 1 ? 'span-4' : 'span-5']">
+        <router-link :to="{name: 'collection-list', params: { uuid: $route.params.uuid }}" class=" flex justify-end">
           <span>Download als PDF</span>
           <icon-document />
         </router-link>
@@ -41,17 +41,7 @@ export default {
   },
 
   props: {
-    uuid: [ String, Number ],
-  },
-
-  data() {
-    return {
-
-      // States
-      isLoading: false,
-      isFetched: false,
-
-    }
+    pagination: [ Object ],
   },
 
 }
