@@ -80,7 +80,7 @@
                   <a 
                     href="javascript:;" 
                     class="btn-primary is-small mb-3x">
-                    <span>Kommentar speichern</span>
+                    <span>Antworten</span>
                   </a>
                   <a 
                     href="javascript:;" 

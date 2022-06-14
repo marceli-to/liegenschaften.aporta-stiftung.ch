@@ -2,6 +2,7 @@
 <h1>Wohnungsangebot {{$collection->estate->description}}</h1>
 <p>Guten Tag {{$collection->firstname}} {{$collection->name}}</p>
 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis aliquam nostrum optio nam tempore:</p>
+<p><a href="{{ route('offer.list', ['collection' => $collection->uuid, 'hash' => md5($collection->email)]) }}" class="button button-primary">Unser Angebot</a></p>
 <table class="notification-table" cellspacing="0" cellpadding="0">
 <thead>
 <th>Liegenschaft</th>

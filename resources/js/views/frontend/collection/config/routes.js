@@ -4,7 +4,7 @@ import CollectionShow from '@/views/frontend/collection/Show.vue';
 const routes = [
   {
     name: 'collection-list',
-    path: '/angebot/:uuid',
+    path: '/angebot/:uuid/:hash?',
     component: CollectionList,
   },
   {

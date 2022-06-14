@@ -16,8 +16,8 @@ use App\Http\Controllers\TestController;
 Auth::routes(['verify' => true, 'register' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('/angebot/{collection:uuid}', [CollectionController::class, 'show'])->name('offer');
-Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [CollectionController::class, 'show'])->name('offer');
+Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [CollectionController::class, 'show'])->name('offer.show');
+Route::get('/angebot/{collection:uuid}/{hash?}', [CollectionController::class, 'show'])->name('offer.list');
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 
