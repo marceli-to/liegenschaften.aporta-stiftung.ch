@@ -20,7 +20,6 @@
 <td>{{$item->apartment->description}}</td>
 <td>{{$item->apartment->size}}</td>
 </tr>
-@endforeach
 </tbody>
 </table>
 @endcomponent

@@ -88,7 +88,7 @@
           <span>{{ d.replied_at ? d.replied_at : '–' }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
-          <span>{{ d.collection.comment }}</span>
+          <span>{{ d.comment }}</span>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <icon-checkmark v-if="d.accepted == 1"/>
