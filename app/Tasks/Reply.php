@@ -10,7 +10,7 @@ class Reply
     foreach($replies->all() as $r)
     {
       try {
-        \Mail::to($r->email)->send(new \App\Mail\Reply($r));
+        \Mail::to(env('APORTA_REPLY_TO'))->send(new \App\Mail\Reply($r));
         $r->processed = 1;
         $r->save();
       } 
