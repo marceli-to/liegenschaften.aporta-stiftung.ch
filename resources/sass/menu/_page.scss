@@ -151,7 +151,7 @@ nav.page-menu-collection {
       &:not(.is-active) {
         border-bottom: 1px solid $color-light-grey;
         color: $color-light-grey;
-
+        pointer-events: none;
         &:hover {
           border-bottom: 1px solid $color-primary;
           color: $color-primary;

@@ -27,7 +27,7 @@
             <router-link 
               :to="{name: 'apartments'}"
               class="icon-filter"
-              v-if="$route.name == 'collection'">
+              v-if="$route.name == 'collection' || $route.name == 'collections'">
               <icon-filter :active="$store.state.filter.set" />
             </router-link>
             <a 

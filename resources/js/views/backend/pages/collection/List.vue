@@ -84,7 +84,7 @@
         </list-item>
       </div>
     </list>
-    <list-empty v-else>
+    <list-empty class="mt-6x text-md" v-else>
       {{messages.emptyData}}
     </list-empty>
   </site-main>
@@ -92,13 +92,11 @@
   <dialog-wrapper ref="dialogDestroyConfirm">
     <template #message>
       <div>
-        <strong>
-          Bitte löschen bestätigen!
-        </strong>
+        <strong>Möchten Sie den ausgewählten Eintrag wirklich löschen?</strong>
       </div>
     </template>
     <template #actions>
-      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="destroy()">Löschen</a>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="destroy()">Ja</a>
     </template>
   </dialog-wrapper>
 </div>
@@ -170,7 +168,7 @@ export default {
 
       // Messages
       messages: {
-        emptyData: 'Es sind noch keine Daten vorhanden...',
+        emptyData: 'Es sind noch keine Angebote vorhanden.',
       },
     };
   },

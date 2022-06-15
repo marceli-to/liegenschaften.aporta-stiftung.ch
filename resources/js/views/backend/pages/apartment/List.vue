@@ -133,7 +133,7 @@
         @mouseleave="hide(apartment.number)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
-            <icon-checkbox class="icon" />
+            <icon-checkbox class="icon icon-light" />
           </a>
           <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
            <icon-checkbox :active="'true'" class="icon" />

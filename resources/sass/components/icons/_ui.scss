@@ -51,9 +51,6 @@
 
 .icon-user {
   @extend %icon;
-  align-items: center;
-  color: $color-primary;
-  display: flex; 
 }
 
 .icon-state {
@@ -65,4 +62,18 @@
   color: $color-primary;
   height: inherit;
   display: flex;
+}
+
+.icon-dark {
+  color: $color-primary;
+}
+
+.icon-light {
+  color: $color-medium-grey;
+}
+
+.has-selection { 
+  .icon-dark {
+    color: $color-light-grey;
+  }
 }

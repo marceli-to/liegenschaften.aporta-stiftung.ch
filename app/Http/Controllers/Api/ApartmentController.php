@@ -90,8 +90,13 @@ class ApartmentController extends Controller
    */
   public function update(Apartment $apartment, Request $request)
   {
-    $apartment = Apartment::with('tenant')->find($apartment->id);
+    $apartment = Apartment::with('tenant')->findOrFail($apartment->id);
 
+    // State
+    $apartment->state_id = $request->input('state_id');
+    $apartment->save();
+
+    // Tenants
     if (!$request->input('tenant.firstname') && !$request->input('tenant.name'))
     {
       $apartment->tenant_id = null;
@@ -120,6 +125,7 @@ class ApartmentController extends Controller
         $apartment->save();
       }
     }
+
     return response()->json('successfully updated');
   }
 

@@ -70,7 +70,7 @@
         :key="apartment.uuid">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
-           <icon-checkbox :active="'true'" class="icon" />
+           <icon-checkbox :active="'true'" class="icon icon-secondary" />
           </a> 
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">

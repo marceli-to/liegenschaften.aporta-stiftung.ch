@@ -89,7 +89,19 @@
                 <input type="text" v-model="apartment.tenant.firstname">
               </apartment-input>
             </apartment-row>
-            <h2 class="mt-15x">Angeboten</h2>
+            <apartment-row>
+              <apartment-label :cls="'span-1'">Status</apartment-label>
+              <div class="span-3 flex">
+                <a href="" class="icon-state flex" @click.prevent="setState(1)">
+                  <icon-radio :active="apartment.state_id == 1 ? true : false" />
+                  <span class="ml-2x">frei</span>
+                </a>
+                <a href="" class="icon-state flex ml-6x" @click.prevent="setState(3)">
+                  <icon-radio :active="apartment.state_id == 3 ? true : false" />
+                  <span class="ml-2x">vermietet</span>
+                </a>
+              </div>
+            </apartment-row>
           </div>
         </apartment-grid>
       </apartment-wrapper>
@@ -100,7 +112,7 @@
 <script>
 import NProgress from 'nprogress';
 import ErrorHandling from '@/mixins/ErrorHandling';
-import IconReplace from "@/components/ui/icons/Replace.vue";
+import IconRadio from "@/components/ui/icons/Radio.vue";
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
@@ -116,7 +128,7 @@ export default {
   components: {
     NProgress,
     DialogWrapper,
-    IconReplace,
+    IconRadio,
     SiteHeader,
     SiteMain,
     PageMenu,
@@ -138,7 +150,8 @@ export default {
         tenant: {
           name: null,
           firstname: null
-        }
+        },
+        state_id: 1,
       },
 
       // Routes
@@ -195,6 +208,10 @@ export default {
       event.target.classList.add('is-invalid');
       this.hasErrors = true;
     },
+
+    setState(stateId) {
+      this.apartment.state_id = stateId;
+    }
   },
 
 };

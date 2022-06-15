@@ -21,10 +21,14 @@
         </router-link>
       </li>
       <li>
-        <a href="">
-          <icon-bubble />
-          <span>Kommentar</span>
+        <a href="" @click.prevent="addToCollection($props.apartment.uuid)" v-if="!isInCollection($props.apartment.uuid)">
+          <icon-checkbox class="icon icon-dark" />
+          <span>Merken</span>
         </a>
+        <a href="" @click.prevent="removeFromCollection($props.apartment.uuid)" v-if="isInCollection($props.apartment.uuid)">
+          <icon-checkbox :active="true" class="icon" />
+          <span>Merken</span>
+        </a> 
       </li>
       <li>
         <a href="">
@@ -44,6 +48,8 @@ import IconReset from "@/components/ui/icons/Reset.vue";
 import IconPencil from "@/components/ui/icons/Pencil.vue";
 import IconBubble from "@/components/ui/icons/Bubble.vue";
 import IconDocument from "@/components/ui/icons/Document.vue";
+import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
+import Collection from "@/views/backend/pages/mixins/Collection";
 
 export default {
 
@@ -54,12 +60,15 @@ export default {
     IconPencil,
     IconBubble,
     IconDocument,
+    IconCheckbox
   },
 
   props: {
     id: [ String, Number ],
     apartment: Object,
   },
+
+  mixins: [Collection],
 
   data() {
     return {
