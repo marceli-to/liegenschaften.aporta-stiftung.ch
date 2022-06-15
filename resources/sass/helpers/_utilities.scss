@@ -4,19 +4,18 @@
  * -----------------------------------------------------------------------------
  */
 
-.hide-sm {
-	display: none;
-	@include bp-md() {
-		display: block;
-	}
+.xs\:hide {
+  @include bp-xs() {
+    display: none !important;
+  }
 }
 
-.hide-md {
-	display: block;
-	@include bp-md() {
-		display: none;
-	}
+.sm\:hide {
+  @include bp-sm() {
+    display: none !important;
+  }
 }
+
 
 .line-after {
   position: relative;

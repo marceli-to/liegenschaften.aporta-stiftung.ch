@@ -4,13 +4,13 @@
     <div>
       <nav class="site-menu">
         <ul>
-          <li class="span-2">
+          <li class="xs:span-4 span-2">
             <icon-logo class="icon-logo" />
           </li>
-          <li class="span-6 page-title">
+          <li class="xs:hide span-6 page-title">
             <h1>{{ $parent.$parent.$props.estate }}</h1>
           </li>
-          <li class="span-4 page-title flex justify-end">
+          <li class="xs:span-8 span-4 page-title flex justify-end">
             <h2>Ihre Wohnungsangebote</h2>
           </li>
         </ul>

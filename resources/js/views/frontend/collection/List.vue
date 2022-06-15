@@ -2,20 +2,20 @@
 <div>
   <site-header></site-header>
   <site-main v-if="isFetched">
-    <div class="grid-cols-12 collection">
-      <div class="span-4 collection__intro">
+    <div class="sm:grid-cols-12">
+      <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
+      <div class="span-4 collection__intro mb-6x sm:mb-0">
         <p>Sehr geehrter Herr Burri</p>
         <p>Aufgrund Ihrer Präferenzen hat die Dr. Stephan à Porta-Stiftung die unten stehenden Wohnungen für Sie ausgesucht.</p>
       </div>
-      <div class="span-5 collection__iso">
+      <div class="xs:hide span-5 collection__iso">
         <isometrie />
       </div>
-      <div class="span-3 flex justify-end">
+      <div class="xs:hide span-3 flex justify-end">
         <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">Google Maps</a>
       </div>  
     </div>
-
-    <list v-if="sortedData">
+    <list v-if="sortedData" class="xs:hide">
       <list-header>
         <list-item :class="'span-2 list-item-header line-after'">
           Adresse
@@ -121,6 +121,7 @@
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']"></list-item>
       </div>
     </list>
+
 
   </site-main>
 </div>

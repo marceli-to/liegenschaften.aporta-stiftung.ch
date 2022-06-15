@@ -22,14 +22,7 @@
   }
 }
 
-%md\:flex,
-.md\:flex {
-  @include bp-sm() {
-    display: flex;
-  }
-}
-
-%items-start ,
+%items-start,
 .items-start {
   align-items: flex-start;
 }
@@ -52,6 +45,13 @@
 %justify-end,
 .justify-end {
   justify-content: flex-end;
+}
+
+%sm\:justify-end,
+.sm\:justify-end {
+  @include bp-sm() {
+    justify-content: flex-end;
+  }
 }
 
 %justify-center,

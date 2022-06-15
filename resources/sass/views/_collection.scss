@@ -4,13 +4,14 @@
  * -----------------------------------------------------------------------------
  */
 
-form.collection {
-  @extend %mt-10x;
-  border-top: 2px solid $color-primary;
-  display: block;
-}
+.user-collection {
 
-.collection {
+  header.site-header {
+  
+    &.is-collection-list {
+      margin-bottom: $space-5x;
+    }
+  }
 
   .collection__intro {
     @extend %pr-6x;
@@ -26,6 +27,13 @@ form.collection {
   .collection__iso {
     @extend %pt-8x;
   }
+
+  .collection__form {
+    @extend %mt-10x;
+    border-top: 2px solid $color-primary;
+    display: block;
+  }
+  
 }
 
 .collection-text {

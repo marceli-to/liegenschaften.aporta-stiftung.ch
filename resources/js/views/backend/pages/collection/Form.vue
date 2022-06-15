@@ -123,7 +123,7 @@
     <list-empty v-else>
       {{messages.emptyData}}
     </list-empty>
-    <form @submit.prevent="submit" class="collection" v-if="sortedData.length">
+    <form @submit.prevent="submit" class="collection__form" v-if="sortedData.length">
       <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
         <ul>
           <li class="start-4">
