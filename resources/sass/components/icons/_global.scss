@@ -48,7 +48,11 @@
 
 %icon,
 .icon {
-    display: block;
+  display: block;
+  text-decoration: none !important;
+  &.is-disabled {
+    color: $color-dark-blue !important;
+  }
 }
 
 // Inline block

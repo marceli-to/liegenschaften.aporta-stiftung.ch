@@ -1,3 +1,3 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12"><path fill="currentColor" d="M5 .2h11v1.5H5zM5 5.2h11v1.5H5zM5 10.2h11v1.5H5z"/><circle fill="currentColor" cx="1" cy="1" r="1"/><circle fill="currentColor" cx="1" cy="6" r="1"/><circle fill="currentColor" cx="1" cy="11" r="1"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20"><g fill="currentColor"><path d="M7 .5h18v2H7z"/><circle cx="1.5" cy="1.5" r="1.5"/><path d="M7 9h18v2H7z"/><circle cx="1.5" cy="10" r="1.5"/><path d="M7 17.5h18v2H7z"/><circle cx="1.5" cy="18.5" r="1.5"/></g></svg>
 </template>

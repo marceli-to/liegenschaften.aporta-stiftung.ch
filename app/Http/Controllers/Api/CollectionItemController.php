@@ -30,47 +30,15 @@ class CollectionItemController extends Controller
   }
 
   /**
-   * Destroy collection items
+   * Destroy a collection item
    *  
-   * @param  \Illuminate\Http\Request $request
+   * @param CollectionItem $collectionItem
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Request $request)
+  public function destroy(CollectionItem $collectionItem)
   {
-    if ($request->input('items'))
-    {
-      foreach($request->input('items') as $item)
-      {
-        $collectionItem = CollectionItem::where('uuid', $item)->first();
-        if ($collectionItem)
-        {
-          $collectionItem->delete();
-        }
-      }
-    }
+    CollectionItem::findOrFail($collectionItem->id)->delete();
     return response()->json('successfully deleted');
   }
 
-  /**
-   * Archive collection items
-   *  
-   * @param  \Illuminate\Http\Request $request
-   * @return \Illuminate\Http\Response
-   */
-  public function archive(Request $request)
-  {
-    if ($request->input('items'))
-    {
-      foreach($request->input('items') as $item)
-      {
-        $collectionItem = CollectionItem::where('uuid', $item)->first();
-        if ($collectionItem)
-        {
-          $collectionItem->archive = 1;
-          $collectionItem->save();
-        }
-      }
-    }
-    return response()->json('successfully deleted');
-  }
 }

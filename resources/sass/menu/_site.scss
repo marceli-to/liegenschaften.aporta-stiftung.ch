@@ -13,8 +13,11 @@ nav.site-menu {
   }
 
   li {
+    align-items: center;
+    display: flex;
     color: $color-white;
     @include font-size($fs-md);
+    min-height: 40px;
     position: relative;
     text-transform: uppercase;
 

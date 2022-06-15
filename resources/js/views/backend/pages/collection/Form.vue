@@ -4,8 +4,8 @@
   <site-main v-if="isFetched">
     <list v-if="sortedData.length">
       <list-header>
-        <list-item :class="'span-1 list-item-header'">
-          &nbsp;
+        <list-item :class="'span-1 list-item-header flex justify-center'">
+          Merken
         </list-item>
         <list-item :class="'span-2 list-item-header line-after'">
           Adresse
@@ -70,8 +70,8 @@
         :key="apartment.uuid">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
-           <icon-trash :size="'md'" class="icon" />
-          </a>
+           <icon-checkbox :active="'true'" class="icon" />
+          </a> 
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
@@ -128,7 +128,7 @@
         <ul>
           <li class="start-4">
             <a href="">
-              <icon-cross :size="'md'" />
+              <icon-reset />
               <span>Zurücksetzen</span>
             </a>
           </li>
@@ -168,7 +168,7 @@
       </list>
       <div class="flex justify-center mt-6x" v-if="candidates.length > 1">
         <a href="" @click.prevent="removeCandidate()">
-          <icon-trash class="icon" />
+          <icon-trash class="icon-trash" />
         </a>
       </div>
     </form>
@@ -215,6 +215,8 @@ import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
+import IconReset from "@/components/ui/icons/Reset.vue";
+import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
@@ -239,6 +241,8 @@ export default {
     IconTrash,
     IconCross,
     IconArrowRight,
+    IconCheckbox,
+    IconReset,
     List,
     ListRow,
     ListHeader,

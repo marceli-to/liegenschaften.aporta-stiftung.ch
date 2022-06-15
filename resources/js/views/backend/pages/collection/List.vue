@@ -2,35 +2,18 @@
 <div>
   <site-header :user="$store.state.user"></site-header>
   <site-main v-if="isFetched">
-    <nav :class="[marked.length == 0 ? 'is-disabled' : '', 'page-menu page-menu__offer']">
-      <ul>
-        <li class="start-5">
-          <a href="" @click.prevent="archive()">
-            <icon-download />
-            <span>Archivieren {{ marked.length > 0 ? '(' + marked.length +')' : ''}}</span>
-          </a>
-        </li>
-        <li>
-          <a href="" @click.prevent="destroy()">
-            <icon-trash :size="'lg'" />
-            <span>Löschen {{ marked.length > 0 ? '(' + marked.length +')' : ''}}</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <list class="mt-18x" v-if="sortedData.length">
+    <list class="mt-6x" v-if="sortedData.length">
       <list-header>
+        <list-item :class="'span-1'">
+          &nbsp;
+        </list-item>
         <list-item :class="'span-2 list-item-header line-after'">
-          Name
+          Name / E-Mail
           <a href="" @click.prevent="sort('collection.name')">
             <icon-sort />
           </a>
         </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
-          E-Mail
-        </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
+        <list-item :class="'span-3 list-item-header line-after'">
           Angebote Wohnung
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
@@ -56,7 +39,7 @@
         </list-item>
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
-            Status
+            Interesse
             <a href="" @click.prevent="sort('accepted')">
               <icon-sort />
             </a>
@@ -65,16 +48,20 @@
       </list-header>
       <div 
         v-for="(d, index) in sortedData" 
-        :class="[isMarked(d.uuid) ? 'is-marked' : '', 'list-row']" 
-        :key="d.id"
-        @click="mark(d.uuid)">
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <span>{{ d.collection.firstname }} {{ d.collection.name }}</span>
+        class="list-row" 
+        :key="d.id">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
+          <a href="" @click.prevent="showConfirm(d.uuid)">
+            <icon-trash class="icon-trash" />
+          </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <span>{{ d.collection.email }}</span>
+          <span>
+            {{ d.collection.firstname }} {{ d.collection.name }}<br>
+            {{ d.collection.email }}
+          </span>
         </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
           <span>{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</span>
           <span>{{ d.apartment.description }}</span>
         </list-item>
@@ -101,6 +88,19 @@
       {{messages.emptyData}}
     </list-empty>
   </site-main>
+
+  <dialog-wrapper ref="dialogDestroyConfirm">
+    <template #message>
+      <div>
+        <strong>
+          Bitte löschen bestätigen!
+        </strong>
+      </div>
+    </template>
+    <template #actions>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="destroy()">Löschen</a>
+    </template>
+  </dialog-wrapper>
 </div>
 </template>
 <script>
@@ -114,11 +114,10 @@ import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
-import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
-import IconDownload from "@/components/ui/icons/Download.vue";
+import IconTrash from "@/components/ui/icons/Trash.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
@@ -138,11 +137,10 @@ export default {
     IconSort,
     IconState,
     IconPlus,
-    IconTrash,
     IconCross,
-    IconDownload,
     IconCheckmark,
     IconHourglass,
+    IconTrash,
     List,
     ListRow,
     ListHeader,
@@ -162,11 +160,10 @@ export default {
       // Routes
       routes: {
         get: '/api/collection-items',
-        archive: '/api/collection-items/archive',
-        delete: '/api/collection-items/delete',
+        delete: '/api/collection-item',
       },
 
-      marked: [],
+      itemToDelete: null,
 
       // States
       isFetched: false,
@@ -195,39 +192,21 @@ export default {
       });
     },
 
-    archive() {
-      NProgress.start();
-      this.isFetched = true;
-      this.axios.put(`${this.routes.archive}`, {items: this.marked}).then(response => {
-        this.marked = [];
-        this.fetch();
-        NProgress.done();
-      });
-    },
-
     destroy() {
       NProgress.start();
-      this.isFetched = true;
-      this.axios.put(`${this.routes.delete}`, {items: this.marked}).then(response => {
-        this.marked = [];
+      this.axios.delete(`${this.routes.delete}/${this.itemToDelete}`).then(response => {
         this.fetch();
+        this.itemToDelete = null;
+        this.$refs.dialogDestroyConfirm.hide();
         NProgress.done();
       });
     },
 
-    mark(uuid) {
-      let index = this.marked.findIndex(item => item === uuid);
-      if (index > -1) {
-        this.marked.splice(index, 1);
-      }
-      else if (index == -1) {
-       this.marked.push(uuid);
-      }
+    showConfirm(uuid) {
+      this.itemToDelete = uuid;
+      this.$refs.dialogDestroyConfirm.show();
     },
 
-    isMarked(uuid) {
-      return this.marked.find(item => item === uuid) !== undefined ? true : false;
-    }
   },
 }
 </script>

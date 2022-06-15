@@ -59,8 +59,8 @@
     <isometrie />
     <list v-if="sortedData">
       <list-header>
-        <list-item :class="'span-1 list-item-header'">
-          &nbsp;
+        <list-item :class="'span-1 list-item-header flex justify-center'">
+          Merken
         </list-item>
         <list-item :class="'span-2 list-item-header line-after'">
           Adresse
@@ -133,11 +133,11 @@
         @mouseleave="hide(apartment.number)">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
-           <icon-plus :size="'md'" class="icon"  />
+            <icon-checkbox class="icon" />
           </a>
           <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
-           <icon-trash :size="'md'" class="icon" />
-          </a>
+           <icon-checkbox :active="'true'" class="icon" />
+          </a> 
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
@@ -208,7 +208,7 @@ import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
-import IconTrash from "@/components/ui/icons/Trash.vue";
+import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
@@ -231,7 +231,7 @@ export default {
     IconState,
     IconRadio,
     IconPlus,
-    IconTrash,
+    IconCheckbox,
     List,
     ListRow,
     ListHeader,

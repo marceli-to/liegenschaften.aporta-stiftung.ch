@@ -12,6 +12,10 @@ header.site-header {
   &.is-detail {
     background-color: $color-dark-grey;
     margin-bottom: 0;
+
+    .icon-collection.is-disabled {
+      color: $color-grey !important;
+    }
   }
 
   &.is-collection {

@@ -8,21 +8,14 @@
   color: $color-primary;
 }
 
-.icon-replace,
-.icon-trash,
-.icon-plus-small {
+.icon-trash {
   @extend %icon;
   color: $color-medium-grey;
-  margin-top: 2px;
   transition: color .1s ease-in;
 
   &:hover {
     color: $color-primary;
   }
-}
-
-.icon-plus-small {
-  color: $color-primary;
 }
 
 .icon-plus {
@@ -36,15 +29,15 @@
   width: 20px;
 }
 
-.icon-export {
-  @extend %icon;
-  color: $color-white;
-  margin-top: 4px;
-}
-
 .icon-filter {
-  @extend %icon;
-  color: $color-primary;
+  align-items: center;
+  display: flex;
+
+  svg {
+    align-items: inherit;
+    display: inherit;
+  }
+
   &.is-active {
     color: $color-white !important;
   }
@@ -52,9 +45,8 @@
 
 .icon-collection {
   @extend %icon;
-  color: $color-white;
-  right: 25%;
-  position: absolute;
+  align-items: center;
+  display: flex;
 }
 
 .icon-user {
@@ -62,7 +54,6 @@
   align-items: center;
   color: $color-primary;
   display: flex; 
-  margin-top: 4px;
 }
 
 .icon-state {

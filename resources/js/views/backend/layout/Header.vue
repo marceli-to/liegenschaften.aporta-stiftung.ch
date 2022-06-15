@@ -12,46 +12,48 @@
               Eglistrasse
             </router-link>
           </li>
-          <li class="span-4 flex justify-center site-menu__pagination" v-if="$store.state.filter.items.length && $props.view == 'show'">
-            <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
-              <icon-arrow-left />
-            </router-link>
-              <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
-            <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.next }}">
-              <icon-arrow-right />
-            </router-link>
+          <li class="span-4 flex justify-center site-menu__pagination" v-if="$props.view == 'show'">
+            <template v-if="$store.state.filter.items.length">
+              <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
+                <icon-arrow-left />
+              </router-link>
+                <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
+              <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.next }}">
+                <icon-arrow-right />
+              </router-link>
+            </template>
           </li>
-          <template  v-if="$props.view != 'show'">
-            <li class="span-4 flex justify-center items-center mt-1x">
-              <router-link 
-                :to="{name: 'apartments'}"
-                class="icon-filter"
-                v-if="$route.name == 'collection'">
-                <icon-filter :active="$store.state.filter.set" />
-              </router-link>
-              <a 
-                href="" 
-                :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" 
-                @click.prevent="toggleFilter()"
-                v-else>
-                <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
-                <icon-cross v-if="$parent.hasFilter" />
-              </a>
-              <router-link 
-                :to="{name: 'collection'}" 
-                class="icon-collection" 
-                v-if="$store.state.collection.set">
-                <icon-collection :active="$route.name == 'collection' ? true : false" />
-              </router-link>
-            </li>
-          </template>
-           <li class="user">
-            <a href="/logout" class="user icon-user">
-              {{user.email}}
-              <icon-user class="ml-4x"/>
+          <li class="span-4 flex justify-center" v-else>
+            <router-link 
+              :to="{name: 'apartments'}"
+              class="icon-filter"
+              v-if="$route.name == 'collection'">
+              <icon-filter :active="$store.state.filter.set" />
+            </router-link>
+            <a 
+              href="" 
+              :class="[$parent.hasFilter ? 'is-active' : '', 'icon-filter']" 
+              @click.prevent="toggleFilter()"
+              v-else>
+              <icon-filter v-if="!$parent.hasFilter" :active="$store.state.filter.set" />
+              <icon-cross v-if="$parent.hasFilter" />
             </a>
           </li>
-          <li class="span-1 flex items-center justify-end">
+          <li class="span-1 flex justify-center">
+            <router-link :to="{name: 'collection'}" class="icon-collection" v-if="$store.state.collection.items.length > 0">
+              <icon-collection :active="$route.name == 'collection' || $store.state.collection.items.length > 0 ? true : false" />
+              <span class="ml-2x">{{$store.state.collection.items.length}}</span>
+            </router-link>
+            <div class="icon-collection is-disabled" v-else>
+              <icon-collection />
+            </div>
+          </li>
+          <li class="span-2 flex justify-center">
+            <a href="/logout" class="icon-user">
+              <icon-user />
+            </a>
+          </li>
+          <li class="span-1 flex justify-center">
             <router-link 
               :to="{name: 'apartments'}"
               class="icon-offer"
