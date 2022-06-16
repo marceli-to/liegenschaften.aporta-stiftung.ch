@@ -15,6 +15,17 @@
 }
 
 @for $i from 1 through 12 {
+  %xs\:grid-cols-#{$i},
+  .xs\:grid-cols-#{$i} {
+    @include bp-xs() {
+      display: grid;
+      grid-template-columns: repeat($i, minmax(0, 1fr));
+      grid-column-gap: $space-4x;
+    }
+  }
+}
+
+@for $i from 1 through 12 {
   %sm\:grid-cols-#{$i},
   .sm\:grid-cols-#{$i} {
     @include bp-sm() {
@@ -61,6 +72,15 @@
   %xs\:span-#{$i},
   .xs\:span-#{$i} {
     @include bp-xs() {
+      grid-column: span $i / span $i;
+    }
+  }
+}
+
+@for $i from 1 through 12 {
+  %sm\:span-#{$i},
+  .sm\:span-#{$i} {
+    @include bp-sm() {
       grid-column: span $i / span $i;
     }
   }

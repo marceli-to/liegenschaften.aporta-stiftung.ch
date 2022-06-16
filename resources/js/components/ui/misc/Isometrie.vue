@@ -1,5 +1,5 @@
 <template>
-<div class="iso-wrapper">
+<div class="mb-8x sm:mb-15x">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1526.2 1022" class="iso">
     <g data-id="HOFGEBÄUDE_B">
       <g data-id="Schatten_02">

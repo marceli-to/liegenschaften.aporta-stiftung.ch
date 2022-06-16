@@ -75,6 +75,15 @@
       }
     }
 
+    &.list-item__xs {
+      @extend %mb-6x;
+      @include background-default();
+      background-image: url($url-icons + 'chevron-right.svg');
+      background-size: auto 12px;
+      background-position: top 12px right;
+      border-top: 1px solid $color-primary;
+    }
+
     > a, 
     > span {
       color: $color-primary;

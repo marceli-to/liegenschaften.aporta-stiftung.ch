@@ -99,7 +99,11 @@ nav.page-menu-collection {
   }
 
   li {
-    height: 60px;
+    height: 48px;
+
+    @include bp-sm() {
+      height: 60px;
+    }
 
     &.page-menu-collection__browse {
       align-items: center;

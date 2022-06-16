@@ -29,3 +29,18 @@
     width: 1px;
   }
 }
+
+.sm\:line-after {
+  position: relative;
+  &:after {
+    @include bp-sm() {
+      background-color: $color-light-grey;
+      content: '';
+      height: 100%;
+      position: absolute;
+      right: -8px;
+      top: 0;
+      width: 1px;
+    }
+  }  
+}

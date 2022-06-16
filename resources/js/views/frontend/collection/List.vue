@@ -4,7 +4,7 @@
   <site-main v-if="isFetched">
     <div class="sm:grid-cols-12">
       <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
-      <div class="span-4 collection__intro mb-6x sm:mb-0">
+      <div class="span-4 collection__intro mb-8x sm:mb-0">
         <p>Sehr geehrter Herr Burri</p>
         <p>Aufgrund Ihrer Präferenzen hat die Dr. Stephan à Porta-Stiftung die unten stehenden Wohnungen für Sie ausgesucht.</p>
       </div>
@@ -120,6 +120,18 @@
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']"></list-item>
       </div>
+    </list>
+    <list class="sm:hide list-xs" v-if="data">
+      <list-item 
+        v-for="d in sortedData" 
+        :key="d.uuid" 
+        class="list-item list-item__xs">
+        <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+          <strong>{{ d.room_description }}, {{ d.size }} m<sup>2</sup></strong><br>
+          {{ d.street }}, {{ d.city }}<br>
+          {{ d.description }}
+        </router-link>
+      </list-item>
     </list>
 
 

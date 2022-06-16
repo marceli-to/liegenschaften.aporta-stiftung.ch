@@ -7,14 +7,18 @@
 .user-collection {
 
   header.site-header {
-  
+    &.is-collection-detail {
+      @extend %mb-0;
+    }
+
     &.is-collection-list {
-      margin-bottom: $space-5x;
+      @extend %mb-3x;
+      @extend %sm\:mb-5x;
     }
   }
 
   .collection__intro {
-    @extend %pr-6x;
+    @extend %sm\:pr-6x;
     color: $color-black;
     @include font-size($fs-md);
 

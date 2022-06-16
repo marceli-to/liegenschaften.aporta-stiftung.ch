@@ -1,14 +1,14 @@
 <template>
-<div class="mb-15x">
+<div class="mb-6x sm:mb-15x">
   <nav class="page-menu-collection content-block">
     <ul>
-      <li :class="[pagination.count > 1 ? 'span-4' : 'span-5']">
+      <li :class="[pagination.count > 1 ? 'sm:span-4' : 'sm:span-5', 'xs:hide']">
         <router-link :to="{name: 'collection-list', params: { uuid: $route.params.uuid }}">
           <icon-arrow-left :size="'md'" />
           <span>Zurück zur Übersicht</span>
         </router-link>
       </li>
-      <li class="span-2 page-menu-collection__browse" v-if="pagination.count > 1">
+      <li class="span-10 sm:span-2 page-menu-collection__browse" v-if="pagination.count > 1">
         <router-link :to="{name: 'collection-show', params: { uuid: $route.params.uuid, itemUuid: pagination.prev }}" class="icon-browse">
           <icon-arrow-left :size="'md'" />
         </router-link>
@@ -17,11 +17,11 @@
           <icon-arrow-right :size="'md'" />
         </router-link>
       </li>
-      <li :class="[pagination.count > 1 ? 'span-4' : 'span-5']">
-        <router-link :to="{name: 'collection-list', params: { uuid: $route.params.uuid }}" class=" flex justify-end">
+      <li :class="[pagination.count > 1 ? 'sm:span-4' : 'sm:span-5', 'xs:hide']">
+        <a href="" target="_blank" title="Download Grundriss als PDF">
           <span>Download als PDF</span>
           <icon-document />
-        </router-link>
+        </a>
       </li>
     </ul>
   </nav>
@@ -43,6 +43,5 @@ export default {
   props: {
     pagination: [ Object ],
   },
-
 }
 </script>

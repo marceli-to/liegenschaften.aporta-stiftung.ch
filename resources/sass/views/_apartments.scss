@@ -4,10 +4,6 @@
  * -----------------------------------------------------------------------------
  */
 
-.iso-wrapper {
-  margin-bottom: $space-15x;
-}
-
 .iso {
   display: block;
   margin-left: auto;
@@ -27,7 +23,7 @@
   }
 
   .apartment-grid {
-    @extend %grid-cols-10;
+    @extend %sm\:grid-cols-10;
   }
 
   .apartment-row-header,

@@ -1,15 +1,23 @@
 <template>
 <div >
-  <site-header></site-header>
+  <site-header :view="'show'"></site-header>
   <site-main v-if="isFetched">
     <page-menu :pagination="pagination"></page-menu>
     <apartment-wrapper>
-      <h2>{{ data.description }}&nbsp;&nbsp;<em>{{ data.rooms }} {{ data.size }} M<sup>2</sup></em></h2>
-      <apartment-grid>
-        <div class="span-6 line-after">
+      <h2 class="sm:hide">{{ data.room_description }}, {{ data.size }} m<sup>2</sup><br><em>{{ data.street }}, {{ data.city }}<br>{{ data.description }}</em></h2>
+      <h2 class="xs:hide">{{ data.description }}&nbsp;&nbsp;<em>{{ data.rooms }} {{ data.size }} M<sup>2</sup></em></h2>
+      <apartment-grid class="sm:grid-cols-10">
+        <div class="span-6 sm:line-after">
           <apartment-row>
             <div class="span-4 is-first">
-              <h3>Grundriss</h3>
+              <div class="xs:grid-cols-6">
+                <h3 class="xs:span-3">Grundriss</h3>
+                <div class="xs:span-3 sm:hide flex justify-end">
+                  <a href="" target="_blank" class="icon" title="Download Grundriss als PDF">
+                    <span>Download als PDF</span>
+                  </a>
+                </div>
+              </div>
               <figure class="apartment-floorplan">
                 <img :src="`/assets/media/${data.number}.svg`" height="600" width="600" class="is-responsive">
               </figure>
@@ -19,7 +27,7 @@
             <div class="span-4 is-first">
               <h3>Lage / Details</h3>
               <div class="grid-cols-12">
-                <div class="span-6">
+                <div class="span-12 sm:span-6 mb-8x sm:mb-0">
                   <apartment-row>
                     <div class="span-2"><label>Adresse</label></div>
                     <div class="span-2">{{ data.street }}</div>
@@ -42,7 +50,7 @@
                     <div class="span-2">{{ data.size_balcony }} m<sup>2</sup></div>
                   </apartment-row>
                 </div>
-                <div class="span-6">
+                <div class="span-12 sm:span-6">
                   <isometrie :active="data.number" />
                 </div>
               </div>
@@ -54,7 +62,7 @@
             <div class="span-4 is-first" v-if="!data.has_reply">
               <h3>An-/Abmeldung</h3>
               <form>
-                <apartment-row>
+                <apartment-row class="pb-3x sm:pb-0">
                   <apartment-label :cls="'span-3'">Ich habe Interesse an der Wohnung</apartment-label>
                   <apartment-input :cls="'span-1 flex justify-center'">
                     <a href="" @click.prevent="toggleAccept(1)" class="icon-state">
@@ -122,6 +130,7 @@ import Isometrie from '@/components/ui/misc/Isometrie.vue';
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconRadio from '@/components/ui/icons/Radio.vue';
+import IconDocument from '@/components/ui/icons/Document.vue';
 
 export default {
   components: {
@@ -138,7 +147,8 @@ export default {
     Isometrie,
     IconCross,
     IconCheckmark,
-    IconRadio
+    IconRadio,
+    IconDocument
   },
 
   mixins: [ErrorHandling],
