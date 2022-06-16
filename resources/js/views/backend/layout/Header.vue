@@ -49,7 +49,7 @@
             </div>
           </li>
           <li class="span-2 flex justify-center">
-            <a href="/logout" class="icon-user">
+            <a href="/logout" class="icon">
               <icon-user />
             </a>
           </li>

@@ -4,29 +4,38 @@
  * -----------------------------------------------------------------------------
  */
 
+%icon,
 .icon {
   color: $color-primary;
+  display: block;
+  text-decoration: none !important;
+
+  &.is-disabled {
+    color: $color-dark-blue !important;
+  }
+}
+
+.icon-dark {
+  color: $color-primary;
+}
+
+.icon-light {
+  color: $color-medium-grey;
+}
+
+.has-selection { 
+  .icon-dark {
+    color: $color-light-grey;
+  }
 }
 
 .icon-trash {
   @extend %icon;
   color: $color-medium-grey;
   transition: color .1s ease-in;
-
   &:hover {
     color: $color-primary;
   }
-}
-
-.icon-plus {
-  @extend %icon;
-  color: $color-primary;
-  height: 20px; 
-  left: 50%; 
-  position: absolute; 
-  transform: translateX(-50%);
-  top: 90px; 
-  width: 20px;
 }
 
 .icon-filter {
@@ -49,31 +58,13 @@
   display: flex;
 }
 
-.icon-user {
-  @extend %icon;
-}
-
 .icon-state {
   color: $color-primary;
 }
 
 .icon-browse {
+  @extend %icon;
   align-items: center;
-  color: $color-primary;
-  height: inherit;
   display: flex;
-}
-
-.icon-dark {
-  color: $color-primary;
-}
-
-.icon-light {
-  color: $color-medium-grey;
-}
-
-.has-selection { 
-  .icon-dark {
-    color: $color-light-grey;
-  }
+  height: inherit;
 }
