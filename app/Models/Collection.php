@@ -9,12 +9,10 @@ class Collection extends Base
   use SoftDeletes;
   
   protected $casts = [
+    'valid_until' => 'date:d.m.Y',
     'created_at' => 'date:d.m.Y',
     'updated_at' => 'date:d.m.Y',
     'deleted_at' => 'date:d.m.Y',
-    'sent_at'    => 'date:d.m.Y',
-    'read_at'    => 'date:d.m.Y',
-    'replied_at' => 'date:d.m.Y'
   ];
 
   protected $fillable = [
@@ -22,6 +20,7 @@ class Collection extends Base
     'firstname',
     'name',
     'email',
+    'valid_until',
     'error',
     'processed',
     'estate_id'
@@ -36,5 +35,13 @@ class Collection extends Base
   {
     return $this->hasMany(CollectionItem::class, 'collection_id', 'id');
   }
+
+	public function scopeValid($query)
+	{
+		$constraint = date('Y-m-d', 
+			strtotime(\Config::get('client.deadline_offer'))
+		);
+		return $query->where('valid_until', '>=', $constraint);
+	}
 
 }

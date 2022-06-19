@@ -23,7 +23,7 @@ class CollectionController extends BaseController
 
   public function show(Collection $collection, $hash = NULL)
   {
-    $collection = $collection->with('estate')->findOrFail($collection->id);
+    $collection = $collection->valid()->with('estate')->findOrFail($collection->id);
     
     // Update collection item 'read_at' state if 
     // collection is viewed by the intended user

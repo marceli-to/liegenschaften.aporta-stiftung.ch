@@ -46,6 +46,7 @@ class CollectionController extends Controller
         'name' => $candidate['name'],
         'firstname' => $candidate['firstname'],
         'email' => $candidate['email'],
+        'valid_until' => \Carbon\Carbon::now()->addDays(5), //\Config::get('client.deadline_offer'),
         'estate_id' => env('ESTATE_ID'),
       ]);
       $collection->save();
