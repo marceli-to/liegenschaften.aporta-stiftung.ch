@@ -17,10 +17,16 @@ class UserCollectionController extends Controller
   public function list(Collection $collection)
   {
     $collection = Collection::with('items.apartment.room', 'items.apartment.building', 'items.apartment.floor', 'estate')->findOrFail($collection->id);
+    
+    if (!$collection->valid())
+    {
+      return response()->json(['valid' => FALSE]);
+    }
 
     // Map fields
     $data = [
       'uuid' => $collection->uuid,
+      'valid' => $collection->valid(),
       'estate' => $collection->estate->description_long . ', ' . $collection->estate->city,
       'items' => $collection->items->map(function($i) {
         return [
@@ -53,6 +59,12 @@ class UserCollectionController extends Controller
   public function show(Collection $collection, $collectionItemUuid = NULL)
   {
     $item = CollectionItem::with('apartment.room', 'apartment.building', 'apartment.floor', 'collection.estate')->where('uuid', $collectionItemUuid)->firstOrFail();
+
+    if (!$item->collection->valid())
+    {
+      return response()->json(['valid' => FALSE]);
+    }
+
     $data = [
       'uuid' => $item->uuid,
       'estate' => $item->collection->estate->description_long . ', ' . $item->collection->estate->city,
@@ -70,7 +82,7 @@ class UserCollectionController extends Controller
       'has_reply' => $item->replied_at == NULL ? FALSE : TRUE
     ];
 
-    return response()->json(['item' => $data, 'pagination' => $this->getPagination($collection, $collectionItemUuid)]);
+    return response()->json(['valid' => $item->collection->valid(), 'item' => $data, 'pagination' => $this->getPagination($collection, $collectionItemUuid)]);
   }
 
   /**

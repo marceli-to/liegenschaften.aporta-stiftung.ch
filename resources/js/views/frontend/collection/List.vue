@@ -2,139 +2,142 @@
 <div>
   <site-header></site-header>
   <site-main v-if="isFetched">
-    <div class="sm:grid-cols-12">
-      <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
-      <div class="span-4 collection__intro mb-8x sm:mb-0">
-        <p>Sehr geehrter Herr Burri</p>
-        <p>Aufgrund Ihrer Präferenzen hat die Dr. Stephan à Porta-Stiftung die unten stehenden Wohnungen für Sie ausgesucht.</p>
+    <div v-if="isValid">
+      <div class="sm:grid-cols-12">
+        <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
+        <div class="span-4 collection__intro mb-8x sm:mb-0">
+          <p>Sehr geehrter Herr Burri</p>
+          <p>Aufgrund Ihrer Präferenzen hat die Dr. Stephan à Porta-Stiftung die unten stehenden Wohnungen für Sie ausgesucht.</p>
+        </div>
+        <div class="xs:hide span-5 collection__iso">
+          <isometrie />
+        </div>
+        <div class="xs:hide span-3 flex justify-end">
+          <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">Google Maps</a>
+        </div>  
       </div>
-      <div class="xs:hide span-5 collection__iso">
-        <isometrie />
-      </div>
-      <div class="xs:hide span-3 flex justify-end">
-        <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">Google Maps</a>
-      </div>  
-    </div>
-    <list v-if="sortedData" class="xs:hide">
-      <list-header>
-        <list-item :class="'span-2 list-item-header line-after'">
-          Adresse
-          <a href="" @click.prevent="sort('street')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
-          Bezeichnung
-          <a href="" @click.prevent="sort('description')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
-          Mieter*in
-          <a href="" @click.prevent="sort('tenant')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Zimmer
-          <a href="" @click.prevent="sort('room')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          M<sup>2</sup>
-          <a href="" @click.prevent="sort('size')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Terrasse
-          <a href="" @click.prevent="sort('size_terrace')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Sitzplatz
-          <a href="" @click.prevent="sort('size_patio')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Balkon
-          <a href="" @click.prevent="sort('size_balcony')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header'">
-          Bezug
-          <a href="" @click.prevent="sort('size_balcony')">
-            <icon-sort />
-          </a>
-        </list-item>
-      </list-header>
-      <div 
-        v-for="(d, index) in sortedData" 
-        class="list-row" 
-        :key="d.uuid" 
-        @mouseover="show(d.number)" 
-        @mouseleave="hide(d.number)">
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+      <list v-if="sortedData" class="xs:hide">
+        <list-header>
+          <list-item :class="'span-2 list-item-header line-after'">
+            Adresse
+            <a href="" @click.prevent="sort('street')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-2 list-item-header line-after'">
+            Bezeichnung
+            <a href="" @click.prevent="sort('description')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-2 list-item-header line-after'">
+            Mieter*in
+            <a href="" @click.prevent="sort('tenant')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header line-after'">
+            Zimmer
+            <a href="" @click.prevent="sort('room')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header line-after'">
+            M<sup>2</sup>
+            <a href="" @click.prevent="sort('size')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header line-after'">
+            Terrasse
+            <a href="" @click.prevent="sort('size_terrace')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header line-after'">
+            Sitzplatz
+            <a href="" @click.prevent="sort('size_patio')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header line-after'">
+            Balkon
+            <a href="" @click.prevent="sort('size_balcony')">
+              <icon-sort />
+            </a>
+          </list-item>
+          <list-item :class="'span-1 list-item-header'">
+            Bezug
+            <a href="" @click.prevent="sort('size_balcony')">
+              <icon-sort />
+            </a>
+          </list-item>
+        </list-header>
+        <div 
+          v-for="(d, index) in sortedData" 
+          class="list-row" 
+          :key="d.uuid" 
+          @mouseover="show(d.number)" 
+          @mouseleave="hide(d.number)">
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.street }}
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.description }}
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.tenant }}
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.room }}
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.size }} m<sup>2</sup>
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.size_terrace }} <span v-if="d.size_terrace > 0">m<sup>2</sup></span>
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.size_patio }} <span v-if="d.size_patio > 0">m<sup>2</sup></span>
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.size_balcony }} <span v-if="d.size_balcony > 0">m<sup>2</sup></span>
+            </router-link>
+          </list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']"></list-item>
+        </div>
+      </list>
+      <list class="sm:hide list-xs" v-if="data">
+        <list-item 
+          v-for="d in sortedData" 
+          :key="d.uuid" 
+          class="list-item list-item__xs">
           <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.street }}
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+            <strong>{{ d.room_description }}, {{ d.size }} m<sup>2</sup></strong><br>
+            {{ d.street }}, {{ d.city }}<br>
             {{ d.description }}
           </router-link>
         </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.tenant }}
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.room }}
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.size }} m<sup>2</sup>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.size_terrace }} <span v-if="d.size_terrace > 0">m<sup>2</sup></span>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.size_patio }} <span v-if="d.size_patio > 0">m<sup>2</sup></span>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-            {{ d.size_balcony }} <span v-if="d.size_balcony > 0">m<sup>2</sup></span>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']"></list-item>
-      </div>
-    </list>
-    <list class="sm:hide list-xs" v-if="data">
-      <list-item 
-        v-for="d in sortedData" 
-        :key="d.uuid" 
-        class="list-item list-item__xs">
-        <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-          <strong>{{ d.room_description }}, {{ d.size }} m<sup>2</sup></strong><br>
-          {{ d.street }}, {{ d.city }}<br>
-          {{ d.description }}
-        </router-link>
-      </list-item>
-    </list>
-
-
+      </list>
+    </div>
+    <div v-else class="flex justify-center mt-15x">
+      <p class="text-md"><strong>Dieses Angebot ist leider nicht mehr verfügbar.</strong></p>     
+    </div>
   </site-main>
 </div>
 </template>
@@ -181,6 +184,7 @@ export default {
 
       // States
       isFetched: false,
+      isValid: false,
 
       // Routes
       routes: {
@@ -207,6 +211,7 @@ export default {
         this.data = response.data.items;
         this.uuid = response.data.uuid;
         this.estate = response.data.estate;
+        this.isValid = response.data.valid;
         this.isFetched = true;
         NProgress.done();
       });

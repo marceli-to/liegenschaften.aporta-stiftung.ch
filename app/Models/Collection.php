@@ -36,6 +36,9 @@ class Collection extends Base
     return $this->hasMany(CollectionItem::class, 'collection_id', 'id');
   }
 
+  /**
+   * Local scope for valid collections
+   */
 	public function scopeValid($query)
 	{
 		$constraint = date('Y-m-d', 
@@ -43,5 +46,15 @@ class Collection extends Base
 		);
 		return $query->where('valid_until', '>=', $constraint);
 	}
+
+  /**
+   * Attribute for valid collections
+   * 
+   * @return Boolean
+   */
+  public function valid()
+  {
+    return date('Y-m-d', time()) <= $this->valid_until;
+  }
 
 }
