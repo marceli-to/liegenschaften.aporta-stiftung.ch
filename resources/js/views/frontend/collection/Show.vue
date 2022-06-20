@@ -64,7 +64,7 @@
                 <h3>An-/Abmeldung</h3>
                 <form>
                   <apartment-row class="pb-3x sm:pb-0">
-                    <apartment-label :cls="'span-3'">Ich habe Interesse an der Wohnung</apartment-label>
+                    <apartment-label :cls="'span-3'">Ich habe Interesse an dieser Wohnung</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(1)" class="icon-state">
                         <icon-radio :active="form.accept == 1" />
@@ -101,7 +101,7 @@
                   </div>
                   <div class="collection-text mt-16x">
                     <p>Haben Sie Fragen?</p>
-                    <p>Giancarlo Esempio steht Ihnen für weitere Informationen gerne zur Verfügung:<br>043 222 60 00<br><a href="mailo:esempio@test.ch">esempio@aporta-stiftung.ch</a></p>
+                    <p>Camilla Walker steht Ihnen für weitere Informationen gerne zur Verfügung:<br>043 222 60 03<br><a href="mailo:wohnung@aporta-stiftung.ch">wohnung@aporta-stiftung.ch</a></p>
                   </div>
                 </form>
               </div>

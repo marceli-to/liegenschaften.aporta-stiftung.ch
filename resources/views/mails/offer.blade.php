@@ -1,40 +1,12 @@
 @component('mail::message')
 <h1>Wohnungsangebot {{$collection->estate->description}}</h1>
 <p>Guten Tag {{$collection->firstname}} {{$collection->name}}</p>
-<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis aliquam nostrum optio nam tempore:</p>
+<p>Sie haben sich für eine Wohnung in unserem Neubau «Eglistrasse» interessiert. Es freut uns Ihnen mitzuteilen, dass wir ein passendes Angebot für Sie haben.</p>
+<p>Sämtliche Informationen zu unserem Angebot sowie die Möglichkeit einer direkten Rückmeldung, finden Sie unter dem untenstehenden Link.</p>
+<p><strong>Achtung das Angebot ist nur 5 Tage gültig,</strong> wir bitten Sie um schnelle Rückmeldung. Weitere Angebote im Neubau «Eglistrasse» gibt es nicht.</p>
+<p><strong>Block A:</strong><br>Vertragsbeginn ist der 1. November 2022. Die Wohnungsübergabe wird bereits im Oktober erfolgen. Die Wohnungen werden etappiert vermietet. Die Vermietung erfolgt ohne Wohnungsbesichtigung.</p>
+<p><strong>Block B (ausser Hohlstrasse):</strong><br>Vertragsbeginn ist der 15. Februar 2023. Die Wohnungen werden etappiert vermietet. Die Vermietung erfolgt ohne Wohnungsbesichtigung. In der Überbauung (Eglistrasse 1/Hohlstrasse) befinden sich im Weiteren ein Kindergarten der Stadt Zürich sowie das Zürcher Lighthouse.</p>
+<p><strong>Block B (Hohlstrasse 315):</strong><br>Vertragsbeginn ist der 1. März 2023.<br>Die Wohnungen werden etappiert vermietet. Die Vermietung erfolgt ohne Wohnungsbesichtigung. In der Überbauung (Eglistrasse 1/Hohlstrasse) befinden sich im Weiteren ein Kindergarten der Stadt Zürich sowie das Zürcher Lighthouse.</p>
 <p><a href="{{ route('offer.list', ['collection' => $collection->uuid, 'hash' => md5($collection->email)]) }}" class="button button-primary">Unser Angebot</a></p>
-<table class="notification-table" cellspacing="0" cellpadding="0">
-<thead>
-<th>Liegenschaft</th>
-<th>Adresse</th>
-<th>Etage</th>
-<th>Zimmer</th>
-<th>Bezeichnung</th>
-<th>M<sup>2</sup></th>
-</thead>
-<tbody>
-@foreach($collection->items as $item)
-<tr>
-<td>
-{{$collection->estate->description}}
-</td>
-<td>
-{{$item->apartment->building->street}}
-</td>
-<td>
-{{$item->apartment->floor->abbreviation}}
-</td>
-<td>
-{{$item->apartment->room->abbreviation}}
-</td>
-<td>
-{{$item->apartment->description}}
-</td>
-<td>
-{{$item->apartment->size}}
-</td>
-</tr>
-@endforeach
-</tbody>
-</table>
+<p>Freundliche Grüsse<br><br>DR. STEPHAN À PORTA-STIFTUNG<br>Camilla Walker</p>
 @endcomponent

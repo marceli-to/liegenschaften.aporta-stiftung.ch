@@ -59,6 +59,9 @@ p {
   text-align: left;
 }
 
+strong, b {
+  font-weight: bold;
+}
 
 img {
   max-width: 100%;
@@ -159,7 +162,7 @@ img {
 
 .button {
   -webkit-text-size-adjust: none;
-  border-radius: 4px;
+  border-radius: 0;
   color: #fff;
   display: inline-block;
   overflow: hidden;
@@ -169,10 +172,10 @@ img {
 .button-blue,
 .button-primary {
   background-color: #2d3748;
-  border-bottom: 8px solid #2d3748;
+  border-bottom: 9px solid #2d3748;
   border-left: 18px solid #2d3748;
   border-right: 18px solid #2d3748;
-  border-top: 8px solid #2d3748;
+  border-top: 9px solid #2d3748;
 }
 
 
