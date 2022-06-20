@@ -56,26 +56,26 @@
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
             {{ d.collection.firstname }} {{ d.collection.name }}<br>
             {{ d.collection.email }}
-          </span>
+          </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-          <span>{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</span>
-          <span>{{ d.apartment.description }}</span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</a>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.apartment.description }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.sent_at ? d.sent_at : '–' }}</span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.sent_at ? d.sent_at : '–' }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.read_at ? d.read_at : '–' }}</span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.read_at ? d.read_at : '–' }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <span>{{ d.replied_at ? d.replied_at : '–' }}</span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.replied_at ? d.replied_at : '–' }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
-          <span>{{ d.comment }}</span>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.comment }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <icon-checkmark v-if="d.accepted == 1"/>

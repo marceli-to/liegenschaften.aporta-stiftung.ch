@@ -85,14 +85,20 @@
     }
 
     > a, 
-    > span {
+    > span,
+    > span a {
       color: $color-primary;
       display: block;
+    }
+
+    > a, 
+    > span {
       min-height: 60px;
       padding-top: $space-2x;
     }
 
-    > span + span {
+    > span + span,
+    > a + a {
       border-top: 1px solid $color-secondary;
     }
 
