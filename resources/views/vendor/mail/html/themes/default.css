@@ -16,10 +16,10 @@ html {
 body {
   -webkit-text-size-adjust: none;
   background-color: #ffffff;
-  color: #000000;
+  color: #194164;
   height: 100%;
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: 16px;
+  line-height: 1.4;
   margin: 0;
   padding: 0;
   width: 100% !important;
@@ -45,7 +45,7 @@ a img {
 
 h1 {
   color: #32648c;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   line-height: 1.2;
   margin: 0 0 24px 0;
@@ -53,8 +53,8 @@ h1 {
 }
 
 p {
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: 16px;
+  line-height: 1.4;
   margin: 0 0 20px 0;
   text-align: left;
 }
