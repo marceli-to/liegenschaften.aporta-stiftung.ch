@@ -4,12 +4,12 @@
     <nav class="selector" v-if="hasFilter && isFetchedFilterItems">
       <div>
         <div class="grid-cols-12">
-          <div class="span-1 start-2">
+          <div class="span-2">
             <h2>Haus</h2>
             <div v-for="building in filterItems.buildings" :key="building.id">
               <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
                 <icon-radio :active="$store.state.filter.building_id == building.id" />
-                <span>{{building.description}}</span>
+                <span>{{building.street}}</span>
               </a>
             </div>
           </div>
@@ -28,6 +28,15 @@
               <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
                 <icon-radio :active="$store.state.filter.floor_id == floor.id" />
                 <span>{{floor.description}}</span>
+              </a>
+            </div>
+          </div>
+          <div class="span-2">
+            <h2>Mietzins</h2>
+            <div v-for="(value, key) in filterItems.rent" :key="key">
+              <a href="javascript:;" @click.prevent="setFilterItem('rent', key)">
+                <icon-radio :active="$store.state.filter['rent'] == key" />
+                <span>{{value}}</span>
               </a>
             </div>
           </div>
@@ -51,7 +60,7 @@
           </div>
         </div>
       </div>
-      <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen</a>
+      <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen ({{ sortedData.length }})</a>
       <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetFilter()">Zurücksetzen</a>
     </nav>
   </site-header>
@@ -151,7 +160,8 @@
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
-            {{ apartment.tenant ? apartment.tenant.full_name : '–' }}
+            <!-- {{ apartment.tenant ? apartment.tenant.full_name : '–' }} -->
+            {{ apartment.rent_gross }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
@@ -267,7 +277,8 @@ export default {
           rooms: '/api/settings/rooms',
           floors: '/api/settings/floors',
           exteriors: '/api/settings/exteriors',
-          states: '/api/settings/states'
+          states: '/api/settings/states',
+          rent: '/api/settings/rent',
         }
       },
 
@@ -317,6 +328,7 @@ export default {
         this.axios.get(this.routes.settings.floors),
         this.axios.get(this.routes.settings.exteriors),
         this.axios.get(this.routes.settings.states),
+        this.axios.get(this.routes.settings.rent),
       ]).then(axios.spread((...responses) => {
         this.filterItems = {
           buildings: responses[0].data,
@@ -324,6 +336,7 @@ export default {
           floors: responses[2].data,
           exteriors: responses[3].data,
           states: responses[4].data,
+          rent: responses[5].data,
         };
         this.isFetchedFilterItems = true;
       }));
@@ -336,6 +349,7 @@ export default {
         floor_id: this.$store.state.filter.floor_id ? this.$store.state.filter.floor_id : null,
         exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
         state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
+        rent: this.$store.state.filter.rent ? this.$store.state.filter.rent : null,
       };
       NProgress.start();
       this.isFetched = false;

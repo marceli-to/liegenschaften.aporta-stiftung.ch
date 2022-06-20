@@ -35,6 +35,22 @@
                     <div class="span-2"><label>Bezeichnung</label></div>
                     <div class="span-2">{{ apartment.description }}</div>
                   </apartment-row>
+                  <apartment-row>
+                    <div class="span-2"><label>Miete Netto</label></div>
+                    <div class="span-2">{{ apartment.rent_net }}</div>
+                  </apartment-row>
+                  <apartment-row>
+                    <div class="span-2"><label>Nebenkosten</label></div>
+                    <div class="span-2">{{ apartment.additional_cost }}</div>
+                  </apartment-row>
+                  <apartment-row>
+                    <div class="span-2"><label>Miete Brutto</label></div>
+                    <div class="span-2">{{ apartment.rent_gross }}</div>
+                  </apartment-row>
+                  <apartment-row>
+                    <div class="span-2"><label>Kelerabteil</label></div>
+                    <div class="span-2">vorhanden</div>
+                  </apartment-row>
                   <apartment-row v-if="apartment.size_patio > 0">
                     <div class="span-2"><label>Sitzplatz</label></div>
                     <div class="span-2">{{ apartment.size_patio }} m<sup>2</sup></div>

@@ -173,4 +173,17 @@ class TestController extends BaseController
   }
 
 
+  public function apartmentUuid()
+  {
+    $apts = Apartment::get();
+    foreach($apts as $a)
+    {
+      $a->uuid = \Str::uuid();
+      $a->save();
+    }
+    
+    return response()->json(true);
+  }
+
+
 }

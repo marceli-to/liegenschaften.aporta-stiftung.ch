@@ -67,4 +67,17 @@ class SettingsController extends Controller
     return response()->json(State::whereIn('id', config(env('ESTATE_DOMAIN_KEY'). '.settings.states'))->get());
   }
 
+
+  /**
+   * Get available rent steps
+   *
+   * @return \Illuminate\Http\Response
+   */
+
+  public function rent()
+  {
+    return response()->json(config(env('ESTATE_DOMAIN_KEY'). '.settings.rent_steps'));
+  }
+
+
 }

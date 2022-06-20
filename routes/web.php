@@ -26,6 +26,7 @@ Route::get('/notify', [TestController::class, 'notify']);
 Route::get('/tenants', [TestController::class, 'tenants']);
 Route::get('/tenant/{tenant}', [TestController::class, 'tenant']);
 Route::get('/apartments', [TestController::class, 'apartments']);
+Route::get('/apartments/uuid', [TestController::class, 'apartmentUuid']);
 Route::get('/apartment/{apartment}', [TestController::class, 'apartment']);
 Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
 Route::get('/building/{building}', [TestController::class, 'building']);

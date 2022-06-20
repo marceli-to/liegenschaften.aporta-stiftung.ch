@@ -25,6 +25,9 @@ class Apartment extends Base
     'floor_id' ,
     'building_id' ,
     'tenant_id',
+    'rent_net',
+    'additional_cost',
+    'rent_gross'
   ];
 
   /**

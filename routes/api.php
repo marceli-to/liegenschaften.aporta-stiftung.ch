@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('settings/rooms', [SettingsController::class, 'rooms']);
   Route::get('settings/floors', [SettingsController::class, 'floors']);
   Route::get('settings/exteriors', [SettingsController::class, 'exteriors']);
+  Route::get('settings/rent', [SettingsController::class, 'rent']);
   Route::get('settings/states', [SettingsController::class, 'states']);
 
   // Collection items

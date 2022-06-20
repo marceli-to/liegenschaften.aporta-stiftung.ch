@@ -28,6 +28,7 @@ export default {
         room_id: null,
         floor_id: null,
         exterior: null,
+        rent: null,
         items: [],
         menu: {
           index: 1,

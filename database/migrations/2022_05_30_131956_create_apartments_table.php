@@ -22,7 +22,7 @@ class CreateApartmentsTable extends Migration
           $table->decimal('size_terrace', 8, 1)->nullable()->default(0.0);
           $table->decimal('size_patio', 8, 1)->nullable()->default(0.0);
           $table->decimal('size_balcony', 8, 1)->nullable()->default(0.0);
-          $table->tinyInteger('order')->default(-1);
+          $table->smallInteger('order')->default(-1);
           $table->tinyInteger('publish')->default(1);
           $table->foreignId('room_id')->constrained();
           $table->foreignId('state_id')->constrained();

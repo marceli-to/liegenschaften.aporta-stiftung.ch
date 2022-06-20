@@ -95,7 +95,7 @@
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
             <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-              {{ d.room }}
+              {{ d.rooms }}
             </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">

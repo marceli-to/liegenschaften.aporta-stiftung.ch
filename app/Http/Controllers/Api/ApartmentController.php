@@ -19,7 +19,7 @@ class ApartmentController extends Controller
    */
   public function get()
   { 
-    $data = Apartment::with('building', 'floor', 'room', 'tenant')->orderBy('order')->where('estate_id', env('ESTATE_ID'))->get();
+    $data = Apartment::with('building', 'floor', 'room', 'tenant')->orderBy('order', 'DESC')->where('estate_id', env('ESTATE_ID'))->get();
     return new DataCollection($data->sortBy('building.order'));
   }
 
@@ -48,7 +48,7 @@ class ApartmentController extends Controller
     $matches = [];
 
     // Add ids of 'building, floor, room etc.'
-    foreach($request->except('exterior') as $key => $value)
+    foreach($request->except(['exterior', 'rent']) as $key => $value)
     {
       if ($request->input($key))
       {
@@ -66,6 +66,20 @@ class ApartmentController extends Controller
       $data = $filtered->all();
     }
 
+    // Handle rent
+    if ($request->input('rent'))
+    {
+      $constraints = explode('+', $request->input('rent'));
+
+      foreach($constraints as $constraint)
+      {
+        $c = explode(':', $constraint);
+        $operator = $c[0] == 'lt' ? '<' : '>';
+        $value    = $c[1];
+        $filtered =  $data->where('rent_gross', $operator, $value);
+      }
+      $data = $filtered->all();
+    }
     return new DataCollection(collect($data)->sortBy('building.order'));
   }
 
