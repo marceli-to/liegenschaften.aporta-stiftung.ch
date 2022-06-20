@@ -19,7 +19,7 @@ body {
   color: #194164;
   height: 100%;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.3;
   margin: 0;
   padding: 0;
   width: 100% !important;
@@ -54,7 +54,7 @@ h1 {
 
 p {
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.3;
   margin: 0 0 20px 0;
   text-align: left;
 }
@@ -162,20 +162,22 @@ img {
 
 .button {
   -webkit-text-size-adjust: none;
-  border-radius: 0;
+  border-radius: 4px;
   color: #fff;
-  display: inline-block;
+  font-weight: bold;
+  display: inline-block !important;
   overflow: hidden;
   text-decoration: none;
+  width: auto !important;
 }
 
 .button-blue,
 .button-primary {
-  background-color: #2d3748;
-  border-bottom: 9px solid #2d3748;
-  border-left: 18px solid #2d3748;
-  border-right: 18px solid #2d3748;
-  border-top: 9px solid #2d3748;
+  background-color: #194164;
+  border-bottom: 9px solid #194164;
+  border-left: 18px solid #194164;
+  border-right: 18px solid #194164;
+  border-top: 9px solid #194164;
 }
 
 

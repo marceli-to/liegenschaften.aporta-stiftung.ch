@@ -35,6 +35,8 @@ Route::get('/floors/{estate}', [TestController::class, 'floors']);
 Route::get('/rooms/{estate}', [TestController::class, 'rooms']);
 Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
 Route::get('/reply', [TestController::class, 'reply']);
+Route::get('/mail/offer', [TestController::class, 'mailOffer']);
+
 
 // Logged in users
 Route::middleware('auth:sanctum', 'verified')->group(function() {

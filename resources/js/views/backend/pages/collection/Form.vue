@@ -262,8 +262,8 @@ export default {
       // Candidates
       candidates: [
         {
-          name: 'Marcel',
-          firstname: 'Stadelmann',
+          name: 'Stadelmann',
+          firstname: 'Marcel',
           email: 'm@marceli.to'
         },
       ],

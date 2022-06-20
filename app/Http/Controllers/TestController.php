@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Floor;
 use App\Models\Room;
 use App\Models\ReplyQueue;
+use App\Tasks\Offer;
 
 use Illuminate\Http\Request;
 
@@ -165,18 +166,10 @@ class TestController extends BaseController
     }
   }
 
-  /**
-   * Show a single tenant
-   *
-   * @param Tenant $tenant
-   * @return \Illuminate\Http\Response
-   */
-
-
-  public function reply()
+  public function mailOffer()
   {
-    dd(ReplyQueue::with('item.collection.estate', 'item.apartment')->unprocessed()->get());
-    return response()->json();
+    $offer = new Offer();
+    return response()->json(true);
   }
 
 
