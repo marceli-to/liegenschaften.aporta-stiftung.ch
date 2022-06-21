@@ -36,6 +36,10 @@
                     <div class="span-2">{{ apartment.description }}</div>
                   </apartment-row>
                   <apartment-row>
+                    <div class="span-2"><label>Nummer</label></div>
+                    <div class="span-2">{{ apartment.number }}</div>
+                  </apartment-row>
+                  <apartment-row>
                     <div class="span-2"><label>Miete Netto</label></div>
                     <div class="span-2">{{ apartment.rent_net }}</div>
                   </apartment-row>

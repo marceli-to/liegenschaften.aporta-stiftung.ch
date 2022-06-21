@@ -18,7 +18,7 @@
             <div v-for="room in filterItems.rooms" :key="room.id">
               <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
                 <icon-radio :active="$store.state.filter.room_id == room.id" />
-                <span>{{room.description}}</span>
+                <span>{{room.abbreviation}}</span>
               </a>
             </div>
           </div>
@@ -27,7 +27,7 @@
             <div v-for="floor in filterItems.floors" :key="floor.id">
               <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
                 <icon-radio :active="$store.state.filter.floor_id == floor.id" />
-                <span>{{floor.description}}</span>
+                <span>{{floor.abbreviation}}</span>
               </a>
             </div>
           </div>
@@ -83,8 +83,14 @@
             <icon-sort />
           </a>
         </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
-          Mietzins Brutto
+        <list-item :class="'span-1 list-item-header'">
+          Nummer
+          <a href="" @click.prevent="sort('number')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :class="'span-1 list-item-header line-after'">
+          Mietzins
           <a href="" @click.prevent="sort('sortable_rent')">
             <icon-sort />
           </a>
@@ -119,12 +125,6 @@
             <icon-sort />
           </a>
         </list-item>
-        <!-- <list-item :class="'span-1 list-item-header'">
-          Nummer
-          <a href="" @click.prevent="sort('number')">
-            <icon-sort />
-          </a>
-        </list-item> -->
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
             Status
@@ -158,7 +158,12 @@
             {{ apartment.description }}
           </router-link>
         </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+            {{ apartment.number }}
+          </router-link>
+        </list-item>
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             <!-- {{ apartment.tenant ? apartment.tenant.full_name : '–' }} -->
             {{ apartment.rent_gross }}
@@ -189,11 +194,6 @@
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
-        <!-- <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
-            {{ apartment.number }}
-          </router-link>
-        </list-item> -->
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
