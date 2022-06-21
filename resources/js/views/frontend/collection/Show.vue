@@ -79,7 +79,7 @@
               <div class="span-4 is-first" v-if="!data.has_reply">
                 <h3>An-/Abmeldung</h3>
                 <form>
-                  <apartment-row class="pb-3x sm:pb-0">
+                  <apartment-row class="pb-3x">
                     <apartment-label :cls="'span-3'">Ich habe Interesse an dieser Wohnung</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(1)" class="icon-state">
@@ -87,20 +87,36 @@
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <apartment-row>
-                    <apartment-label :cls="'span-3'">Ich habe kein Interesse an der Wohnung</apartment-label>
+                  <apartment-row class="pb-3x">
+                    <apartment-label :cls="'span-3'">Ich habe <strong>kein</strong> Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(0)" class="icon-state">
                         <icon-radio :active="form.accept == 0" />
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <div v-if="form.accept == 0">
+                  <apartment-row class="pb-3x">
+                    <apartment-label :cls="'span-3'">Ich bin nicht mehr auf Wohungssuche, bitte löschen Sie meine Anmeldung</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <a href="" @click.prevent="toggleAccept(2)" class="icon-state">
+                        <icon-radio :active="form.accept == 2" />
+                      </a>
+                    </apartment-input>
+                  </apartment-row>
+                  <apartment-row class="pb-3x">
+                    <apartment-label :cls="'span-3'">Ich habe Interesse an einem Abstellplatz in der Tiefgarage Eichbühlstrasse (Warteliste)</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <a href="" @click.prevent="toggleParking()" class="icon-state">
+                        <icon-radio :active="form.parking == 1" />
+                      </a>
+                    </apartment-input>
+                  </apartment-row>
+                  <!-- <div v-if="form.accept == 0">
                     <div class="collection-text my-6x">
                       <p>Sie haben kein Interesse an der Wohnung? Bitte teilen Sie uns ihre Gründe mit.</p>
                     </div>
                     <textarea name="comment" class="is-outline" placeholder="Kommentar" v-model="form.comment"></textarea>
-                  </div>
+                  </div> -->
                   <div class="mt-12x" v-if="form.accept != null">
                     <a 
                       href="javascript:;" 
@@ -186,6 +202,7 @@ export default {
       // Form data
       form: {
         accept: null,
+        parking: 0,
         comment: null,
       },
 
@@ -224,6 +241,7 @@ export default {
       let data = {
         'uuid': this.$route.params.itemUuid,
         'accepted': this.form.accept,
+        'parking': this.form.parking,
         'comment': this.form.comment,
       };
       NProgress.start();
@@ -236,6 +254,11 @@ export default {
 
     toggleAccept(value) {
       this.form.accept = value;
+    },
+
+
+    toggleParking() {
+      this.form.parking = this.form.parking ? 0 : 1;
     },
 
     reset() {

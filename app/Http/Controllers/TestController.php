@@ -10,6 +10,7 @@ use App\Models\Floor;
 use App\Models\Room;
 use App\Models\ReplyQueue;
 use App\Tasks\Offer;
+use App\Tasks\Reply;
 
 use Illuminate\Http\Request;
 
@@ -171,6 +172,13 @@ class TestController extends BaseController
     $offer = new Offer();
     return response()->json(true);
   }
+
+  public function mailReply()
+  {
+    $reply = new Reply();
+    return response()->json(true);
+  }
+
 
 
   public function apartmentUuid()

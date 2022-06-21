@@ -1,5 +1,5 @@
 <template>
-<div class="mb-8x sm:mb-15x">
+<div class="iso-wrapper">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1526.2 1022" class="iso">
     <g data-id="HOFGEBÄUDE_B">
       <g data-id="Schatten_02">
@@ -2001,7 +2001,7 @@ export default {
 }
 
 .cls-4 {
-  stroke-width: .3px;
+  stroke-width: .6px; /* .3 */
 }
 
 .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
@@ -2031,7 +2031,7 @@ export default {
 }
 
 .cls-5, .cls-7 {
-  stroke-width: .2px;
+  stroke-width: .4px; /* .2. */
 }
 
 .cls-6 {
@@ -2039,7 +2039,7 @@ export default {
 }
 
 .cls-6, .cls-8, .cls-9 {
-  stroke-width: .3px;
+  stroke-width: .6px; /* .3 */
 }
 
 .cls-13 {

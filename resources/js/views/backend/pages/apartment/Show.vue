@@ -82,7 +82,14 @@
             <div class="span-1"><label>Vorname</label></div>
             <div class="span-3">{{ apartment.tenant_id ? apartment.tenant.firstname : '–' }}</div>
           </apartment-row>
-          
+          <apartment-row>
+            <div class="span-1"><label>E-Mail</label></div>
+            <div class="span-3">{{ apartment.tenant_id && apartment.tenant.email ? apartment.tenant.email : '–' }}</div>
+          </apartment-row>
+          <apartment-row>
+            <div class="span-1"><label>Telefon</label></div>
+            <div class="span-3">{{ apartment.tenant_id && apartment.tenant.phone ? apartment.tenant.phone : '–' }}</div>
+          </apartment-row>
           <template v-if="apartment.collection_items.length">
             <h2 class="mt-15x">Angeboten</h2>
             <apartment-row-header>

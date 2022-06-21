@@ -23,6 +23,7 @@ class CollectionItem extends Base
     'read_at',
     'replied_at',
     'accepted',
+    'parking',
     'comment',
     'archive',
     'collection_id',

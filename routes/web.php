@@ -35,7 +35,7 @@ Route::get('/estate/{estate}', [TestController::class, 'estate']);
 Route::get('/floors/{estate}', [TestController::class, 'floors']);
 Route::get('/rooms/{estate}', [TestController::class, 'rooms']);
 Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
-Route::get('/reply', [TestController::class, 'reply']);
+Route::get('/mail/reply', [TestController::class, 'mailReply']);
 Route::get('/mail/offer', [TestController::class, 'mailOffer']);
 
 

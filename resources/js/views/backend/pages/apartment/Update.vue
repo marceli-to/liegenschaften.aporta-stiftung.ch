@@ -106,6 +106,18 @@
               </apartment-input>
             </apartment-row>
             <apartment-row>
+              <apartment-label :cls="'span-1'">E-Mail</apartment-label>
+              <apartment-input :cls="'span-3'">
+                <input type="text" v-model="apartment.tenant.email">
+              </apartment-input>
+            </apartment-row>
+            <apartment-row>
+              <apartment-label :cls="'span-1'">Telefon</apartment-label>
+              <apartment-input :cls="'span-3'">
+                <input type="text" v-model="apartment.tenant.phone">
+              </apartment-input>
+            </apartment-row>
+            <apartment-row>
               <apartment-label :cls="'span-1'">Status</apartment-label>
               <div class="span-3 flex">
                 <a href="" class="icon-state flex" @click.prevent="setState(1)">

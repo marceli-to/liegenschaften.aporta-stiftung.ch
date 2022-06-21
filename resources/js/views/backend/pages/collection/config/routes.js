@@ -9,7 +9,7 @@ const routes = [
   },
   {
     name: 'collections',
-    path: '/administration/angebote/',
+    path: '/administration/angebote/:uuid?',
     component: CollectionList,
   },
 ];

@@ -101,6 +101,7 @@ class UserCollectionController extends Controller
     $item->update([
       'comment' => $request->input('comment'),
       'accepted' => $request->input('accepted'),
+      'parking' => $request->input('parking'),
       'replied_at'  => \Carbon\Carbon::now()
     ]);
     ReplyQueue::create(['collection_item_id' => $item->id]);
@@ -156,4 +157,5 @@ class UserCollectionController extends Controller
   
     return $browse;
   }
+  
 }

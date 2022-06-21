@@ -134,6 +134,8 @@ class ApartmentController extends Controller
           'uuid' => \Str::uuid(),
           'firstname' => $request->input('tenant.firstname'),
           'name' => $request->input('tenant.name'),
+          'email' => $request->input('tenant.email'),
+          'phone' => $request->input('tenant.phone'),
         ]);
         $apartment->tenant_id = $tenant->id;
         $apartment->save();

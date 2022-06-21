@@ -4,6 +4,16 @@
  * -----------------------------------------------------------------------------
  */
 
+.iso-wrapper {
+  @extend %pb-8x;
+  @extend %sm\:pb-15x;
+  background-color: $color-white;
+  padding-bottom: $space-8x;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 .iso {
   display: block;
   margin-left: auto;

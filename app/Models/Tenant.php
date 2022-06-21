@@ -12,6 +12,8 @@ class Tenant extends Base
     'uuid',
     'firstname',
     'name',
+    'email',
+    'phone',
     'publish'
   ];
 

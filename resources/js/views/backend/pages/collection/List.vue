@@ -35,7 +35,7 @@
           </a>
         </list-item>
         <list-item :class="'span-2 list-item-header'">
-          Kommentar
+          Antwort
         </list-item>
         <list-item :class="'span-1 list-item-header flex direction-column align-center'">
           <div>
@@ -48,7 +48,8 @@
       </list-header>
       <div 
         v-for="(d, index) in sortedData" 
-        class="list-row" 
+        :class="[d.uuid == $route.params.uuid ? 'is-marked' : '', 'list-row']" 
+        :data-uuid="d.uuid"
         :key="d.id">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="showConfirm(d.uuid)">
@@ -75,11 +76,16 @@
           <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.replied_at ? d.replied_at : '–' }}</a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.comment }}</a>
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
+            <span v-if="d.replied_at != null && d.accepted == 0">Nicht mehr auf Wohnungssuche<br><br></span>
+            <span v-if="d.replied_at != null && d.accepted == 1">Hat Interesse an diesem Angebot<br><br></span>
+            <span v-if="d.replied_at != null && d.accepted == 2">Kein Interesse an diesem Angebot, möchte aber auf Warteliste bleiben<br><br></span>
+            <span v-if="d.replied_at != null && d.parking">Hat Interessse an Abstellplatz</span>
+          </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <icon-checkmark v-if="d.accepted == 1"/>
-          <icon-cross :size="'lg'" v-else-if="d.replied_at != null && d.accepted == 0" />
+          <icon-cross :size="'lg'" v-else-if="d.replied_at != null && (d.accepted == 0 || d.accepted == 2)" />
           <icon-hourglass v-else-if="d.replied_at == null && d.accepted == 0"/>
         </list-item>
       </div>
