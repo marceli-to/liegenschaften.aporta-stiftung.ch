@@ -83,7 +83,7 @@
             <icon-sort />
           </a>
         </list-item>
-        <list-item :class="'span-1 list-item-header'">
+        <list-item :class="'span-1 list-item-header line-after'">
           Nummer
           <a href="" @click.prevent="sort('number')">
             <icon-sort />

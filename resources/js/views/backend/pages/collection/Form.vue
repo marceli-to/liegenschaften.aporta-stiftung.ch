@@ -19,8 +19,14 @@
             <icon-sort />
           </a>
         </list-item>
-        <list-item :class="'span-2 list-item-header line-after'">
-          Mietzins Brutto
+        <list-item :class="'span-1 list-item-header line-after'">
+          Nummer
+          <a href="" @click.prevent="sort('number')">
+            <icon-sort />
+          </a>
+        </list-item>
+        <list-item :class="'span-1 list-item-header line-after'">
+          Mietzins
           <a href="" @click.prevent="sort('sortable_rent')">
             <icon-sort />
           </a>
@@ -83,7 +89,12 @@
             {{ apartment.description }}
           </router-link>
         </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+            {{ apartment.number }}
+          </router-link>
+        </list-item>
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
             {{ apartment.rent_gross }}
           </router-link>
