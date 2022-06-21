@@ -103,7 +103,7 @@
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <apartment-row class="pb-3x">
+                  <apartment-row class="pb-3x" v-if="form.accept == 1">
                     <apartment-label :cls="'span-3'">Ich habe Interesse an einem Abstellplatz in der Tiefgarage Eichbühlstrasse (Warteliste)</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleParking()" class="icon-state">
@@ -254,6 +254,9 @@ export default {
 
     toggleAccept(value) {
       this.form.accept = value;
+      if (this.form.accept !== 1) {
+        this.form.parking = 0;
+      }
     },
 
 
