@@ -30,6 +30,14 @@ class Apartment extends Base
     'rent_gross'
   ];
 
+  protected $appends = [
+    'sortable_rent', 
+    'sortable_size', 
+    'sortable_size_terrace', 
+    'sortable_size_patio', 
+    'sortable_size_balcony'
+  ];
+
   /**
    * Relationships
    */
@@ -95,6 +103,57 @@ class Apartment extends Base
   public function scopeSold($query)
   {
     return $query->where('state_id', State::SOLD);
+  }
+
+
+  /**
+   * Get the float value of rent_gross for sorting
+   *
+   * @return Integer
+   */
+  public function getSortableRentAttribute()
+  {
+    return (float) $this->rent_gross;
+  }
+
+  /**
+   * Get the float value of size for sorting
+   *
+   * @return Float
+   */
+  public function getSortableSizeAttribute()
+  {
+    return (float) $this->size;
+  }
+
+  /**
+   * Get the float value of size_terrace for sorting
+   *
+   * @return Float
+   */
+  public function getSortableSizeTerraceAttribute()
+  {
+    return (float) $this->size_terrace;
+  }
+
+  /**
+   * Get the float value of size_patio for sorting
+   *
+   * @return Float
+   */
+  public function getSortableSizePatioAttribute()
+  {
+    return (float) $this->size_patio;
+  }
+
+  /**
+   * Get the float value of size_patio for sorting
+   *
+   * @return Float
+   */
+  public function getSortableSizeBalconyAttribute()
+  {
+    return (float) $this->size_balcony;
   }
 
   /**

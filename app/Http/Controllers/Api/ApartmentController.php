@@ -69,14 +69,19 @@ class ApartmentController extends Controller
     // Handle rent
     if ($request->input('rent'))
     {
-      $constraints = explode('+', $request->input('rent'));
+      $constraint = explode(':', $request->input('rent'));
 
-      foreach($constraints as $constraint)
+      if ($constraint[0] == 'lt')
       {
-        $c = explode(':', $constraint);
-        $operator = $c[0] == 'lt' ? '<' : '>';
-        $value    = $c[1];
-        $filtered =  $data->where('rent_gross', $operator, $value);
+        $filtered = $data->where('rent_gross', '<', $constraint[1]);
+      }
+      else if ($constraint[0] == 'gt')
+      {
+        $filtered = $data->where('rent_gross', '>', $constraint[1]);
+      }
+      else
+      {
+        $filtered = $data->whereBetween('rent_gross', [$constraint[0], $constraint[1]]);
       }
       $data = $filtered->all();
     }

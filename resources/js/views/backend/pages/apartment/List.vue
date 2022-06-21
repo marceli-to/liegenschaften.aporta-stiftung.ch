@@ -84,8 +84,8 @@
           </a>
         </list-item>
         <list-item :class="'span-2 list-item-header line-after'">
-          Mieter*in
-          <a href="" @click.prevent="sort('tenant.name')">
+          Mietzins Brutto
+          <a href="" @click.prevent="sort('sortable_rent')">
             <icon-sort />
           </a>
         </list-item>
@@ -97,25 +97,25 @@
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           M<sup>2</sup>
-          <a href="" @click.prevent="sort('size')">
+          <a href="" @click.prevent="sort('sortable_size')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Terrasse
-          <a href="" @click.prevent="sort('size_terrace')">
+          <a href="" @click.prevent="sort('sortable_size_terrace')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Sitzplatz
-          <a href="" @click.prevent="sort('size_patio')">
+          <a href="" @click.prevent="sort('sortable_size_patio')">
             <icon-sort />
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header'">
           Balkon
-          <a href="" @click.prevent="sort('size_balcony')">
+          <a href="" @click.prevent="sort('sortable_size_balcony')">
             <icon-sort />
           </a>
         </list-item>

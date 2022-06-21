@@ -38,6 +38,7 @@ class UserCollectionController extends Controller
           'tenant' => $i->apartment->tenant ? $i->apartment->tenant->full_name : '',
           'rooms' => $i->apartment->room->abbreviation,
           'room_description' => $i->apartment->room->description,
+          'rent_gross' => $i->apartment->rent_gross,
           'size' => $i->apartment->size,
           'size_terrace' => $i->apartment->size_terrace,
           'size_patio' => $i->apartment->size_patio,

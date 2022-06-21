@@ -30,8 +30,8 @@
             </a>
           </list-item>
           <list-item :class="'span-2 list-item-header line-after'">
-            Mieter*in
-            <a href="" @click.prevent="sort('tenant')">
+            Mietzins Brutto
+            <a href="" @click.prevent="sort('rent_gross')">
               <icon-sort />
             </a>
           </list-item>
@@ -90,7 +90,7 @@
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
             <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-              {{ d.tenant }}
+              {{ d.rent_gross }}
             </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
