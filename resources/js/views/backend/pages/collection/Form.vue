@@ -262,9 +262,9 @@ export default {
       // Candidates
       candidates: [
         {
-          name: 'Stadelmann',
-          firstname: 'Marcel',
-          email: 'm@marceli.to'
+          name: null,
+          firstname: null,
+          email: null,
         },
       ],
 
