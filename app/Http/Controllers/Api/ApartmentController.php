@@ -115,6 +115,11 @@ class ApartmentController extends Controller
     $apartment->state_id = $request->input('state_id');
     $apartment->save();
 
+    // Date available
+    $apartment->available_at = $request->input('available_at') ? $request->input('available_at') : NULL;
+    $apartment->save();
+
+
     // Tenants
     if (!$request->input('tenant.firstname') && !$request->input('tenant.name'))
     {

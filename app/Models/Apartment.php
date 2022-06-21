@@ -9,6 +9,11 @@ class Apartment extends Base
 {
   use SoftDeletes;
   
+  protected $casts = [
+    'available_at' => 'date:d.m.Y',
+    'deleted_at' => 'date:d.m.Y',
+  ];
+
   protected $fillable = [
     'uuid',
     'number',
@@ -27,7 +32,8 @@ class Apartment extends Base
     'tenant_id',
     'rent_net',
     'additional_cost',
-    'rent_gross'
+    'rent_gross',
+    'available_at'
   ];
 
   protected $appends = [
@@ -105,6 +111,16 @@ class Apartment extends Base
     return $query->where('state_id', State::SOLD);
   }
 
+
+  /**
+   * Accessor for available_at
+   * @param Date $value
+   */
+
+  public function setAvailableAtAttribute($value)
+  {
+    $this->attributes['available_at'] = $value ? date('Y-m-d', strtotime($value)) : NULL;
+  }
 
   /**
    * Get the float value of rent_gross for sorting

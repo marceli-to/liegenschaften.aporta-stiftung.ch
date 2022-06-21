@@ -94,6 +94,17 @@
             <div class="span-1"><label>Telefon</label></div>
             <div class="span-3">{{ apartment.tenant_id && apartment.tenant.phone ? apartment.tenant.phone : '–' }}</div>
           </apartment-row>
+          <h2 class="mt-12x">Informationen</h2>
+          <apartment-row>
+            <div class="span-1"><label>Status</label></div>
+            <div class="span-3" v-if="apartment.state_id == 1">frei</div>
+            <div class="span-3" v-else-if="apartment.state_id == 3">reserviert</div>
+          </apartment-row>
+          <apartment-row>
+            <div class="span-1"><label>Bezugstermin</label></div>
+            <div class="span-3">{{ apartment.available_at }}</div>
+          </apartment-row>
+
           <template v-if="apartment.collection_items.length">
             <h2 class="mt-15x">Angeboten</h2>
             <apartment-row-header>

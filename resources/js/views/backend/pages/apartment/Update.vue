@@ -94,13 +94,13 @@
           <div class="span-4">
             <h2>Hauptmieter*in</h2>
             <apartment-row>
-              <apartment-label :cls="'span-1'">Name</apartment-label>
+              <apartment-label :cls="'span-1'">Name *</apartment-label>
               <apartment-input :cls="'span-3'">
                 <input type="text" v-model="apartment.tenant.name">
               </apartment-input>
             </apartment-row>
             <apartment-row>
-              <apartment-label :cls="'span-1'">Vorname</apartment-label>
+              <apartment-label :cls="'span-1'">Vorname *</apartment-label>
               <apartment-input :cls="'span-3'">
                 <input type="text" v-model="apartment.tenant.firstname">
               </apartment-input>
@@ -117,6 +117,7 @@
                 <input type="text" v-model="apartment.tenant.phone">
               </apartment-input>
             </apartment-row>
+            <h2 class="mt-12x">Informationen</h2>
             <apartment-row>
               <apartment-label :cls="'span-1'">Status</apartment-label>
               <div class="span-3 flex">
@@ -130,6 +131,18 @@
                 </a>
               </div>
             </apartment-row>
+            <apartment-row>
+              <apartment-label :cls="'span-1'">Bezugstermin</apartment-label>
+              <apartment-input :cls="'span-3'">
+                <the-mask
+                  type="text"
+                  mask="##.##.####"
+                  :masked="true"
+                  name="date"
+                  v-model="apartment.available_at"
+                ></the-mask>
+              </apartment-input>
+            </apartment-row>
           </div>
         </apartment-grid>
       </apartment-wrapper>
@@ -139,6 +152,7 @@
 </template>
 <script>
 import NProgress from 'nprogress';
+import { TheMask } from "vue-the-mask";
 import ErrorHandling from '@/mixins/ErrorHandling';
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
@@ -155,6 +169,7 @@ import Isometrie from '@/components/ui/misc/Isometrie.vue';
 export default {
   components: {
     NProgress,
+    TheMask,
     DialogWrapper,
     IconRadio,
     SiteHeader,
