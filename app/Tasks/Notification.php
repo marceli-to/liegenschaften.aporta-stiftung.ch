@@ -6,14 +6,14 @@ class Notification
   public function __invoke()
   {
     $mails = \App\Models\MailQueue::unprocessed()->get();
-    $mails = collect($mails)->splice(0, 3);
+    $mails = collect($mails)->splice(0,1);
 
     foreach($mails->all() as $m)
     {
       $data = json_decode($m->data);
        try {
 
-        // Replies
+        // Reply
         if ($m->type == 'reply') {
           \Mail::to(env('APORTA_REPLY_TO'))->send(new \App\Mail\Reply($data));
           $m->processed = 1;
@@ -27,7 +27,7 @@ class Notification
           $m->save();
         }
 
-        // Offers
+        // Offer
         if ($m->type == 'offer') {
           \Mail::to($data->email)->send(new \App\Mail\Offer($data));
           $m->processed = 1;
@@ -40,7 +40,6 @@ class Notification
             $item->save();
           }
         }
-
       } 
       catch(\Throwable $e) {
         $m->processed = 1;
