@@ -76,34 +76,57 @@
           </div>
           <div class="span-4">
             <apartment-row>
-              <div class="span-4 is-first" v-if="!data.has_reply">
-                <h3>An-/Abmeldung</h3>
+              <div class="span-4 is-first">
+                <h3 v-if="!data.has_reply">An-/Abmeldung</h3>
+                <h3 v-else>Ihre Rückmeldung</h3>
                 <form>
-                  <apartment-row class="pb-3x">
+
+                  <apartment-row class="pb-3x" v-if="!data.has_reply">
                     <apartment-label :cls="'span-3'">Ich habe Interesse an dieser Wohnung</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(1)" class="icon-state">
-                        <icon-radio :active="form.accept == 1" />
+                        <icon-radio :active="form.accepted == 1" />
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <apartment-row class="pb-3x">
+                  <apartment-row class="pb-3x" v-else-if="data.has_reply && data.accepted == 1">
+                    <apartment-label :cls="'span-3'">Ich habe Interesse an dieser Wohnung</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <icon-radio class="icon" :active="true" />
+                    </apartment-input>
+                  </apartment-row>
+
+                  <apartment-row class="pb-3x" v-if="!data.has_reply">
                     <apartment-label :cls="'span-3'">Ich habe <strong>kein</strong> Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(0)" class="icon-state">
-                        <icon-radio :active="form.accept == 0" />
+                        <icon-radio :active="form.accepted == 0" />
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <apartment-row class="pb-3x">
+                  <apartment-row class="pb-3x" v-else-if="data.has_reply && data.accepted == 0">
+                    <apartment-label :cls="'span-3'">Ich habe <strong>kein</strong> Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <icon-radio :active="true" />
+                    </apartment-input>
+                  </apartment-row>
+
+                  <apartment-row class="pb-3x" v-if="!data.has_reply">
                     <apartment-label :cls="'span-3'">Ich bin nicht mehr auf Wohungssuche, bitte löschen Sie meine Anmeldung</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleAccept(2)" class="icon-state">
-                        <icon-radio :active="form.accept == 2" />
+                        <icon-radio :active="form.accepted == 2" />
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <apartment-row class="pb-3x" v-if="form.accept == 1">
+                  <apartment-row class="pb-3x" v-else-if="data.has_reply && data.accepted == 2">
+                    <apartment-label :cls="'span-3'">Ich bin nicht mehr auf Wohungssuche, bitte löschen Sie meine Anmeldung</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <icon-radio :active="true" />
+                    </apartment-input>
+                  </apartment-row>
+
+                  <apartment-row class="pb-3x" v-if="!data.has_reply && form.accepted == 1">
                     <apartment-label :cls="'span-3'">Ich habe Interesse an einem Abstellplatz in der Tiefgarage Eichbühlstrasse (Warteliste)</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <a href="" @click.prevent="toggleParking()" class="icon-state">
@@ -111,13 +134,16 @@
                       </a>
                     </apartment-input>
                   </apartment-row>
-                  <!-- <div v-if="form.accept == 0">
-                    <div class="collection-text my-6x">
-                      <p>Sie haben kein Interesse an der Wohnung? Bitte teilen Sie uns ihre Gründe mit.</p>
-                    </div>
-                    <textarea name="comment" class="is-outline" placeholder="Kommentar" v-model="form.comment"></textarea>
-                  </div> -->
-                  <div class="mt-12x" v-if="form.accept != null">
+                  <apartment-row class="pb-3x" v-else-if="data.has_reply && data.parking">
+                    <apartment-label :cls="'span-3'">Ich habe Interesse an einem Abstellplatz in der Tiefgarage Eichbühlstrasse (Warteliste)</apartment-label>
+                    <apartment-input :cls="'span-1 flex justify-center'">
+                      <a href="" @click.prevent="toggleParking()" class="icon-state">
+                        <icon-radio :active="true" />
+                      </a>
+                    </apartment-input>
+                  </apartment-row>
+
+                  <div class="mt-12x" v-if="form.accepted != null">
                     <a 
                       href="javascript:;" 
                       class="btn-primary is-small mb-3x"
@@ -137,9 +163,9 @@
                   </div>
                 </form>
               </div>
-              <div class="span-4 is-first collection-text" v-else>
+              <!-- <div class="span-4 is-first collection-text" v-else>
                 <p>Sie haben dieses Angebot bereits beantwortet.</p>
-              </div>
+              </div> -->
             </apartment-row>
           </div>
         </apartment-grid>
@@ -201,7 +227,7 @@ export default {
 
       // Form data
       form: {
-        accept: null,
+        accepted: null,
         parking: 0,
         comment: null,
       },
@@ -240,7 +266,7 @@ export default {
     reply() {
       let data = {
         'uuid': this.$route.params.itemUuid,
-        'accepted': this.form.accept,
+        'accepted': this.form.accepted,
         'parking': this.form.parking,
         'comment': this.form.comment,
       };
@@ -248,24 +274,26 @@ export default {
       this.axios.post(`${this.routes.reply}`, data).then(response => {
         this.reset();
         this.data.has_reply = true;
+        this.data.parking = data.parking;
+        this.data.accepted = data.accepted;
         NProgress.done();
       });
     },
 
     toggleAccept(value) {
-      this.form.accept = value;
-      if (this.form.accept !== 1) {
+      this.form.accepted = value;
+      if (this.form.accepted !== 1) {
         this.form.parking = 0;
       }
     },
-
 
     toggleParking() {
       this.form.parking = this.form.parking ? 0 : 1;
     },
 
     reset() {
-      this.form.accept = null;
+      this.form.accepted = null;
+      this.form.parking = 0;
     }
   },
 

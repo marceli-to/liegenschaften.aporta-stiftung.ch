@@ -83,6 +83,8 @@ class UserCollectionController extends Controller
       'size_terrace' => $item->apartment->size_terrace,
       'size_patio' => $item->apartment->size_patio,
       'size_balcony' => $item->apartment->size_balcony,
+      'accepted' => $item->accepted,
+      'parking' => $item->parking,
       'has_reply' => $item->replied_at == NULL ? FALSE : TRUE
     ];
 
