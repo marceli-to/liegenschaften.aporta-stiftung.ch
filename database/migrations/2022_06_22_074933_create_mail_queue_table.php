@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReplyQueueTable extends Migration
+class CreateMailQueueTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateReplyQueueTable extends Migration
      */
     public function up()
     {
-        Schema::create('reply_queue', function (Blueprint $table) {
+        Schema::create('mail_queue', function (Blueprint $table) {
           $table->id();
+          $table->string('type', 255);
+          $table->json('data');
           $table->tinyInteger('processed')->default(0);
           $table->text('error')->nullable();
-          $table->foreignId('collection_item_id')->constrained();
           $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateReplyQueueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reply_queue');
+        Schema::dropIfExists('mail_queue');
     }
 }

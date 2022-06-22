@@ -6,7 +6,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\MailQueue;
 
-class Reply extends Mailable
+class Confirmation extends Mailable
 {
   use Queueable, SerializesModels;
 
@@ -31,8 +31,8 @@ class Reply extends Mailable
   public function build()
   {
     return $this->from(\Config::get('client.email.from'), env('APP_NAME'))
-                ->subject('Antwort Wohnungsangebot '. $this->data->collection->estate->description .' – ' . env('APP_NAME'))
+                ->subject('Wohnungsangebot '. $this->data->collection->estate->description .' – ' . env('APP_NAME'))
                 ->with(['item' => $this->data])
-                ->markdown('mails.reply');
+                ->markdown('mails.confirmation');
   }
 }

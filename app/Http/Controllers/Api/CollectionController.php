@@ -4,8 +4,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Collection;
 use App\Models\CollectionItem;
-use App\Models\Apartment;
 use App\Http\Requests\CollectionStoreRequest;
+use App\Models\Apartment;
+use App\Models\MailQueue;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
@@ -61,6 +62,12 @@ class CollectionController extends Controller
         ]);
         $collectionItem->save();
       }
+
+      // Add collection data to mail_queue
+      MailQueue::create([
+        'type' => 'offer',
+        'data' => Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->find($collection->id)->toJson()
+      ]);
     }
  
     return response()->json(['collectionId' => $collection->id]);

@@ -8,5 +8,5 @@
 <p><strong>Block B (ausser Hohlstrasse):</strong><br>Vertragsbeginn ist der 15. Februar 2023. Die Wohnungen werden etappiert vermietet. Die Vermietung erfolgt ohne Wohnungsbesichtigung. In der Überbauung (Eglistrasse 1/Hohlstrasse) befinden sich im Weiteren ein Kindergarten der Stadt Zürich sowie das Zürcher Lighthouse.</p>
 <p><strong>Block B (Hohlstrasse 315):</strong><br>Vertragsbeginn ist der 1. März 2023.<br>Die Wohnungen werden etappiert vermietet. Die Vermietung erfolgt ohne Wohnungsbesichtigung. In der Überbauung (Eglistrasse 1/Hohlstrasse) befinden sich im Weiteren ein Kindergarten der Stadt Zürich sowie das Zürcher Lighthouse.</p>
 <p style="padding: 12px 0"><a href="{{ route('offer.list', ['collection' => $collection->uuid, 'hash' => md5($collection->email)]) }}" class="button button-primary">Unser Angebot</a></p>
-<p>Freundliche Grüsse<br><br>DR. STEPHAN À PORTA-STIFTUNG<br>Camilla Walker</p>
+<p>Freundliche Grüsse<br><br>{{ env('APP_NAME') }}<br>Camilla Walker</p>
 @endcomponent

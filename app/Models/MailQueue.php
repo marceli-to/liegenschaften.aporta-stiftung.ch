@@ -2,24 +2,19 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Base;
 
-class ReplyQueue extends Base
+class MailQueue extends Model
 {
   use HasFactory;
 
-  protected $table = 'reply_queue';
+  protected $table = 'mail_queue';
 
   protected $fillable = [
+    'type',
+    'data',
     'error',
     'processed',
-    'collection_item_id',
   ];
-
-	public function item()
-	{
-		return $this->hasOne(CollectionItem::class, 'id', 'collection_item_id');
-	}
 
 	public function scopeUnprocessed($query)
 	{

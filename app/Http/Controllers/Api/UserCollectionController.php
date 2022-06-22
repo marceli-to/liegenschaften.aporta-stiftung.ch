@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\CollectionItem;
-use App\Models\ReplyQueue;
+use App\Models\MailQueue;
 use Illuminate\Http\Request;
 
 class UserCollectionController extends Controller
@@ -106,7 +106,17 @@ class UserCollectionController extends Controller
       'parking' => $request->input('parking'),
       'replied_at'  => \Carbon\Carbon::now()
     ]);
-    ReplyQueue::create(['collection_item_id' => $item->id]);
+
+    MailQueue::create([
+      'type' => 'reply',
+      'data' => CollectionItem::with('collection.estate', 'apartment.building', 'apartment.room')->find($item->id)->toJson()
+    ]);
+
+    MailQueue::create([
+      'type' => 'confirmation',
+      'data' => CollectionItem::with('collection.estate', 'apartment.building', 'apartment.room')->find($item->id)->toJson()
+    ]);
+
     return response()->json('success');
   }
 

@@ -8,7 +8,6 @@ use App\Models\Estate;
 use App\Models\State;
 use App\Models\Floor;
 use App\Models\Room;
-use App\Models\ReplyQueue;
 use App\Tasks\Offer;
 use App\Tasks\Reply;
 
@@ -167,20 +166,6 @@ class TestController extends BaseController
     }
   }
 
-  public function mailOffer()
-  {
-    $offer = new Offer();
-    return response()->json(true);
-  }
-
-  public function mailReply()
-  {
-    $reply = new Reply();
-    return response()->json(true);
-  }
-
-
-
   public function apartmentUuid()
   {
     $apts = Apartment::get();
@@ -193,5 +178,49 @@ class TestController extends BaseController
     return response()->json(true);
   }
 
+  public function mailQueue()
+  {
+    $mails = \App\Models\MailQueue::unprocessed()->get();
+    $mails = collect($mails)->splice(0, 3);
+
+    foreach($mails->all() as $m)
+    {
+      $data = json_decode($m->data);
+      try {
+        if ($m->type == 'reply') {
+          \Mail::to(env('APORTA_REPLY_TO'))->send(new \App\Mail\Reply($data));
+          $m->processed = 1;
+          $m->save();
+        }
+
+        // Confirmation
+        if ($m->type == 'confirmation') {
+          \Mail::to($data->collection->email)->send(new \App\Mail\Confirmation($data));
+          $m->processed = 1;
+          $m->save();
+        }
+
+        // Offers
+        if ($m->type == 'offer') {
+          \Mail::to($data->email)->send(new \App\Mail\Offer($data));
+          $m->processed = 1;
+          $m->save();
+  
+          foreach($data->items as $i)
+          {
+            $item = \App\Models\CollectionItem::find($i->id);
+            $item->sent_at = \Carbon\Carbon::now();
+            $item->save();
+          }
+        }
+      } 
+      catch(\Throwable $e) {
+        $m->processed = 1;
+        $m->error = $e;
+        $m->save();
+        \Log::error($e);
+      }
+    }    
+  }
 
 }

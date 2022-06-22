@@ -2,8 +2,7 @@
 namespace App\Console;
 use App\Tasks\Newsletter;
 use Illuminate\Console\Scheduling\Schedule;
-use App\Tasks\Offer;
-use App\Tasks\Reply;
+use App\Tasks\Notification;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -25,8 +24,7 @@ class Kernel extends ConsoleKernel
    */
   protected function schedule(Schedule $schedule)
   {
-    $schedule->call(new Offer)->everyMinute();
-    $schedule->call(new Reply)->everyMinute();
+    $schedule->call(new Notification)->everyMinute();
   }
 
   /**

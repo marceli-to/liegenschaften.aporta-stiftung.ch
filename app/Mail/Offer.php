@@ -4,23 +4,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Collection;
 
 class Offer extends Mailable
 {
   use Queueable, SerializesModels;
 
-  protected $collection;
+  protected $data;
 
   /**
    * Create a new message instance.
    *
-   * @param Collection $collection
+   * @param $data
    * @return void
    */
-  public function __construct(Collection $collection)
+  public function __construct($data)
   {
-    $this->collection = $collection;
+    $this->data = $data;
   }
 
   /**
@@ -30,9 +29,9 @@ class Offer extends Mailable
    */
   public function build()
   {
-    return $this->from(\Config::get('client.email.from'), 'Dr. Stephan à Porta-Stiftung')
-                ->subject('Wohnungsangebot '. $this->collection->estate->description .' – Dr. Stephan à Porta-Stiftung')
-                ->with(['collection' => $this->collection])
+    return $this->from(\Config::get('client.email.from'), env('APP_NAME'))
+                ->subject('Wohnungsangebot '. $this->data->estate->description .' – '. env('APP_NAME'))
+                ->with(['collection' => $this->data])
                 ->markdown('mails.offer');
   }
 }
