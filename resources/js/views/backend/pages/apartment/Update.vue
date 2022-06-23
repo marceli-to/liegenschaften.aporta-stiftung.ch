@@ -37,7 +37,7 @@
               <div class="span-4">
                 <h3>Grundriss</h3>
                 <figure class="apartment-floorplan">
-                  <img :src="`/assets/media/${apartment.number}.svg`" height="600" width="600" class="is-responsive">
+                  <img :src="`/assets/media/${apartment.number}-${apartment.uuid}.svg`" height="600" width="600" class="is-responsive">
                 </figure>
               </div>
             </apartment-row>
@@ -52,7 +52,7 @@
                       <div class="span-2 start-3">{{ apartment.estate.city }}</div>
                     </apartment-row>
                     <apartment-row>
-                      <div class="span-2"><label>Bezeichnung</label></div>
+                      <div class="span-2"><label>Lage</label></div>
                       <div class="span-2">{{ apartment.description }}</div>
                     </apartment-row>
                     <apartment-row>

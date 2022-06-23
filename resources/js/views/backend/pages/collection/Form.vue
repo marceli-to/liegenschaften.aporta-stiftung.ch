@@ -14,7 +14,7 @@
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
-          Bezeichnung
+          Lage
           <a href="" @click.prevent="sort('description')">
             <icon-sort />
           </a>
@@ -138,7 +138,7 @@
       <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
         <ul>
           <li class="start-4">
-            <a href="">
+            <a href="" @click.prevent="showResetConfirm()">
               <icon-reset />
               <span>Zurücksetzen</span>
             </a>
@@ -389,6 +389,7 @@ export default {
     showStoreSuccess() {
       this.$refs.dialogStoreSuccess.show();
     },
+
   },
 
   computed: {

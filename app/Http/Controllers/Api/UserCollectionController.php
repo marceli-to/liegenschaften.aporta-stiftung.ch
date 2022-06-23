@@ -70,6 +70,7 @@ class UserCollectionController extends Controller
       'uuid' => $item->uuid,
       'estate' => $item->collection->estate->description_long . ', ' . $item->collection->estate->city,
       'city' => $item->collection->estate->city,
+      'apartementUuid' => $item->apartment->uuid,
       'number' => $item->apartment->number,
       'street' => $item->apartment->building->street,
       'description' => $item->apartment->description,
@@ -163,6 +164,7 @@ class UserCollectionController extends Controller
     $browse = [
       'index' => $key + 1,
       'count' => $items->count(),
+      //'current' => $current->apartment->uuid,
       'prev'  => ($prev) ? $prev->uuid : NULL,
       'next'  => ($next) ? $next->uuid : NULL,
     ];

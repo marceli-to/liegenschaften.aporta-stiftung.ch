@@ -2,6 +2,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\TestController;
 
@@ -44,14 +45,12 @@ if (
   Route::get('/rooms/{estate}', [TestController::class, 'rooms']);
   Route::get('/buildings/{estate}', [TestController::class, 'buildings']);
   Route::get('/mail/queue', [TestController::class, 'mailQueue']);
-    
+  Route::get('/rename/files', [TestController::class, 'renameFiles']);
+
   // Logged in users
   Route::middleware('auth:sanctum', 'verified')->group(function() {
     Route::get('/administration/{any?}', function () {
       return view('layout.authenticated');
     })->where('any', '.*')->middleware('role:admin')->name('applications');
-  });
-  
+  }); 
 }
-
-

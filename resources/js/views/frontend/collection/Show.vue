@@ -3,7 +3,7 @@
   <site-header :view="'show'"></site-header>
   <site-main v-if="isFetched">
     <div v-if="isValid">
-      <page-menu :pagination="pagination"></page-menu>
+      <page-menu :pagination="pagination" :fileUuid="`${data.number}-${data.apartementUuid}`"></page-menu>
       <apartment-wrapper>
         <h2 class="sm:hide">{{ data.room_description }}, {{ data.size }} m<sup>2</sup><br><em>{{ data.street }}, {{ data.city }}<br>{{ data.description }}</em></h2>
         <h2 class="xs:hide">{{ data.description }}&nbsp;&nbsp;<em>{{ data.rooms }} {{ data.size }} M<sup>2</sup></em></h2>
@@ -14,13 +14,15 @@
                 <div class="xs:grid-cols-6">
                   <h3 class="xs:span-3">Grundriss</h3>
                   <div class="xs:span-3 sm:hide flex justify-end">
-                    <a href="" target="_blank" class="icon" title="Download Grundriss als PDF">
+                    <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" class="icon" title="Download Grundriss als PDF">
                       <span>Download als PDF</span>
                     </a>
                   </div>
                 </div>
                 <figure class="apartment-floorplan">
-                  <img :src="`/assets/media/${data.number}.svg`" height="600" width="600" class="is-responsive">
+                  <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" title="Download Grundriss als PDF">
+                    <img :src="`/assets/media/${data.number}-${data.apartementUuid}.svg`" height="600" width="600" class="is-responsive">
+                  </a>
                 </figure>
               </div>
             </apartment-row>
@@ -35,7 +37,7 @@
                       <div class="span-2 start-3">{{ data.city }}</div>
                     </apartment-row>
                     <apartment-row>
-                      <div class="span-2"><label>Bezeichnung</label></div>
+                      <div class="span-2"><label>Lage</label></div>
                       <div class="span-2">{{ data.description }}</div>
                     </apartment-row>
                     <apartment-row>

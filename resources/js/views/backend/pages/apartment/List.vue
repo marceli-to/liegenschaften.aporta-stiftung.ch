@@ -78,7 +78,7 @@
           </a>
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
-          Bezeichnung
+          Lage
           <a href="" @click.prevent="sort('description')">
             <icon-sort />
           </a>

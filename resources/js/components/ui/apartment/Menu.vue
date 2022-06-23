@@ -9,7 +9,7 @@
         </router-link>
       </li>
       <li>
-        <a href="">
+        <a href="" @click.prevent="$emit('reset')">
           <icon-reset />
           <span>Zurücksetzen</span>
         </a>
@@ -31,18 +31,18 @@
         </a> 
       </li>
       <li>
-        <a href="">
+        <a :href="`/assets/media/${$props.apartment.number}-${$props.apartment.uuid}.pdf`" target="_blank">
           <icon-document />
-          <span>PDF-Export</span>
+          <span>Download PDF</span>
         </a>
       </li>
     </ul>
     <slot />
   </nav>
+
 </div>
 </template>
 <script>
-//import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconArrowLeft from "@/components/ui/icons/ArrowLeft.vue";
 import IconReset from "@/components/ui/icons/Reset.vue";
 import IconPencil from "@/components/ui/icons/Pencil.vue";
@@ -54,13 +54,12 @@ import Collection from "@/views/backend/pages/mixins/Collection";
 export default {
 
   components: {
-    //DialogWrapper,
     IconArrowLeft,
     IconReset,
     IconPencil,
     IconBubble,
     IconDocument,
-    IconCheckbox
+    IconCheckbox,
   },
 
   props: {
@@ -69,22 +68,5 @@ export default {
   },
 
   mixins: [Collection],
-
-  data() {
-    return {
-
-      // States
-      isLoading: false,
-      isFetched: false,
-      
-      // Routes
-      routes: {
-        fetch: '/api/apartment',
-      },
-    }
-  },
-
-  mounted() {
-  },
 }
 </script>

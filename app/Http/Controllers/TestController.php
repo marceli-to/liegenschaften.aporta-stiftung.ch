@@ -223,4 +223,16 @@ class TestController extends BaseController
     }    
   }
 
+  public function renameFiles()
+  {
+    $apartments = Apartment::get();
+    foreach($apartments as $a)
+    {
+      $path = $_SERVER['DOCUMENT_ROOT'] . 'test/';
+      rename ($path . $a->number . '.pdf', $path . $a->number . '-' . $a->uuid . '.pdf');
+      rename ($path . $a->number . '.svg', $path . $a->number . '-' . $a->uuid . '.svg');
+    }
+
+    dd($apartments);
+  }
 }

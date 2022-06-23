@@ -5,6 +5,7 @@ use App\Http\Resources\DataCollection;
 use App\Models\Estate;
 use App\Models\Building;
 use App\Models\Apartment;
+use App\Models\State;
 use App\Models\Tenant;
 use App\Http\Requests\ApartmentStoreRequest;
 use Illuminate\Http\Request;
@@ -153,6 +154,22 @@ class ApartmentController extends Controller
     }
 
     return response()->json('successfully updated');
+  }
+
+  /**
+   * Reset all apartment data
+   *
+   * @param Apartment $apartment
+   * @return \Illuminate\Http\Response
+   */
+  public function reset(Apartment $apartment)
+  {
+    $apartment->collectionItems()->delete();
+    $apartment->tenant_id = NULL;
+    $apartment->state_id = State::FREE;
+    $apartment->available_at = NULL;
+    $apartment->save();
+    return $this->find($apartment);
   }
 
 }

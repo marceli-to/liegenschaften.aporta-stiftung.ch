@@ -7,7 +7,8 @@
   <site-main v-if="isFetched">
     <page-menu 
       :id="$route.params.uuid"
-      :apartment="apartment" 
+      :apartment="apartment"
+      @reset="showResetConfirm()" 
     ></page-menu>
     <apartment-wrapper>
       <apartment-grid>
@@ -17,7 +18,7 @@
             <div class="span-4 is-first">
               <h3>Grundriss</h3>
               <figure class="apartment-floorplan">
-                <img :src="`/assets/media/${apartment.number}.svg`" height="600" width="600" class="is-responsive">
+                <img :src="`/assets/media/${apartment.number}-${apartment.uuid}.svg`" height="600" width="600" class="is-responsive">
               </figure>
             </div>
           </apartment-row>
@@ -32,7 +33,7 @@
                     <div class="span-2 start-3">{{ apartment.estate.city }}</div>
                   </apartment-row>
                   <apartment-row>
-                    <div class="span-2"><label>Bezeichnung</label></div>
+                    <div class="span-2"><label>Lage</label></div>
                     <div class="span-2">{{ apartment.description }}</div>
                   </apartment-row>
                   <apartment-row>
@@ -102,7 +103,7 @@
           </apartment-row>
           <apartment-row>
             <div class="span-1"><label>Bezugstermin</label></div>
-            <div class="span-3">{{ apartment.available_at }}</div>
+            <div class="span-3">{{ apartment.available_at ? apartment.available_at : '–' }}</div>
           </apartment-row>
 
           <template v-if="apartment.collection_items.length">
@@ -127,11 +128,23 @@
       </apartment-grid>
     </apartment-wrapper>
   </site-main>
-
+  <dialog-wrapper ref="dialogResetConfirm">
+    <template #message>
+      <div>
+        <strong>
+          Sind Sie sicher, dass sämtliche Objektdaten (Mieter, Angebote) gelöscht werden sollen?
+        </strong>
+      </div>
+    </template>
+    <template #actions>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="reset()">Löschen</a>
+    </template>
+  </dialog-wrapper>
 </div>
 </template>
 <script>
 import NProgress from 'nprogress';
+import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import Filter from "@/views/backend/pages/mixins/Filter";
 import ErrorHandling from '@/mixins/ErrorHandling';
 import SiteHeader from '@/views/backend/layout/Header.vue';
@@ -150,6 +163,7 @@ import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 export default {
   components: {
     NProgress,
+    DialogWrapper,
     SiteHeader,
     SiteMain,
     PageMenu,
@@ -177,6 +191,7 @@ export default {
       // Routes
       routes: {
         fetch: '/api/apartment',
+        reset: '/api/apartment'
       },
 
       // States
@@ -213,6 +228,19 @@ export default {
       event.target.classList.add('is-invalid');
       this.hasErrors = true;
     },
+
+    reset() {
+      NProgress.start();
+      this.axios.delete(`${this.routes.reset}/${this.apartment.uuid}`).then(response => {
+        this.apartment = response.data;
+        this.$refs.dialogResetConfirm.hide();
+        NProgress.done();
+      });
+    },
+
+    showResetConfirm() {
+      this.$refs.dialogResetConfirm.show();
+    }
 
   },
 
