@@ -125,6 +125,10 @@
                   <icon-radio :active="apartment.state_id == 1 ? true : false" />
                   <span class="ml-2x">frei</span>
                 </a>
+                <a href="" class="icon-state flex ml-6x" @click.prevent="setState(2)">
+                  <icon-radio :active="apartment.state_id == 2 ? true : false" />
+                  <span class="ml-2x">reserviert</span>
+                </a>
                 <a href="" class="icon-state flex ml-6x" @click.prevent="setState(3)">
                   <icon-radio :active="apartment.state_id == 3 ? true : false" />
                   <span class="ml-2x">vermietet</span>

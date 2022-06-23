@@ -99,7 +99,8 @@
           <apartment-row>
             <div class="span-1"><label>Status</label></div>
             <div class="span-3" v-if="apartment.state_id == 1">frei</div>
-            <div class="span-3" v-else-if="apartment.state_id == 3">reserviert</div>
+            <div class="span-3" v-else-if="apartment.state_id == 2">reserviert</div>
+            <div class="span-3" v-else-if="apartment.state_id == 3">vermietet</div>
           </apartment-row>
           <apartment-row>
             <div class="span-1"><label>Bezugstermin</label></div>
@@ -119,8 +120,9 @@
               <div class="span-2 border-light-blue">{{ item.collection.firstname }} {{ item.collection.name }}</div>
               <div class="span-1">{{ item.sent_at }}</div>
               <div class="span-1 flex justify-center text-primary">
-                <icon-checkmark v-if="item.accepted" />
-                <icon-cross :size="'md'" v-else />
+                <icon-checkmark v-if="item.accepted == 1 && item.replied_at" />
+                <icon-cross v-else-if="item.accepted == 2 && item.replied_at" :size="'md'" />
+                <icon-hourglass v-else />
               </div>
             </apartment-row>
           </template>
@@ -159,8 +161,10 @@ import ApartmentInput from '@/components/ui/apartment/Input.vue';
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
+import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 
 export default {
+
   components: {
     NProgress,
     DialogWrapper,
@@ -175,7 +179,8 @@ export default {
     ApartmentRowHeader,
     Isometrie,
     IconCross,
-    IconCheckmark
+    IconCheckmark,
+    IconHourglass
   },
 
   mixins: [ErrorHandling, Filter],

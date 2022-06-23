@@ -14,7 +14,7 @@
           </a>
         </list-item>
         <list-item :class="'span-3 list-item-header line-after'">
-          Angebote Wohnung
+          Adresse / Lage 
         </list-item>
         <list-item :class="'span-1 list-item-header line-after'">
           Gesendet
