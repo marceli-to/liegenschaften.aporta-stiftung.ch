@@ -6,6 +6,7 @@ public/.htaccess
 /vendor
 .env
 .env.backup
+.env.*
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -13,3 +14,6 @@ npm-debug.log
 yarn-error.log
 INSTALL.TXT
 /INSTALL.TXT
+
+# tenants storage
+/storage/eglistrasse*
