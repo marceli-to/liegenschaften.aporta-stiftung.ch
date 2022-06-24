@@ -45,66 +45,7 @@ class ApartmentController extends Controller
    */
   public function filter(Request $request)
   { 
-    // // Build search query
-    // $matches = [];
-
-    // // Add ids of 'building, floor, room etc.'
-    // foreach($request->except(['exterior', 'rent', 'collections']) as $key => $value)
-    // {
-    //   if ($request->input($key))
-    //   {
-    //     $matches[$key] = $value;
-    //   }
-    // }
-
-    // // Filter by matches
-    // $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->where('estate_id', env('ESTATE_ID'))->where($matches)->orderBy('order')->get();
-
-    // // Filter by 'exterior'
-    // if ($request->input('exterior'))
-    // {
-    //   //$data = collect($data);
-    //   $filtered = $data->where('size_' . $request->input('exterior'), '>', 0);      
-    //   $data = $filtered->all();
-    // }
-
-    // // // Filter by 'collections'
-    // $data_temp = [];
-    // if ($request->input('collections'))
-    // {
-    //   foreach($data as $d)
-    //   {
-    //     if ($d->collectionItems->count() > 0)
-    //     {
-    //       $data_temp[] = $d;
-    //     }
-    //   }
-    //   $data = collect($data_temp);
-    // }
-
-    // // Filter by 'rent'
-    // if ($request->input('rent'))
-    // {
-    //   $data = collect($data);
-    //   $constraint = explode(':', $request->input('rent'));
-    //   if ($constraint[0] == 'lt')
-    //   {
-    //     $filtered = $data->where('rent_gross', '<', $constraint[1]);
-    //     $data = $filtered->all();
-    //   }
-    //   else if ($constraint[0] == 'gt')
-    //   {
-    //     $filtered = $data->where('rent_gross', '>', $constraint[1]);
-    //     $data = $filtered->all();
-    //   }
-    //   else
-    //   {
-    //     $filtered = $data->whereBetween('rent_gross', [$constraint[0], $constraint[1]]);
-    //     $data = $filtered->all();
-    //   }
-    // }
-    
-    // Get all data
+    // Get all apartments
     $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->where('estate_id', env('ESTATE_ID'))->orderBy('order')->get();
 
     // Buildings
