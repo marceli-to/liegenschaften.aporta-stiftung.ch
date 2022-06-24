@@ -82,7 +82,6 @@
                 <h3 v-if="!data.has_reply">An-/Abmeldung</h3>
                 <h3 v-else>Ihre Rückmeldung</h3>
                 <form>
-
                   <apartment-row class="pb-3x" v-if="!data.has_reply">
                     <apartment-label :cls="'span-3'">Ich habe Interesse an dieser Wohnung</apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
@@ -165,9 +164,25 @@
                   </div>
                 </form>
               </div>
-              <!-- <div class="span-4 is-first collection-text" v-else>
-                <p>Sie haben dieses Angebot bereits beantwortet.</p>
-              </div> -->
+            </apartment-row>
+            <apartment-row class="grid-cols-none mt-15x">
+              <div>
+                <h3>Impressionen</h3>
+                <div class="grid-cols-12 grid-row-gap">
+                  <figure class="span-12">
+                    <img src="/assets/img/aporta-eglistrasse-wohnraum.jpg" class="is-responsive" width="1016" height="718">
+                  </figure>
+                  <figure class="span-6">
+                    <img src="/assets/img/aporta-eglistrasse-nasszellen.jpg" class="is-responsive" width="1000" height="1415">
+                  </figure>
+                  <figure class="span-6">
+                    <img src="/assets/img/aporta-eglistrasse-treppenhaus.jpg" class="is-responsive" width="1000" height="1415">
+                  </figure>
+                  <figure class="span-12">
+                    <img src="/assets/img/aporta-eglistrasse-gartenblick.jpg" class="is-responsive" width="1016" height="718">
+                  </figure>
+                </div>
+              </div>
             </apartment-row>
           </div>
         </apartment-grid>

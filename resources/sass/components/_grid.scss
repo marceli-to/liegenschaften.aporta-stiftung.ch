@@ -38,7 +38,7 @@
 
 %grid-cols-none,
 .grid-cols-none {
-  grid-template-columns: none;
+  grid-template-columns: none !important;
 }
 
 %grid-gap,
