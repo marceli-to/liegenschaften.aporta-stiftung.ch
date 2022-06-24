@@ -12,7 +12,10 @@
           <isometrie />
         </div>
         <div class="xs:hide span-3 flex justify-end">
-          <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">Google Maps</a>
+          <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">
+            <span>Google Maps</span>
+            <icon-link-external class="ml-1x" />
+          </a>
         </div>  
       </div>
       <list v-if="sortedData" class="xs:hide">
@@ -152,6 +155,7 @@ import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 import IconSort from "@/components/ui/icons/Sort.vue";
+import IconLinkExternal from '@/components/ui/icons/LinkExternal.vue';
 
 export default {
 
@@ -165,6 +169,7 @@ export default {
     ListItem,
     Isometrie,
     IconSort,
+    IconLinkExternal
   },
 
   mixins: [ErrorHandling, Sort],

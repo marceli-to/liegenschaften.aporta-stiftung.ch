@@ -17,5 +17,6 @@
 
 .link-maps {
   color: $color-medium-grey;
+  @include font-size($fs-md);
   text-transform: uppercase;
 }

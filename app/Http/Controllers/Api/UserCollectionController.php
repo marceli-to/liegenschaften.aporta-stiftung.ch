@@ -27,7 +27,10 @@ class UserCollectionController extends Controller
     $data = [
       'uuid' => $collection->uuid,
       'valid' => $collection->valid(),
-      'estate' => $collection->estate->description_long . ', ' . $collection->estate->city,
+      'estate' => [
+        'description' => $collection->estate->description_long . ', ' . $collection->estate->city,
+        'maps' => $collection->estate->maps
+      ],
       'items' => $collection->items->map(function($i) {
         return [
           'uuid' => $i->uuid,
