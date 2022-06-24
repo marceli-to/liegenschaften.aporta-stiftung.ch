@@ -7,8 +7,8 @@
           <div class="span-2">
             <h2>Haus</h2>
             <div v-for="building in filterItems.buildings" :key="building.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('building_id', building.id)">
-                <icon-radio :active="$store.state.filter.building_id == building.id" />
+              <a href="javascript:;" @click.prevent="setFilterItem('buildings', building.id)">
+                <icon-radio :active="isFilterAttribute('buildings', building.id)" />
                 <span>{{building.street}}</span>
               </a>
             </div>
@@ -16,8 +16,8 @@
           <div class="span-2">
             <h2>Zimmer</h2>
             <div v-for="room in filterItems.rooms" :key="room.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('room_id', room.id)">
-                <icon-radio :active="$store.state.filter.room_id == room.id" />
+              <a href="javascript:;" @click.prevent="setFilterItem('rooms', room.id)">
+                <icon-radio :active="isFilterAttribute('rooms', room.id)" />
                 <span>{{room.abbreviation}}</span>
               </a>
             </div>
@@ -25,8 +25,8 @@
           <div class="span-2">
             <h2>Geschoss</h2>
             <div v-for="floor in filterItems.floors" :key="floor.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('floor_id', floor.id)">
-                <icon-radio :active="$store.state.filter.floor_id == floor.id" />
+              <a href="javascript:;" @click.prevent="setFilterItem('floors', floor.id)">
+                <icon-radio :active="isFilterAttribute('floors', floor.id)" />
                 <span>{{floor.abbreviation}}</span>
               </a>
             </div>
@@ -52,15 +52,15 @@
           <div class="span-2">
             <h2>Status</h2>
             <div v-for="state in filterItems.states" :key="state.id">
-              <a href="javascript:;" @click.prevent="setFilterItem('state_id', state.id)">
-                <icon-radio :active="$store.state.filter.state_id == state.id" />
+              <a href="javascript:;" @click.prevent="setFilterItem('states', state.id)">
+                <icon-radio :active="isFilterAttribute('states', state.id)" />
                 <span>{{state.description}}</span>
               </a>
             </div>
             <div>
               <a href="javascript:;" @click.prevent="setFilterItem('collections', 1)">
                 <icon-radio :active="$store.state.filter.collections == 1" />
-                <span>Angeboten</span>
+                <span>Angebote</span>
               </a>
             </div>
           </div>
@@ -350,11 +350,10 @@ export default {
 
     fetchFiltered() {
       let param = {
-        building_id: this.$store.state.filter.building_id ? this.$store.state.filter.building_id : null,
-        room_id: this.$store.state.filter.room_id ? this.$store.state.filter.room_id : null,
-        floor_id: this.$store.state.filter.floor_id ? this.$store.state.filter.floor_id : null,
-        exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
-        state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
+        buildings: this.$store.state.filter.buildings ? this.$store.state.filter.buildings : null,
+        rooms: this.$store.state.filter.rooms ? this.$store.state.filter.rooms : null,
+        floors: this.$store.state.filter.floors ? this.$store.state.filter.floors : null,
+        states: this.$store.state.filter.states ? this.$store.state.filter.states : null,
         rent: this.$store.state.filter.rent ? this.$store.state.filter.rent : null,
         collections: this.$store.state.filter.collections ? this.$store.state.filter.collections : null,
       };

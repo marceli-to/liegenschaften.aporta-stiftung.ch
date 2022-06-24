@@ -9,11 +9,13 @@ export default new Vuex.Store({
 
     filter: {
       set: false,
-      state_id: null,
-      collections: null,
-      building_id: null,
-      room_id: null,
-      exterior: null,
+      buildings: [],
+      rooms: [],
+      floors: [],
+      states: [],
+      collections: '',
+      exterior: '',
+      rent: '',
       items: [],
       menu: {
         index: 1,

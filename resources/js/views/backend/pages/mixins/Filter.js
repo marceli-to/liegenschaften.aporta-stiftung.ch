@@ -23,13 +23,13 @@ export default {
     resetFilter() {
       let filter = {
         set: false,
-        state_id: null,
-        collections: null,
-        building_id: null,
-        room_id: null,
-        floor_id: null,
-        exterior: null,
-        rent: null,
+        buildings: [],
+        rooms: [],
+        floors: [],
+        states: [],
+        collections: '',
+        exterior: '',
+        rent: '',
         items: [],
         menu: {
           index: 1,
@@ -46,11 +46,29 @@ export default {
     setFilterItem(type, value) {
       let filter = this.$store.state.filter;
 
-      if (filter[type] != null && filter[type] == value) {
-        filter[type] = null;
-      }
-      else {
-        filter[type] = value;
+      if (filter[type] != null) {
+
+        // Multi types
+        if (Array.isArray(filter[type])) {
+          if (this.isFilterAttribute(type,value)) {
+            const index = filter[type].findIndex(x => x === value);
+            if (index > -1) {
+              filter[type].splice(index, 1);
+            }
+          }
+          else {
+            filter[type].push(value);
+          }
+        }
+        // Single types
+        else {
+          if (filter[type] == value) {
+            filter[type] = null;
+          }
+          else {
+            filter[type] = value;
+          }
+        }
       }
       filter['set'] = true;
       this.$store.commit('filter', filter);
@@ -102,6 +120,11 @@ export default {
       }
       this.$store.commit('filter', filter);
     },
+
+    isFilterAttribute(type, value) {
+      let filter = this.$store.state.filter;
+      return filter[type].find(t => t === value) !== undefined ? true : false;
+    }
   },
 
   watch: {
