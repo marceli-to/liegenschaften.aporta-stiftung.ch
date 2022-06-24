@@ -69,7 +69,8 @@
                       <div class="span-2">{{ data.size_balcony }} m<sup>2</sup></div>
                     </apartment-row>
                     <apartment-row v-if="data.shared_exterior">
-                      <div class="span-4"><label>gemeinsame Aussenfläche Egligasse</label></div>
+                      <div class="span-2"><label>Aussenfläche</label></div>
+                      <div class="span-2"><label>gemeinsam an der Egligasse</label></div>
                     </apartment-row>
                   </div>
                   <div class="span-12 sm:span-6">
