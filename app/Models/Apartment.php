@@ -22,6 +22,7 @@ class Apartment extends Base
     'size_terrace',
     'size_patio',
     'size_balcony',
+    'shared_exterior',
     'order',
     'publish',
     'room_id' ,
