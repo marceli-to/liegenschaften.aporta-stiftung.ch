@@ -70,7 +70,7 @@
                   </apartment-row>
                   <apartment-row v-if="apartment.shared_exterior">
                     <div class="span-2"><label>Aussenfläche</label></div>
-                    <div class="span-2"><label>gemeinsam an der Egligasse</label></div>
+                    <div class="span-2">gemeinsam an der Egligasse</div>
                   </apartment-row>
                 </div>
                 <div class="span-6">
