@@ -30,6 +30,11 @@
       cursor: pointer;
     }
 
+    &.has-collections {
+      background-image: linear-gradient(45deg, #f0f0f0 25%, #ffffff 25%, #ffffff 50%, #f0f0f0 50%, #f0f0f0 75%, #ffffff 75%, #ffffff 100%);
+      background-size: 3.66px 3.66px;
+    }
+
     &.is-narrow {
       min-height: auto;
     }

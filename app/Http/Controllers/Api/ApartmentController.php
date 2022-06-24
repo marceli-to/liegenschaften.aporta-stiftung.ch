@@ -20,7 +20,7 @@ class ApartmentController extends Controller
    */
   public function get()
   { 
-    $data = Apartment::with('building', 'floor', 'room', 'tenant')->orderBy('order', 'DESC')->where('estate_id', env('ESTATE_ID'))->get();
+    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->orderBy('order', 'DESC')->where('estate_id', env('ESTATE_ID'))->get();
     return new DataCollection($data->sortBy('building.order'));
   }
 

@@ -136,7 +136,7 @@
       </list-header>
       <div 
         v-for="(apartment, index) in sortedData" 
-        class="list-row" 
+        :class="[apartment.collection_items.length > 0 ? 'has-collections' : '', 'list-row']" 
         :key="apartment.uuid" 
         @mouseover="show(apartment.number)" 
         @mouseleave="hide(apartment.number)">
