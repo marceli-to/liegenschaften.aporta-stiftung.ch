@@ -10,6 +10,7 @@ export default new Vuex.Store({
     filter: {
       set: false,
       state_id: null,
+      collections: null,
       building_id: null,
       room_id: null,
       exterior: null,

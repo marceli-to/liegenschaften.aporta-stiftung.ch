@@ -49,7 +49,7 @@ class ApartmentController extends Controller
     $matches = [];
 
     // Add ids of 'building, floor, room etc.'
-    foreach($request->except(['exterior', 'rent']) as $key => $value)
+    foreach($request->except(['exterior', 'rent', 'collections']) as $key => $value)
     {
       if ($request->input($key))
       {
@@ -57,17 +57,31 @@ class ApartmentController extends Controller
       }
     }
 
-    // Filter
-    $data = Apartment::with('building', 'floor', 'room', 'tenant')->where('estate_id', env('ESTATE_ID'))->where($matches)->orderBy('order')->get();
+    // Filter by matches
+    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->where('estate_id', env('ESTATE_ID'))->where($matches)->orderBy('order')->get();
 
-    // Handle exterior
+    // Filter by 'exterior'
     if ($request->input('exterior'))
     {
       $filtered = $data->where('size_' . $request->input('exterior'), '>', 0);      
       $data = $filtered->all();
     }
 
-    // Handle rent
+    // Filter by 'collections'
+    $data_temp = [];
+    if ($request->input('collections'))
+    {
+      foreach($data as $d)
+      {
+        if ($d->collectionItems->count() > 0)
+        {
+          $data_temp[] = $d;
+        }
+      }
+      $data = $data_temp;
+    }
+
+    // Filter by 'rent'
     if ($request->input('rent'))
     {
       $constraint = explode(':', $request->input('rent'));

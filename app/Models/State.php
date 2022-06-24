@@ -15,7 +15,6 @@ class State extends Base
   public const RESERVED = 2;
   public const RENTED = 3;
   public const SOLD = 4;
-  public const OFFERED = 5;
 
 	public function apartments()
 	{

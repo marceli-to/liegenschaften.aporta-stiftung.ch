@@ -44,10 +44,11 @@ class CollectionController extends Controller
     {
       $collection = Collection::create([
         'uuid' => \Str::uuid(),
+        'salutation' => $candidate['salutation'],
         'name' => $candidate['name'],
         'firstname' => $candidate['firstname'],
         'email' => $candidate['email'],
-        'valid_until' => \Carbon\Carbon::now()->addDays(5), //\Config::get('client.deadline_offer'),
+        'valid_until' => \Carbon\Carbon::now()->addDays(5),
         'estate_id' => env('ESTATE_ID'),
       ]);
       $collection->save();

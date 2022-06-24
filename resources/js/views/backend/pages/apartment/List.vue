@@ -57,6 +57,12 @@
                 <span>{{state.description}}</span>
               </a>
             </div>
+            <div>
+              <a href="javascript:;" @click.prevent="setFilterItem('collections', 1)">
+                <icon-radio :active="$store.state.filter.collections == 1" />
+                <span>Angeboten</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -350,6 +356,7 @@ export default {
         exterior: this.$store.state.filter.exterior ? this.$store.state.filter.exterior : null,
         state_id: this.$store.state.filter.state_id ? this.$store.state.filter.state_id : null,
         rent: this.$store.state.filter.rent ? this.$store.state.filter.rent : null,
+        collections: this.$store.state.filter.collections ? this.$store.state.filter.collections : null,
       };
       NProgress.start();
       this.isFetched = false;

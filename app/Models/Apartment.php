@@ -112,10 +112,6 @@ class Apartment extends Base
     return $query->where('state_id', State::SOLD);
   }
 
-  public function scopeOffered($query)
-  {
-    return $query->where('state_id', State::OFFERED);
-  }
 
   /**
    * Accessor for available_at

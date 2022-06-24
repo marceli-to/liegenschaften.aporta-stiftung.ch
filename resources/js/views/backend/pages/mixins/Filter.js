@@ -24,6 +24,7 @@ export default {
       let filter = {
         set: false,
         state_id: null,
+        collections: null,
         building_id: null,
         room_id: null,
         floor_id: null,
@@ -51,7 +52,6 @@ export default {
       else {
         filter[type] = value;
       }
-
       filter['set'] = true;
       this.$store.commit('filter', filter);
       this.fetchFiltered();

@@ -138,7 +138,7 @@
       <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
         <ul>
           <li class="start-4">
-            <a href="" @click.prevent="showResetConfirm()">
+            <a href="" @click.prevent="resetCandidates()">
               <icon-reset />
               <span>Zurücksetzen</span>
             </a>
@@ -158,7 +158,8 @@
       </nav>
       <list class="mt-8x">
         <list-header class="is-narrow">
-          <list-item :class="'span-2 start-4 list-item-header line-after'">Vorname</list-item>
+          <list-item :class="'span-2 start-3 list-item-header line-after'">Anrede</list-item>
+          <list-item :class="'span-2 list-item-header line-after'">Vorname</list-item>
           <list-item :class="'span-2 list-item-header line-after'">Nachname</list-item>
           <list-item :class="'span-2 list-item-header'">E-Mail</list-item>
         </list-header>
@@ -166,7 +167,10 @@
           v-for="(candidate, index) in candidates"
           :key="index"
           class="no-hover is-narrow mb-5x">
-          <list-item class="span-2 start-4 list-item is-first line-after">
+          <list-item class="span-2 start-3 list-item is-first line-after">
+            <input type="text" v-model="candidate.salutation" required @blur="validate($event, candidate)">
+          </list-item>
+          <list-item class="span-2 list-item is-first line-after">
             <input type="text" v-model="candidate.firstname" required @blur="validate($event, candidate)">
           </list-item>
           <list-item class="span-2 list-item is-first line-after">
@@ -273,6 +277,7 @@ export default {
       // Candidates
       candidates: [
         {
+          salutation: null,
           name: null,
           firstname: null,
           email: null,
@@ -353,6 +358,7 @@ export default {
     resetCandidates() {
       this.candidates = [
         {
+          salutation: null,
           name: null,
           firstname: null,
           email: null,

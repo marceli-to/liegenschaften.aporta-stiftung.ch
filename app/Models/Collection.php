@@ -17,6 +17,7 @@ class Collection extends Base
 
   protected $fillable = [
     'uuid',
+    'salutation',
     'firstname',
     'name',
     'email',
