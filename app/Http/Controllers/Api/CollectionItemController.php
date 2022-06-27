@@ -38,7 +38,6 @@ class CollectionItemController extends Controller
   public function destroy(CollectionItem $collectionItem)
   {
     CollectionItem::findOrFail($collectionItem->id)->delete();
-    // dd($collectionItem->with('collection.items')->get());
     return response()->json('successfully deleted');
   }
 

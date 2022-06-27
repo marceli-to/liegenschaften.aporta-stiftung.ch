@@ -7,6 +7,7 @@ use App\Models\Building;
 use App\Models\Apartment;
 use App\Models\State;
 use App\Models\Tenant;
+use App\Models\CollectionItem;
 use App\Http\Requests\ApartmentStoreRequest;
 use Illuminate\Http\Request;
 
@@ -203,6 +204,63 @@ class ApartmentController extends Controller
     $apartment->available_at = NULL;
     $apartment->save();
     return $this->find($apartment);
+  }
+
+  /**
+   * Assign an apartement (temporarily) 
+   *
+   * @param Apartment $apartment   
+   * @param  \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\Response
+   */
+  public function assign(Apartment $apartment, Request $request)
+  {
+    $collectionItem = CollectionItem::with('collection')->where('uuid', $request->input('collectionItemUuid'))->first();
+    $collectionItem->lock = 1;
+    $collectionItem->save();
+
+    // Create tenant and add to apartment
+    $tenant = Tenant::create([
+      'uuid' => \Str::uuid(),
+      'firstname' => $collectionItem->collection->firstname,
+      'name' => $collectionItem->collection->name,
+      'email' => $collectionItem->collection->email,
+    ]);
+    $apartment->tenant_id = $tenant->id;
+    $apartment->state_id = State::RESERVED;
+    $apartment->save();
+
+    return response()->json('successfully updated');
+  }
+
+  /**
+   * Finalize an apartement
+   *
+   * @param Apartment $apartment   
+   * @param  \Illuminate\Http\Request $request
+   * @return \Illuminate\Http\Response
+   */
+  public function finalize(Apartment $apartment, Request $request)
+  {
+    $apartment->state_id = State::RENTED;
+    $apartment->save();
+    
+    // Clear collection & all items for the accepted tenant
+    $collectionItem = CollectionItem::with('collection.items')->where('uuid', $request->input('collectionItemUuid'))->first();
+    foreach($collectionItem->collection->items as $item)
+    {
+      $item->delete();
+    }
+    $collectionItem->collection->delete();
+
+    // Clear all collection items for this apartment
+    $collectionItems = CollectionItem::where('apartment_id', $apartment->id)->get();
+    foreach($collectionItems as $item)
+    {
+      $item->delete();
+    }
+
+    return response()->json('successfully updated');
   }
 
 }

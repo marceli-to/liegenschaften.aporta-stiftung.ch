@@ -26,6 +26,7 @@ class CollectionItem extends Base
     'parking',
     'comment',
     'archive',
+    'lock',
     'collection_id',
     'apartment_id',
   ];

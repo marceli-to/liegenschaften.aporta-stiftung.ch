@@ -21,6 +21,10 @@
     pointer-events: none;
   }
 
+  &.is-danger {
+    background-color: $color-danger;
+  }
+
   &.is-filter {
     color: $color-dark-blue;
 

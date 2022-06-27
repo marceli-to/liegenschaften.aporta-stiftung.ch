@@ -128,6 +128,26 @@
                 <icon-cross v-else-if="item.accepted == 2 && item.replied_at" :size="'md'" />
                 <icon-hourglass v-else />
               </div>
+              <div class="span-4" style="border-top: none" v-if="item.accepted == 1 && item.replied_at && item.lock == 0"> 
+                <div class="grid-cols-12">
+                  <div class="span-6">
+                    <a href="" class="btn-primary is-small" @click.prevent="assign(item.uuid)">Prov. Übernehmen</a>
+                  </div>
+                  <div class="span-6">
+                    <a href="" class="btn-secondary is-outline is-small" @click.prevent="showDestroyCollectionItemConfirm(item.uuid)">Angebot Löschen</a>
+                  </div>
+                </div>
+              </div>
+              <div class="span-4" style="border-top: none" v-if="item.accepted == 1 && item.replied_at && item.lock == 1">
+                <div class="grid-cols-12">
+                  <div class="span-6">
+                    <a href="" class="btn-primary is-danger is-small" @click.prevent="showFinalizeConfirm(item.uuid)">Übernehmen</a>
+                  </div>
+                  <div class="span-6">
+                    <a href="" class="btn-secondary is-outline is-small" @click.prevent="showDestroyCollectionItemConfirm(item.uuid)">Angebot Löschen</a>
+                  </div>
+                </div>
+              </div> 
             </apartment-row>
           </template>
         </div>
@@ -144,6 +164,26 @@
     </template>
     <template #actions>
       <a href="javascript:;" class="btn-primary mb-3x" @click.stop="reset()">Löschen</a>
+    </template>
+  </dialog-wrapper>
+  <dialog-wrapper ref="dialogDestroyConfirm">
+    <template #message>
+      <div>
+        <strong>Möchten Sie dieses Angebot wirklich löschen?</strong>
+      </div>
+    </template>
+    <template #actions>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="destroyCollectionItem()">Ja</a>
+    </template>
+  </dialog-wrapper>
+  <dialog-wrapper ref="dialogFinalizeConfirm">
+    <template #message>
+      <div>
+        <strong>Bitte definitive Vergabe bestätigen. Damit werden ALLE Angebote für dieses Objekt gelöscht.</strong>
+      </div>
+    </template>
+    <template #actions>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="finalize()">Ja</a>
     </template>
   </dialog-wrapper>
 </div>
@@ -200,8 +240,13 @@ export default {
       // Routes
       routes: {
         fetch: '/api/apartment',
-        reset: '/api/apartment'
+        reset: '/api/apartment',
+        assign:'/api/apartment/assign',
+        finalize:'/api/apartment/finalize',
+        delete: '/api/collection-item',
       },
+
+      collectionItemUuid: null,
 
       // States
       isFetched: false,
@@ -228,6 +273,35 @@ export default {
       });
     },
 
+    assign(collectionItemUuid) {
+      const data = {
+        collectionItemUuid: collectionItemUuid
+      };
+      NProgress.start();
+      this.isFetched = false;
+      this.axios.put(`${this.routes.assign}/${this.$route.params.uuid}`, data).then(response => {
+        this.isFetched = true;
+        this.fetch();
+        NProgress.done();
+      });
+    },
+
+    finalize() {
+      const data = {
+        collectionItemUuid: this.collectionItemUuid,
+        final: true,
+      };
+      NProgress.start();
+      this.isFetched = false;
+      this.axios.put(`${this.routes.finalize}/${this.$route.params.uuid}`, data).then(response => {
+        this.isFetched = true;
+        this.collectionItemUuid = null;
+        this.$refs.dialogFinalizeConfirm.hide();
+        this.fetch();
+        NProgress.done();
+      });
+    },
+
     validate(event) {
       if (event.target.value.length > 0) {
         event.target.classList.remove('is-invalid');
@@ -247,9 +321,29 @@ export default {
       });
     },
 
+    destroyCollectionItem() {
+      NProgress.start();
+      this.axios.delete(`${this.routes.delete}/${this.collectionItemUuid}`).then(response => {
+        this.fetch();
+        this.collectionItemUuid = null;
+        this.$refs.dialogDestroyConfirm.hide();
+        NProgress.done();
+      });
+    },
+
+    showFinalizeConfirm(uuid) {
+      this.collectionItemUuid = uuid;
+      this.$refs.dialogFinalizeConfirm.show();
+    },
+
     showResetConfirm() {
       this.$refs.dialogResetConfirm.show();
-    }
+    },
+
+    showDestroyCollectionItemConfirm(uuid) {
+      this.collectionItemUuid = uuid;
+      this.$refs.dialogDestroyConfirm.show();
+    },
 
   },
 
