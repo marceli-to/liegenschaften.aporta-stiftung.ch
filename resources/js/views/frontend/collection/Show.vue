@@ -14,13 +14,13 @@
                 <div class="xs:grid-cols-6">
                   <h3 class="xs:span-3">Grundriss</h3>
                   <div class="xs:span-3 sm:hide flex justify-end">
-                    <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" class="icon" title="Download Grundriss als PDF">
-                      <span>Download als PDF</span>
+                    <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" class="icon" title="Weitere Informationen (PDF)">
+                      <span>Weitere Informationen (PDF)</span>
                     </a>
                   </div>
                 </div>
                 <figure class="apartment-floorplan">
-                  <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" title="Download Grundriss als PDF">
+                  <a :href="`/assets/media/${data.number}-${data.apartementUuid}.pdf`" target="_blank" title="Weitere Informationen (PDF)">
                     <img :src="`/assets/media/${data.number}-${data.apartementUuid}.svg`" height="600" width="600" class="is-responsive">
                   </a>
                 </figure>
