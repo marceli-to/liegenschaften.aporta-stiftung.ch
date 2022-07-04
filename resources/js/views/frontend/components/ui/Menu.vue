@@ -18,8 +18,8 @@
         </router-link>
       </li>
       <li :class="[pagination.count > 1 ? 'sm:span-4' : 'sm:span-5', 'xs:hide']">
-        <a :href="`/assets/media/${$props.fileUuid}.pdf`" target="_blank" class="flex justify-end" title="Download Grundriss als PDF">
-          <span>Download als PDF</span>
+        <a :href="`/assets/media/${$props.fileUuid}.pdf`" target="_blank" class="flex justify-end" title="Weitere Informationen">
+          <span>Weitere Informationen (PDF)</span>
           <icon-document />
         </a>
       </li>

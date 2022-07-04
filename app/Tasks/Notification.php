@@ -11,7 +11,7 @@ class Notification
     foreach($mails->all() as $m)
     {
       $data = json_decode($m->data);
-       try {
+      try {
 
         // Reply
         if ($m->type == 'reply') {
