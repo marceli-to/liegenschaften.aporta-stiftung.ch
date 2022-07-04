@@ -121,7 +121,11 @@
               {{ d.size_balcony }} <span v-if="d.size_balcony > 0">m<sup>2</sup></span>
             </router-link>
           </list-item>
-          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']"></list-item>
+          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']">
+            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
+              {{ d.available_at }}
+            </router-link>
+          </list-item>
         </div>
       </list>
       <list class="sm:hide list-xs" v-if="data">

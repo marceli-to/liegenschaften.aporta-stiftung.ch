@@ -5,8 +5,19 @@
     <div v-if="isValid">
       <page-menu :pagination="pagination" :fileUuid="`${data.number}-${data.apartementUuid}`"></page-menu>
       <apartment-wrapper>
-        <h2 class="sm:hide">{{ data.room_description }}, {{ data.size }} m<sup>2</sup><br><em>{{ data.street }}, {{ data.city }}<br>{{ data.description }}</em></h2>
-        <h2 class="xs:hide">{{ data.description }}&nbsp;&nbsp;<em>{{ data.rooms }} {{ data.size }} M<sup>2</sup></em></h2>
+        <div class="sm:grid-cols-10 xs:hide">
+          <div class="span-6">
+            <h2>{{ data.description }}&nbsp;&nbsp;<em>{{ data.rooms }} {{ data.size }} M<sup>2</sup></em></h2>
+          </div>
+          <div class="span-4">
+            Bezugstermin: <strong>{{ data.available_at }}</strong>
+          </div>
+        </div>
+        <div class="sm:hide">
+          <h2>{{ data.room_description }}, {{ data.size }} m<sup>2</sup><br><em>{{ data.street }}, {{ data.city }}<br>{{ data.description }}<br><br>Bezugstermin: <strong>{{ data.available_at }}</strong></em></h2>
+          
+        </div>
+        
         <apartment-grid class="sm:grid-cols-10">
           <div class="span-6 sm:line-after">
             <apartment-row>
