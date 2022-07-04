@@ -19,7 +19,7 @@
       </li>
       <li :class="[pagination.count > 1 ? 'sm:span-4' : 'sm:span-5', 'xs:hide']">
         <a :href="`/assets/media/${$props.fileUuid}.pdf`" target="_blank" class="flex justify-end" title="Weitere Informationen">
-          <span>Weitere Informationen (PDF)</span>
+          <span>Grundrisse & Ausbaubeschrieb (PDF)</span>
           <icon-document />
         </a>
       </li>
