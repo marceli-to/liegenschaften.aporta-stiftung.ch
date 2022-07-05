@@ -175,7 +175,7 @@
                   </div>
                   <div class="collection-text mt-16x">
                     <p>Haben Sie Fragen?</p>
-                    <p>Camilla Walker steht Ihnen für weitere Informationen gerne zur Verfügung:<br>043 222 60 03<br><a href="mailo:wohnung@aporta-stiftung.ch">wohnung@aporta-stiftung.ch</a></p>
+                    <p>Camilla Walker steht Ihnen für weitere Informationen gerne zur Verfügung:<br>043 222 60 03<br><a href="mailto:wohnung@aporta-stiftung.ch">wohnung@aporta-stiftung.ch</a></p>
                   </div>
                 </form>
               </div>
