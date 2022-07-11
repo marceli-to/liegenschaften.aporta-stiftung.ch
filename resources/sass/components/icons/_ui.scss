@@ -29,7 +29,8 @@
   }
 }
 
-.icon-trash {
+.icon-trash,
+.icon-link-external {
   @extend %icon;
   color: $color-medium-grey;
   transition: color .1s ease-in;

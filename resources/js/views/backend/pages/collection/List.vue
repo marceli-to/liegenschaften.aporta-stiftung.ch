@@ -52,11 +52,11 @@
         :data-uuid="d.uuid"
         :key="d.id">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-actions']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
-           <icon-link-external class="icon mt-2x" />
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angebot anzeigen">
+           <icon-link-external class="icon-link-external mb-6x" />
           </a>
           <a href="" @click.prevent="showConfirm(d.uuid)">
-            <icon-trash class="icon-trash mb-2x" />
+            <icon-trash class="icon-trash" />
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
