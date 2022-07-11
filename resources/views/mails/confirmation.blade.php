@@ -8,9 +8,9 @@
 – Ich habe Interesse an einem Abstellplatz in der Tiefgarage Eichbühlstrasse (Warteliste)
 @endif
 @elseif ($item->accepted == 2)
-– Ich habe kein Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste<br>
-@elseif ($item->accepted == 0)
 – Ich bin nicht mehr auf Wohungssuche, bitte löschen Sie meine Anmeldung<br>
+@elseif ($item->accepted == 0)
+– Ich habe kein Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste<br>
 @endif
 </p>
 <p>Wir werden Ihre unverbindliche Antwort prüfen und uns so schnell wie möglich bei Ihnen melden.</p>
