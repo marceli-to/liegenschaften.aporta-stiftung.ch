@@ -2,7 +2,7 @@
 <div>
   <site-header 
     :user="$store.state.user" 
-    :view="'show'">
+    :view="$route.params.single ? 'show-single' : 'show'">
   </site-header>
   <site-main v-if="isFetched">
     <page-menu 
@@ -258,6 +258,7 @@ export default {
   mounted() {
     this.fetch();
     NProgress.configure({ showBar: false });
+    console.log(this.$route.params);
   },
 
   methods: {

@@ -12,8 +12,8 @@
               Eglistrasse
             </router-link>
           </li>
-          <li class="span-4 flex justify-center site-menu__pagination" v-if="$props.view == 'show'">
-            <template v-if="$store.state.filter.items.length">
+          <li class="span-4 flex justify-center site-menu__pagination" v-if="$props.view == 'show' || $props.view == 'show-single'">
+            <template v-if="$store.state.filter.items.length && $props.view == 'show'">
               <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
                 <icon-arrow-left />
               </router-link>
@@ -130,7 +130,7 @@ export default {
       if (this.$parent.hasCollection) {
         cls = cls + ' has-collection';
       }
-      if (this.$props.view == 'show') {
+      if (this.$props.view == 'show' || this.$props.view == 'show-single') {
         cls = cls + ' is-detail';
       }
       if (this.$route.name == 'collections') {

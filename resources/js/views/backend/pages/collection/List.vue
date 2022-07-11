@@ -51,37 +51,40 @@
         :class="[d.uuid == $route.params.uuid ? 'is-marked' : '', 'list-row']" 
         :data-uuid="d.uuid"
         :key="d.id">
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
+        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-actions']">
+          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
+           <icon-link-external class="icon mt-2x" />
+          </a>
           <a href="" @click.prevent="showConfirm(d.uuid)">
-            <icon-trash class="icon-trash" />
+            <icon-trash class="icon-trash mb-2x" />
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">
             {{ d.collection.firstname }} {{ d.collection.name }}<br>
             {{ d.collection.email }}
-          </a>
+          </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</a>
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.apartment.description }}</a>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.apartment.description }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.sent_at ? d.sent_at : '–' }}</a>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.sent_at ? d.sent_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.read_at ? d.read_at : '–' }}</a>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.read_at ? d.read_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">{{ d.replied_at ? d.replied_at : '–' }}</a>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.replied_at ? d.replied_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
-          <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angbot anzeigen">
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">
             <span v-if="d.replied_at != null && d.accepted == 0">Nicht mehr auf Wohnungssuche<br><br></span>
             <span v-if="d.replied_at != null && d.accepted == 1">Hat Interesse an diesem Angebot<br><br></span>
             <span v-if="d.replied_at != null && d.accepted == 2">Kein Interesse an diesem Angebot, möchte aber auf Warteliste bleiben<br><br></span>
             <span v-if="d.replied_at != null && d.parking">Hat Interessse an Abstellplatz</span>
-          </a>
+          </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <icon-checkmark v-if="d.accepted == 1"/>
@@ -122,6 +125,7 @@ import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
+import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
@@ -145,6 +149,7 @@ export default {
     IconCheckmark,
     IconHourglass,
     IconTrash,
+    IconLinkExternal,
     List,
     ListRow,
     ListHeader,

@@ -1,6 +1,6 @@
 @component('mail::message')
 <h1>Wohnungsangebot {{$item->apartment->room->abbreviation}}-Zimmer, {{$item->apartment->building->street}}</h1>
-<p>Vielen Dank für Ihre Rückmeldung, welche wir gerne wie folgt Bestätigen:</p>
+<p>Vielen Dank für Ihre Rückmeldung, welche wir gerne wie folgt bestätigen:</p>
 <p>
 @if ($item->accepted == 1)
 – Ich habe Interesse an dieser Wohnung<br>

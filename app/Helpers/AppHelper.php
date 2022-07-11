@@ -1,7 +1,5 @@
 <?php
 namespace App\Helpers;
-use App\Models\CourseEventStudent;
-use App\Models\SymposiumSubscriber;
 use Illuminate\Support\Str;
 
 class AppHelper

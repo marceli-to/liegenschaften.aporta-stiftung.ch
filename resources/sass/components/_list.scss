@@ -48,16 +48,24 @@
   }
 
   .list-item-action,
+  .list-item-actions,
   .list-item-bullet,
   .list-item-state {
     padding-top: $space-2x;
   }
 
   .list-item-action,
+  .list-item-actions,
   .list-item-bullet,
   .list-item-state {
     display: flex;
     justify-content: center;
+  }
+
+  .list-item-actions {
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .list-item {
@@ -139,6 +147,7 @@
   }
 
   .list-item-action,
+  .list-item-actions,
   .list-item-bullet {
     background-color: $color-white;
     position: relative;

@@ -11,7 +11,7 @@ const routes = [
   
   {
     name: 'apartment-show',
-    path: '/administration/objekt/:uuid/anzeigen',
+    path: '/administration/objekt/:uuid/anzeigen/:single?',
     component: ApartmentShow,
   },
 
