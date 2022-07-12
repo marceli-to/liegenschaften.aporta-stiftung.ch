@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\TestController;
+//use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +49,7 @@ if (
 
   // Logged in users
   Route::middleware('auth:sanctum', 'verified')->group(function() {
+    Route::get('/export', [DownloadController::class, 'export'])->name('export');
     Route::get('/administration/{any?}', function () {
       return view('layout.authenticated');
     })->where('any', '.*')->middleware('role:admin')->name('applications');

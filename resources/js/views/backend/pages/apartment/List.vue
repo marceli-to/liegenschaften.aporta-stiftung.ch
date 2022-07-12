@@ -72,6 +72,9 @@
   </site-header>
   <site-main v-if="isFetched">
     <isometrie />
+    <div class="my-6x pr-6x w-full align-right">
+      <a href="/export/" target="_blank" class="link">Liste als Excel exportieren</a>
+    </div>
     <list v-if="sortedData">
       <list-header>
         <list-item :class="'span-1 list-item-header flex justify-center'">

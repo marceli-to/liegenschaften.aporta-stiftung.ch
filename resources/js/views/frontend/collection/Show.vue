@@ -158,7 +158,6 @@
                       </a>
                     </apartment-input>
                   </apartment-row>
-
                   <div class="mt-12x" v-if="form.accepted != null">
                     <a 
                       href="javascript:;" 
@@ -197,7 +196,8 @@
                     <img src="/assets/img/aporta-eglistrasse-gartenblick.jpg" class="is-responsive" width="1016" height="718">
                   </figure>
                 </div>
-              </div>
+                <div class="mt-2x"><i>Abbildungen nur beispielhaft</i></div>
+            </div>
             </apartment-row>
           </div>
         </apartment-grid>
@@ -207,11 +207,24 @@
       <p class="text-md"><strong>Dieses Angebot ist leider nicht mehr verfügbar.</strong></p>     
     </div>
   </site-main>
+
+  <dialog-wrapper ref="dialogSubmitConfirm">
+    <template #message>
+      <div>
+        <strong>Vielen Dank für Ihre Antwort.</strong>
+      </div>
+    </template>
+    <template #button>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="$refs.dialogSubmitConfirm.hide()">Schliessen</a>
+    </template>
+  </dialog-wrapper>
+
 </div>
 </template>
 <script>
 import NProgress from 'nprogress';
 import ErrorHandling from '@/mixins/ErrorHandling';
+import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/frontend/layout/Header.vue';
 import SiteMain from '@/views/frontend/layout/Main.vue';
 import PageMenu from '@/views/frontend/components/ui/Menu.vue';
@@ -230,6 +243,7 @@ import IconDocument from '@/components/ui/icons/Document.vue';
 export default {
   components: {
     NProgress,
+    DialogWrapper,
     SiteHeader,
     SiteMain,
     PageMenu,
@@ -309,6 +323,7 @@ export default {
         this.data.parking = data.parking;
         this.data.accepted = data.accepted;
         NProgress.done();
+        this.$refs.dialogSubmitConfirm.show();
       });
     },
 
@@ -326,7 +341,8 @@ export default {
     reset() {
       this.form.accepted = null;
       this.form.parking = 0;
-    }
+    },
+
   },
 
   watch: {
