@@ -181,7 +181,7 @@
             </apartment-row>
             <apartment-row class="grid-cols-none mt-15x">
               <div>
-                <h3>Impressionen</h3>
+                <h3>Beispielbilder</h3>
                 <div class="grid-cols-12 grid-row-gap">
                   <figure class="span-12">
                     <img src="/assets/img/aporta-eglistrasse-wohnraum.jpg" class="is-responsive" width="1016" height="718">
@@ -196,7 +196,6 @@
                     <img src="/assets/img/aporta-eglistrasse-gartenblick.jpg" class="is-responsive" width="1016" height="718">
                   </figure>
                 </div>
-                <div class="mt-2x"><i>Abbildungen nur beispielhaft</i></div>
             </div>
             </apartment-row>
           </div>
