@@ -16,6 +16,13 @@
   }
 }
 
+.link-export {
+  color: $color-primary;
+  @include font-size($fs-md);
+  text-transform: uppercase;
+  @include font-bold();
+}
+
 .link-maps {
   color: $color-medium-grey;
   @include font-size($fs-md);
