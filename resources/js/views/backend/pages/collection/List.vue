@@ -80,9 +80,9 @@
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
           <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">
-            <span v-if="d.replied_at != null && d.accepted == 0">Nicht mehr auf Wohnungssuche<br><br></span>
+            <span v-if="d.replied_at != null && d.accepted == 2">Nicht mehr auf Wohnungssuche<br><br></span>
             <span v-if="d.replied_at != null && d.accepted == 1">Hat Interesse an diesem Angebot<br><br></span>
-            <span v-if="d.replied_at != null && d.accepted == 2">Kein Interesse an diesem Angebot, möchte aber auf Warteliste bleiben<br><br></span>
+            <span v-if="d.replied_at != null && d.accepted == 0">Kein Interesse an diesem Angebot, möchte aber auf Warteliste bleiben<br><br></span>
             <span v-if="d.replied_at != null && d.parking">Hat Interessse an Abstellplatz</span>
           </router-link>
         </list-item>
