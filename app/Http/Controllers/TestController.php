@@ -229,10 +229,14 @@ class TestController extends BaseController
     foreach($apartments as $a)
     {
       $path = $_SERVER['DOCUMENT_ROOT'] . 'test/';
-      rename ($path . $a->number . '.pdf', $path . $a->number . '-' . $a->uuid . '.pdf');
-      //rename ($path . $a->number . '.svg', $path . $a->number . '-' . $a->uuid . '.svg');
+      if (file_exists($path . $a->number . '.pdf'))
+      {
+        rename ($path . $a->number . '.pdf', $path . $a->number . '-' . $a->uuid . '.pdf');
+      }
+      if (file_exists($path . $a->number . '.svg'))
+      {
+        rename ($path . $a->number . '.svg', $path . $a->number . '-' . $a->uuid . '.svg');
+      }
     }
-
-    dd($apartments);
   }
 }
