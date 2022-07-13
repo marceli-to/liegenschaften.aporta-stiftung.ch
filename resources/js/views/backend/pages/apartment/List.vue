@@ -73,7 +73,10 @@
   <site-main v-if="isFetched">
     <isometrie />
     <div class="my-6x pr-6x w-full align-right">
-      <a href="/export/" target="_blank" class="link-export">Liste als Excel exportieren</a>
+      <a href="/export/" target="_blank" class="link-export">
+        Export Excel
+      <icon-document />
+      </a>
     </div>
     <list v-if="sortedData">
       <list-header>
@@ -174,7 +177,6 @@
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
-            <!-- {{ apartment.tenant ? apartment.tenant.full_name : '–' }} -->
             {{ apartment.rent_gross }}
           </router-link>
         </list-item>
@@ -227,6 +229,7 @@ import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
+import IconDocument from "@/components/ui/icons/Document.vue";
 import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
 import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
@@ -250,6 +253,7 @@ export default {
     IconState,
     IconRadio,
     IconPlus,
+    IconDocument,
     IconCheckbox,
     List,
     ListRow,

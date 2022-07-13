@@ -18,9 +18,7 @@
 
 .link-export {
   color: $color-primary;
-  @include font-bold();
   @include font-size($fs-md);
-  text-transform: uppercase;
 }
 
 .link-maps {
