@@ -73,9 +73,9 @@
   <site-main v-if="isFetched">
     <isometrie />
     <div class="my-6x pr-6x w-full align-right">
-      <a href="/export/" target="_blank" class="link-export">
+      <a :href="`/export/?v=${randomString()}`" target="_blank" class="link-export">
         Export Excel
-      <icon-document />
+        <icon-document />
       </a>
     </div>
     <list v-if="sortedData">

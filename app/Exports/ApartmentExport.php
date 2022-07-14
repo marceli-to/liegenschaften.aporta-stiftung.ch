@@ -7,7 +7,6 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-
 class ApartmentExport implements FromCollection, WithHeadings, WithEvents, ShouldAutoSize
 {
 /**
