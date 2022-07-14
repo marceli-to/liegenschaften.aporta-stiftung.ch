@@ -32,6 +32,7 @@ class ApartmentExport implements FromCollection, WithHeadings, WithEvents, Shoul
         'Sitzplatz' => $apartment->size_patio,
         'Balkon' => $apartment->size_balcony,
         'Status' => $apartment->state->description,
+        'Mieter' => $apartment->tenant ? $apartment->tenant->full_name : ''
       ];
     }
     return collect($data);
@@ -51,6 +52,7 @@ class ApartmentExport implements FromCollection, WithHeadings, WithEvents, Shoul
       'Sitzplatz',
       'Balkon',
       'Status',
+      'Mieter'
     ];
   }
 
@@ -61,7 +63,7 @@ class ApartmentExport implements FromCollection, WithHeadings, WithEvents, Shoul
   {
     return [
       AfterSheet::class => function(AfterSheet $event) {
-        $cellRange = 'A1:J1';
+        $cellRange = 'A1:K1';
         $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
       },
     ];
