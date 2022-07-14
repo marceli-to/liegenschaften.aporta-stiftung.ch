@@ -6,7 +6,7 @@
       <div class="sm:grid-cols-12">
         <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
         <div class="span-4 collection__intro mb-8x sm:mb-0">
-          <p>Hier finden Sie sämtliche Informationen zu unserem Wohnungsangebot. Unter An-/Abmeldung haben Sie die Möglichkeit Ihre Rückmeldung direkt an uns zu richten. <strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung.</p>
+          <p>Hier finden Sie sämtliche Informationen zu unserem Wohnungsangebot. Unter An-/Abmeldung haben Sie die Möglichkeit Ihre Rückmeldung direkt an uns zu richten. <strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung. Die Vermietung erfolgt <strong>ohne</strong> Wohnungsbesichtigung.</p>
         </div>
         <div class="xs:hide span-5 collection__iso">
           <isometrie />
