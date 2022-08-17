@@ -118,10 +118,10 @@ class Apartment extends Base
    * @param Date $value
    */
 
-  // public function setAvailableAtAttribute($value)
-  // {
-  //   $this->attributes['available_at'] = $value ? date('Y-m-d', strtotime($value)) : NULL;
-  // }
+  public function setAvailableAtAttribute($value)
+  {
+    $this->attributes['available_at'] = $value ? date('Y-m-d', strtotime($value)) : NULL;
+  }
 
   /**
    * Get the float value of rent_gross for sorting
