@@ -46,7 +46,7 @@ class UserCollectionController extends Controller
           'size_terrace' => $i->apartment->size_terrace,
           'size_patio' => $i->apartment->size_patio,
           'size_balcony' => $i->apartment->size_balcony,
-          'available_at' => date('d.m.Y', strtotime($i->apartment->available_at))
+          'available_at' => $i->apartment->available_at ? date('d.m.Y', strtotime($i->apartment->available_at)) : '–'
         ];
       })
     ];
@@ -92,7 +92,7 @@ class UserCollectionController extends Controller
       'accepted' => $item->accepted,
       'parking' => $item->parking,
       'has_reply' => $item->replied_at == NULL ? FALSE : TRUE,
-      'available_at' =>  date('d.m.Y', strtotime($item->apartment->available_at))
+      'available_at' => $item->apartment->available_at ? date('d.m.Y', strtotime($item->apartment->available_at)) : '–'
     ];
 
     return response()->json(['valid' => $item->collection->valid(), 'item' => $data, 'pagination' => $this->getPagination($collection, $collectionItemUuid)]);
