@@ -201,7 +201,7 @@ class ApartmentController extends Controller
     $apartment->collectionItems()->delete();
     $apartment->tenant_id = NULL;
     $apartment->state_id = State::FREE;
-    $apartment->available_at = NULL;
+    //$apartment->available_at = NULL;
     $apartment->save();
     return $this->find($apartment);
   }
