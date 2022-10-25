@@ -342,6 +342,7 @@ export default {
         this.data.has_reply = true;
         this.data.parking = data.parking;
         this.data.accepted = data.accepted;
+        this.data.comment = data.comment;
         NProgress.done();
         this.$refs.dialogSubmitConfirm.show();
       });
