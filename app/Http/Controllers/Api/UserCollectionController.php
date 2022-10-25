@@ -92,6 +92,7 @@ class UserCollectionController extends Controller
       'accepted' => $item->accepted,
       'parking' => $item->parking,
       'has_reply' => $item->replied_at == NULL ? FALSE : TRUE,
+      'comment' => $item->comment,
       'available_at' => $item->apartment->available_at ? date('d.m.Y', strtotime($item->apartment->available_at)) : '–'
     ];
 

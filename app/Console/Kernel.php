@@ -1,6 +1,5 @@
 <?php
 namespace App\Console;
-use App\Tasks\Newsletter;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Tasks\Notification;
 //use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

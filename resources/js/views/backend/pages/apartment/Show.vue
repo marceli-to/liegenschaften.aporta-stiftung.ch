@@ -99,6 +99,10 @@
             <div class="span-1"><label>Telefon</label></div>
             <div class="span-3">{{ apartment.tenant_id && apartment.tenant.phone ? apartment.tenant.phone : '–' }}</div>
           </apartment-row>
+          <apartment-row v-if="apartment.tenant.parking">
+            <div class="span-1"><label>Abstellplatz</label></div>
+            <div class="span-3">Ja</div>
+          </apartment-row>
           <h2 class="mt-12x">Informationen</h2>
           <apartment-row>
             <div class="span-1"><label>Status</label></div>
@@ -258,7 +262,6 @@ export default {
   mounted() {
     this.fetch();
     NProgress.configure({ showBar: false });
-    console.log(this.$route.params);
   },
 
   methods: {

@@ -4,14 +4,14 @@
  * -----------------------------------------------------------------------------
  */
 
- input[type=text],
- input[type=email],
- input[type=number],
- input[type=password],
- input[type=date],
- input[type=time],
- textarea {
-  
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=password],
+input[type=date],
+input[type=time],
+textarea {
+
   &.is-outline {
     background-color: transparent !important;
     border-top: 1px solid $color-light-grey;
@@ -19,4 +19,4 @@
     min-height: $space-12x;
     padding-top: $space-1x;
   }
- }
+}

@@ -225,6 +225,7 @@ class ApartmentController extends Controller
       'firstname' => $collectionItem->collection->firstname,
       'name' => $collectionItem->collection->name,
       'email' => $collectionItem->collection->email,
+      'parking' => $collectionItem->parking,
     ]);
     $apartment->tenant_id = $tenant->id;
     $apartment->state_id = State::RESERVED;

@@ -15,7 +15,6 @@
         </div>
         <div class="sm:hide">
           <h2>{{ data.room_description }}, {{ data.size }} m<sup>2</sup><br><em>{{ data.street }}, {{ data.city }}<br>{{ data.description }}<br><br>Bezugstermin: <strong>{{ data.available_at }}</strong></em></h2>
-          
         </div>
         
         <apartment-grid class="sm:grid-cols-10">
@@ -119,9 +118,21 @@
                         <icon-radio :active="form.accepted == 0" />
                       </a>
                     </apartment-input>
+                    <template v-if="form.accepted == 0">
+                      <apartment-label :cls="'span-4 mt-1x'" style="border-top: none">
+                        <span :class="[hasValidationErrors ? 'text-danger': '', '']">Teilen Sie uns bitte einen Grund mit:</span>
+                        <div class="mt-1x md:mt-3x">
+                          <textarea v-model="form.comment" :class="[hasValidationErrors ? 'is-invalid': '', '']" @focus="removeValidationError()"></textarea>
+                        </div>
+                      </apartment-label>
+                    </template>
                   </apartment-row>
+
                   <apartment-row class="pb-3x" v-else-if="data.has_reply && data.accepted == 0">
-                    <apartment-label :cls="'span-3'">Ich habe <strong>kein</strong> Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste</apartment-label>
+                    <apartment-label :cls="'span-3'">
+                      Ich habe <strong>kein</strong> Interesse an diesem Angebot, bleibe aber für eine Wohnung in einer anderen Siedlung auf der Warteliste
+                      <div class="mt-2x"><strong>Begründung:</strong><br>{{ data.comment }}</div>
+                    </apartment-label>
                     <apartment-input :cls="'span-1 flex justify-center'">
                       <icon-radio :active="true" />
                     </apartment-input>
@@ -158,6 +169,7 @@
                       </a>
                     </apartment-input>
                   </apartment-row>
+
                   <div class="mt-12x" v-if="form.accepted != null">
                     <a 
                       href="javascript:;" 
@@ -286,6 +298,9 @@ export default {
       // States
       isFetched: false,
       isValid: false,
+
+      // Validation errors
+      hasValidationErrors: false,
     };
   },
 
@@ -309,6 +324,12 @@ export default {
     },
 
     reply() {
+
+      if (this.form.accepted == 0 && !this.form.comment) {
+        this.hasValidationErrors = true;
+        return false;
+      }
+
       let data = {
         'uuid': this.$route.params.itemUuid,
         'accepted': this.form.accepted,
@@ -341,6 +362,10 @@ export default {
       this.form.accepted = null;
       this.form.parking = 0;
     },
+
+    removeValidationError() {
+      this.hasValidationErrors = false;
+    }
 
   },
 

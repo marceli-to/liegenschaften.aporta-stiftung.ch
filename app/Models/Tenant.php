@@ -14,6 +14,7 @@ class Tenant extends Base
     'name',
     'email',
     'phone',
+    'parking',
     'publish'
   ];
 

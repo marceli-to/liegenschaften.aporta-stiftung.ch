@@ -20,4 +20,10 @@ class MailQueue extends Model
 	{
 		return $query->where('processed', 0);
 	}
+
+
+	public function scopeProcessed($query)
+	{
+		return $query->where('processed', 1);
+	}
 }
