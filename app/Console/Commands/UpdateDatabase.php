@@ -66,6 +66,7 @@ class UpdateDatabase extends Command
       $rand2 = mt_rand(0,19);
       $t->name = $firstnames[$rand1];
       $t->firstname = $lastnames[$rand2];
+      $t->email = $firstnames[$rand1].'.'.$lastnames[$rand2].'@testmail.ch';
       $t->save();
     }
     return; 
