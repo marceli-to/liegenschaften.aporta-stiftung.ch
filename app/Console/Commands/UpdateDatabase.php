@@ -62,9 +62,10 @@ class UpdateDatabase extends Command
     $tenants = Tenant::get();
     foreach($tenants as $t)
     {
-      $rand = mt_rand(0,19);
-      $t->name = $firstnames[$rand];
-      $t->firstname = $lastnames[$rand];
+      $rand1 = mt_rand(0,19);
+      $rand2 = mt_rand(0,19);
+      $t->name = $firstnames[$rand1];
+      $t->firstname = $lastnames[$rand2];
       $t->save();
     }
     return; 
