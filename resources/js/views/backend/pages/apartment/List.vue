@@ -31,6 +31,7 @@
               </a>
             </div>
           </div>
+          <!--
           <div class="span-2">
             <h2>Mietzins</h2>
             <div v-for="(value, key) in filterItems.rent" :key="key">
@@ -40,6 +41,7 @@
               </a>
             </div>
           </div>
+          -->
           <div class="span-2">
             <h2>Aussenraum</h2>
             <div v-for="(value, key) in filterItems.exteriors" :key="key">
