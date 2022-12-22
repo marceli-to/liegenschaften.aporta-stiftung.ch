@@ -25,7 +25,8 @@ Route::get('/angebot/{collection:uuid}/{hash?}', [CollectionController::class, '
 if (
   \App::domain() == 'liegenschaften.aporta-stiftung.ch.local' || 
   \App::domain() == 'liegenschaften.aporta-stiftung.ch.marceli.to' || 
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch'
+  \App::domain() == 'liegenschaften.aporta-stiftung.ch' ||
+  \App::domain() == 'liegenschaften.aporta-stiftung.ch.wbg.ch'
 )
 {
   Route::get('/', [PageController::class, 'index'])->name('home');
