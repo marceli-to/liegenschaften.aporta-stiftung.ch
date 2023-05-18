@@ -30,7 +30,8 @@
 }
 
 .icon-trash,
-.icon-link-external {
+.icon-link-external,
+.icon-pencil {
   @extend %icon;
   color: $color-medium-grey;
   transition: color .1s ease-in;

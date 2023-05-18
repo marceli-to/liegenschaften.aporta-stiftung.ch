@@ -306,12 +306,12 @@ export default {
   mounted() {
     NProgress.configure({ showBar: false });
     this.hasCollection = true;
-    this.fetch();
+    this.get();
   },
 
   methods: {
     
-    fetch() {
+    get() {
       NProgress.start();
       this.isFetched = false;
       this.axios.post(`${this.routes.get}`, this.$store.state.collection).then(response => {
@@ -395,7 +395,6 @@ export default {
     showStoreSuccess() {
       this.$refs.dialogStoreSuccess.show();
     },
-
   },
 
   computed: {

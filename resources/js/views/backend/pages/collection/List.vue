@@ -53,8 +53,11 @@
         :key="d.id">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-actions']">
           <a :href="`/angebot/${d.collection.uuid}`" target="_blank" title="Angebot anzeigen">
-           <icon-link-external class="icon-link-external mb-6x" />
+           <icon-link-external class="icon-link-external mb-4x" />
           </a>
+          <router-link :to="{name: 'collection-edit', params: { uuid: d.collection.uuid }}" class="icon-state" v-if="d.replied_at == null">
+            <icon-pencil class="icon-pencil mb-4x" />
+          </router-link>
           <a href="" @click.prevent="showConfirm(d.uuid)">
             <icon-trash class="icon-trash" />
           </a>
@@ -126,6 +129,7 @@ import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
 import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
+import IconPencil from "@/components/ui/icons/Pencil.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
@@ -150,6 +154,7 @@ export default {
     IconHourglass,
     IconTrash,
     IconLinkExternal,
+    IconPencil,
     List,
     ListRow,
     ListHeader,

@@ -55,7 +55,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Collections
   Route::get('collections', [CollectionController::class, 'get']);
-  Route::get('collection/{collection}', [CollectionController::class, 'find']);
+  Route::get('collection/{collection:uuid}', [CollectionController::class, 'find']);
   Route::post('collection', [CollectionController::class, 'store']);
+  Route::put('collection/{collection:uuid}', [CollectionController::class, 'update']);
 
 });

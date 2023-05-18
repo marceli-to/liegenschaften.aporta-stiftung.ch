@@ -27,7 +27,7 @@
             <router-link 
               :to="{name: 'apartments'}"
               class="icon-filter"
-              v-if="$route.name == 'collection' || $route.name == 'collections'">
+              v-if="$route.name == 'collection-create' || $route.name == 'collections' || $route.name == 'collection-edit'">
               <icon-filter :active="$store.state.filter.set" />
             </router-link>
             <a 
@@ -40,7 +40,7 @@
             </a>
           </li>
           <li class="span-1 flex justify-center">
-            <router-link :to="{name: 'collection'}" class="icon-collection" v-if="$store.state.collection.items.length > 0">
+            <router-link :to="{name: 'collection-create'}" class="icon-collection" v-if="$store.state.collection.items.length > 0">
               <icon-collection :active="$route.name == 'collection' || $store.state.collection.items.length > 0 ? true : false" />
               <span class="ml-2x">{{$store.state.collection.items.length}}</span>
             </router-link>

@@ -29,6 +29,7 @@ class CollectionController extends Controller
    */
   public function find(Collection $collection)
   {
+    $collection = Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->find($collection->id);
     return response()->json($collection);
   }
 
@@ -42,33 +43,7 @@ class CollectionController extends Controller
   {
     foreach($request->input('candidates') as $candidate)
     {
-      $collection = Collection::create([
-        'uuid' => \Str::uuid(),
-        'salutation' => $candidate['salutation'],
-        'name' => $candidate['name'],
-        'firstname' => $candidate['firstname'],
-        'email' => $candidate['email'],
-        'valid_until' => \Carbon\Carbon::now()->addDays(5),
-        'estate_id' => env('ESTATE_ID'),
-      ]);
-      $collection->save();
-
-      foreach($request->input('items') as $item)
-      {
-        $apartment = Apartment::where('uuid', $item)->first();
-        $collectionItem = CollectionItem::create([
-          'uuid' => \Str::uuid(),
-          'collection_id' => $collection->id,
-          'apartment_id'  => $apartment->id
-        ]);
-        $collectionItem->save();
-      }
-
-      // Add collection data to mail_queue
-      MailQueue::create([
-        'type' => 'offer',
-        'data' => Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->find($collection->id)->toJson()
-      ]);
+      $collection = $this->create($candidate, $request->input('items'));
     }
  
     return response()->json(['collectionId' => $collection->id]);
@@ -83,7 +58,48 @@ class CollectionController extends Controller
    */
   public function update(Collection $collection, CollectionStoreRequest $request)
   {
-    return response()->json('successfully updated');
+    $collection->items()->delete();
+    $collection->delete();
+
+    foreach($request->input('candidates') as $candidate)
+    {
+      $collection = $this->create($candidate, $request->input('items'));
+    }
+
+    return response()->json(['collectionId' => $collection->id]);
+  }
+
+  protected function create($candidate, $items)
+  {
+    $collection = Collection::create([
+      'uuid' => \Str::uuid(),
+      'salutation' => $candidate['salutation'],
+      'name' => $candidate['name'],
+      'firstname' => $candidate['firstname'],
+      'email' => $candidate['email'],
+      'valid_until' => \Carbon\Carbon::now()->addDays(5),
+      'estate_id' => env('ESTATE_ID'),
+    ]);
+    $collection->save();
+
+    foreach($items as $item)
+    {
+      $apartment = Apartment::where('uuid', $item)->first();
+      $collectionItem = CollectionItem::create([
+        'uuid' => \Str::uuid(),
+        'collection_id' => $collection->id,
+        'apartment_id'  => $apartment->id
+      ]);
+      $collectionItem->save();
+    }
+
+    // Add collection data to mail_queue
+    MailQueue::create([
+      'type' => 'offer',
+      'data' => Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->find($collection->id)->toJson()
+    ]);
+
+    return $collection;
   }
 
 }
