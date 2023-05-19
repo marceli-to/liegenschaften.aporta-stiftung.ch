@@ -153,7 +153,7 @@
   
         // Messages
         messages: {
-          emptyData: 'Es sind noch keine Angebote vorhanden.',
+          emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
         },
       };
     },
