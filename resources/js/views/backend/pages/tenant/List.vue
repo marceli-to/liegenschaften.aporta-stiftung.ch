@@ -8,7 +8,7 @@
           <div class="grid-cols-12">
             <div class="span-6">
               <h2>Mieter-Suche</h2>
-              <input type="text" class="search" v-model="searchTerm" placeholder="Suche nach Vorname, Name, E-Mail, Telefon">
+              <input type="text" class="search" v-model="searchTerm" placeholder="Suche nach Vorname, Name, E-Mail, Telefon, Strasse">
             </div>
           </div>
         </div>
