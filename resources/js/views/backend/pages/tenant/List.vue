@@ -161,6 +161,12 @@
     mounted() {
       NProgress.configure({ showBar: false });
       this.fetch();
+
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 13 && this.hasSearch && this.searchTerm !== '') {
+          this.fetch();
+        }
+      });
     },
   
     methods: {
