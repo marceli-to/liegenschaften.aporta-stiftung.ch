@@ -23,11 +23,11 @@ class TenantController extends Controller
           ->orWhere('firstname', 'LIKE', "%{$searchTerm}%")
           ->orWhere('email', 'LIKE', "%{$searchTerm}%")
           ->orWhere('phone', 'LIKE', "%{$searchTerm}%");
-      })->get();
+      })->orderBy('name')->get();
     }
     else
     {
-      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->get();
+      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->orderBy('name')->get();
     }
 
     return new DataCollection($data);
