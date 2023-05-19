@@ -1,7 +1,8 @@
 .dropdown {
   background-color: $color-primary;
   display: inline-block;
-  min-width: 125px;
+  left: - $space-2x;
+  min-width: 132px;
   opacity: 0;
   position: absolute;
   top: 36px;
@@ -18,9 +19,10 @@
     @include font-regular();
     @include font-size($fs-sm);
     border-bottom: 1px solid $color-white;
+    color: $color-white;
     display: block;
     font-weight: 400 !important;
-    text-transform: none !important;
+    text-decoration: none !important;
 
     &:hover {
       background-color: $color-secondary;

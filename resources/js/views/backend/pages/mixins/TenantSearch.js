@@ -21,7 +21,9 @@ export default {
     },
 
     resetSearch() {
-
+      this.hideSearch();
+      this.searchTerm = '';
+      this.fetch();
     },
 
   },

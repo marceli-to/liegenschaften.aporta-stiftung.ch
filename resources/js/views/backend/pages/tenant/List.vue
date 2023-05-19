@@ -8,15 +8,21 @@
           <div class="grid-cols-12">
             <div class="span-6">
               <h2>Mieter-Suche</h2>
-              <input type="text" class="search" v-model="searchTerm" placeholder="Suche nach Vorname, Name, E-Mail, Telefon, Straße, Hausnummer, PLZ, Ort">
+              <input type="text" class="search" v-model="searchTerm" placeholder="Suche nach Vorname, Name, E-Mail, Telefon">
             </div>
           </div>
         </div>
-        <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideSearch()">Anzeigen ({{ sortedData.length }})</a>
+        <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="fetch()">Suchen</a>
         <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetSearch()">Zurücksetzen</a>
       </nav>
     </site-header>
     <site-main v-if="isFetched">
+      <div class="my-6x pr-6x w-full align-right">
+        <a :href="`/export/mieter?v=${randomString()}`" target="_blank" class="link-export">
+          Export Excel
+          <icon-document class="ml-1x" />
+        </a>
+      </div>
       <list class="mt-6x" v-if="sortedData.length">
         <list-header>
           <list-item :class="'span-2 list-item-header line-after'">
@@ -65,7 +71,7 @@
             <span>{{ d.apartment.building.street }}</span>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item']">
-            <span>{{ d.apartment.number }} / {{  d.apartment.description }}</span>
+            <span>{{ d.apartment.number }} / {{ d.apartment.description }}</span>
           </list-item>
         </div>
       </list>
@@ -91,6 +97,7 @@
   import IconTrash from "@/components/ui/icons/Trash.vue";
   import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
   import IconPencil from "@/components/ui/icons/Pencil.vue";
+  import IconDocument from "@/components/ui/icons/Document.vue";
   import SiteHeader from '@/views/backend/layout/Header.vue';
   import SiteMain from '@/views/backend/layout/Main.vue';
   import List from "@/components/ui/layout/List.vue";
@@ -115,6 +122,7 @@
       IconTrash,
       IconLinkExternal,
       IconPencil,
+      IconDocument,
       List,
       ListRow,
       ListHeader,
@@ -160,9 +168,10 @@
       fetch() {
         NProgress.start();
         this.isFetched = false;
-        this.axios.get(`${this.routes.get}`).then(response => {
+        this.axios.get(`${this.routes.get}/${this.searchTerm}`).then(response => {
           this.data = response.data.data;
           this.isFetched = true;
+          this.hideSearch();
           NProgress.done();
         });
       },

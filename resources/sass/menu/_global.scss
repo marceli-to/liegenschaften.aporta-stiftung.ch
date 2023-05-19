@@ -10,7 +10,7 @@ nav {
     display: block;
 
     &.page-title {
-      a, h1 {
+      > a, h1 {
         @include font-bold();
         text-decoration: none !important;
       }
@@ -35,6 +35,7 @@ nav {
 
 .is-collection,
 .has-collection,
+.has-search,
 .has-filter {
   nav {
 

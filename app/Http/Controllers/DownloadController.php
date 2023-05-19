@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\BaseController;
 use App\Exports\ApartmentExport;
+use App\Exports\TenantExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -26,10 +27,22 @@ class DownloadController extends BaseController
    * @return \Illuminate\Http\Response
    */
 
-  public function export()
+  public function exportApartments()
   {
-    $filename = 'liegenschaft-eglistrasse-' . date('d-m-Y-H:i:s') . '.xlsx';
+    $filename = 'liegenschaft-eglistrasse-objekte' . date('d-m-Y-H:i:s') . '.xlsx';
     return Excel::download(new ApartmentExport, $filename);
   }
+
+  /**
+   * Export Tenants to Excel
+   * 
+   * @return \Illuminate\Http\Response
+   */
+
+   public function exportTenants()
+   {
+     $filename = 'liegenschaft-eglistrasse-mieter' . date('d-m-Y-H:i:s') . '.xlsx';
+     return Excel::download(new TenantExport, $filename);
+   }
 
 }

@@ -13,10 +13,23 @@ class TenantController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function get()
+  public function get($searchTerm = NULL)
   { 
-    // Get tenants with apartments where the apartment is not null
-    $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->get();
+    // If search term is provided, filter by name, firstnam, email or phone
+    if ($searchTerm)
+    {
+      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->where(function($query) use ($searchTerm) {
+        $query->where('name', 'LIKE', "%{$searchTerm}%")
+          ->orWhere('firstname', 'LIKE', "%{$searchTerm}%")
+          ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+          ->orWhere('phone', 'LIKE', "%{$searchTerm}%");
+      })->get();
+    }
+    else
+    {
+      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->get();
+    }
+
     return new DataCollection($data);
   }
 

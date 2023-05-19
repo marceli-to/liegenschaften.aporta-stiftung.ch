@@ -1,6 +1,6 @@
 <template>
 <div>
-  <header :class="cls">
+  <header :class="cls" @mouseleave="hideDropdown()">
     <div>
       <nav class="site-menu">
         <ul>
@@ -166,6 +166,9 @@ export default {
       }
       if (this.$parent.hasCollection) {
         cls = cls + ' has-collection';
+      }
+      if (this.$parent.hasSearch) {
+        cls = cls + ' has-search';
       }
       if (this.$props.view == 'show' || this.$props.view == 'show-single') {
         cls = cls + ' is-detail';

@@ -50,7 +50,8 @@ if (
 
   // Logged in users
   Route::middleware('auth:sanctum', 'verified')->group(function() {
-    Route::get('/export', [DownloadController::class, 'export'])->name('export');
+    Route::get('/export/objekte', [DownloadController::class, 'exportApartments'])->name('export_apartments');
+    Route::get('/export/mieter', [DownloadController::class, 'exportTenants'])->name('export_tenants');
     Route::get('/administration/{any?}', function () {
       return view('layout.authenticated');
     })->where('any', '.*')->middleware('role:admin')->name('applications');

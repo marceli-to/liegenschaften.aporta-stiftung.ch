@@ -31,7 +31,7 @@ nav.site-menu {
     }
   }
 
-  a {
+  a:not(.dropdown > a) {
     color: $color-white;
     @include font-bold();
     @include font-size($fs-md);

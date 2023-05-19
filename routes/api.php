@@ -61,6 +61,6 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::put('collection/{collection:uuid}', [CollectionController::class, 'update']);
 
   // Tenants
-  Route::get('tenants', [TenantController::class, 'get']);
+  Route::get('tenants/{searchTerm?}', [TenantController::class, 'get']);
 
 });

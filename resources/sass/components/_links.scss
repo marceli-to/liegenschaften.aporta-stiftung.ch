@@ -17,8 +17,12 @@
 }
 
 .link-export {
+  @extend %flex;
+  @extend %justify-end;
   color: $color-primary;
-  @include font-size($fs-md);
+  @include font-size($fs-sm);
+  @include font-bold();
+  text-transform: uppercase;
 }
 
 .link-maps {

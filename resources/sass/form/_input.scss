@@ -21,10 +21,15 @@ textarea {
   }
 }
 
-input.search{
-  background-color: $color-white;
-  color: $color-primary;
+input.search {
+  background-color: transparent;
+  border-bottom: 1px solid $color-white;
+  color: $color-white;
   min-height: $space-12x;
-  padding: $space-1x $space-2x;
+  padding: $space-1x 0;
+
+  &::placeholder {
+    color: $color-white;
+  }
 }
 
