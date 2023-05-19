@@ -21,6 +21,7 @@ class Collection extends Base
     'firstname',
     'name',
     'email',
+    'remarks',
     'valid_until',
     'estate_id'
   ];

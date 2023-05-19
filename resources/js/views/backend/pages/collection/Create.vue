@@ -186,6 +186,14 @@
           <icon-trash class="icon-trash" />
         </a>
       </div>
+      <list class="mt-8x">
+        <list-row class="no-hover">
+          <list-item :class="'span-8 start-3 mb-5x list-item-header'">Freitext</list-item>
+          <list-item class="span-8 start-3 list-item is-first">
+            <textarea v-model="remarks" class="textarea"></textarea>
+          </list-item>
+        </list-row>
+      </list>
     </form>
   </site-main>
   <dialog-wrapper ref="dialogStoreConfirm">
@@ -284,6 +292,9 @@ export default {
         },
       ],
 
+      // Remarks
+      remarks: null,
+
       // Routes
       routes: {
         get: '/api/apartments',
@@ -325,6 +336,7 @@ export default {
       this.$refs.dialogStoreConfirm.hide();
       const data = {
         candidates: this.candidates,
+        remarks: this.remarks ? this.remarks : null,
         items: this.$store.state.collection.items
       };
       

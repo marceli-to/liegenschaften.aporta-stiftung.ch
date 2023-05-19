@@ -5,5 +5,8 @@
 <p>Sämtliche Informationen zu unserem Angebot sowie die Möglichkeit einer direkten Rückmeldung, finden Sie unter dem untenstehenden Link.</p>
 <p><strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung. Weitere Angebote im Neubau «Eglistrasse» gibt es nicht. Die Vermietung erfolgt <strong>ohne</strong> Wohnungsbesichtigung.</p>
 <p style="padding: 12px 0"><a href="{{ env('APP_FRONTEND_URL') . '/angebot/' . $collection->uuid . '/' . md5($collection->email) }}" class="button button-primary" target="_blank">Unser Angebot</a></p>
+@if ($collection->remarks)
+<p><strong>Bemerkungen</strong><br>{!! nl2br($collection->remarks) !!}</p>
+@endif
 <p>Freundliche Grüsse<br><br>{{ env('APP_NAME') }}<br>Camilla Walker</p>
 @endcomponent

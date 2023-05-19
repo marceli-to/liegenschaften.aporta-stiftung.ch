@@ -43,7 +43,7 @@ class CollectionController extends Controller
   {
     foreach($request->input('candidates') as $candidate)
     {
-      $collection = $this->create($candidate, $request->input('items'));
+      $collection = $this->create($candidate, $request->input('items'), $request->input('remarks'));
     }
  
     return response()->json(['collectionId' => $collection->id]);
@@ -63,13 +63,13 @@ class CollectionController extends Controller
 
     foreach($request->input('candidates') as $candidate)
     {
-      $collection = $this->create($candidate, $request->input('items'));
+      $collection = $this->create($candidate, $request->input('items'), $request->input('remarks'));
     }
 
     return response()->json(['collectionId' => $collection->id]);
   }
 
-  protected function create($candidate, $items)
+  protected function create($candidate, $items, $remarks = null)
   {
     $collection = Collection::create([
       'uuid' => \Str::uuid(),
@@ -77,6 +77,7 @@ class CollectionController extends Controller
       'name' => $candidate['name'],
       'firstname' => $candidate['firstname'],
       'email' => $candidate['email'],
+      'remarks' => $remarks,
       'valid_until' => \Carbon\Carbon::now()->addDays(5),
       'estate_id' => env('ESTATE_ID'),
     ]);

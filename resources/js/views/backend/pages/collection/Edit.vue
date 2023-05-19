@@ -184,6 +184,14 @@
             <icon-trash class="icon-trash" />
           </a>
         </div>
+        <list class="mt-8x">
+          <list-row class="no-hover">
+            <list-item :class="'span-8 start-3 mb-5x list-item-header'">Freitext</list-item>
+            <list-item class="span-8 start-3 list-item is-first">
+              <textarea v-model="remarks" class="textarea"></textarea>
+            </list-item>
+          </list-row>
+        </list>
       </form>
     </site-main>
     <dialog-wrapper ref="dialogUpdateConfirm">
@@ -270,6 +278,9 @@
   
         // Candidates
         candidates: [],
+
+        // Remarks
+        remarks: null,
   
         // Routes
         routes: {
@@ -303,6 +314,7 @@
         this.isFetched = false;
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
           this.data = response.data;
+          this.remarks = this.data.remarks;
           this.candidates.push({
             uuid: this.data.uuid,
             salutation: this.data.salutation,
@@ -317,9 +329,11 @@
   
       update() {
         this.$refs.dialogUpdateConfirm.hide();
+
         const data = {
           candidates: this.candidates,
-          items: this.data.items
+          remarks: this.remarks,
+          items: this.data.items.map(item => item.apartment.uuid),
         };
         
         NProgress.start();
