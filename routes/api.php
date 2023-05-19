@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\CollectionItemController;
 use App\Http\Controllers\Api\UserCollectionController;
+use App\Http\Controllers\Api\TenantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,5 +59,8 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('collection/{collection:uuid}', [CollectionController::class, 'find']);
   Route::post('collection', [CollectionController::class, 'store']);
   Route::put('collection/{collection:uuid}', [CollectionController::class, 'update']);
+
+  // Tenants
+  Route::get('tenants', [TenantController::class, 'get']);
 
 });

@@ -7,21 +7,35 @@
           <li class="span-2">
             <icon-logo class="icon-logo" />
           </li>
-          <li class="span-2 page-title">
-            <router-link :to="{name: 'apartments'}">
+          <li class="span-2 page-title relative">
+            <a href="javascript:;" class="dropdown-button" @mouseover="showDropdown()">
               Eglistrasse
-            </router-link>
+              <icon-chevron-down />
+            </a>
+            <div class="dropdown" @mouseleave="hideDropdown()">
+              <router-link :to="{name: 'apartments'}">
+                Objekte
+              </router-link>
+              <router-link :to="{name: 'tenants'}">
+                Mieter
+              </router-link>
+            </div>
           </li>
           <li class="span-4 flex justify-center site-menu__pagination" v-if="$props.view == 'show' || $props.view == 'show-single'">
             <template v-if="$store.state.filter.items.length && $props.view == 'show'">
               <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.prev }}">
                 <icon-arrow-left />
               </router-link>
-                <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
+              <span>{{$store.state.filter.menu.index | padStart}} / {{$store.state.filter.items.length | padStart}}</span>
               <router-link :to="{name: 'apartment-show', params: { uuid: $store.state.filter.menu.next }}">
                 <icon-arrow-right />
               </router-link>
             </template>
+          </li>
+          <li class="span-4 flex justify-center" v-else-if="$props.view == 'tenants'">
+            <a href="" @click.prevent="toggleSearch()">
+              <icon-magnifier />
+            </a>
           </li>
           <li class="span-4 flex justify-center" v-else>
             <router-link 
@@ -84,15 +98,19 @@ import IconFilter from "@/components/ui/icons/Filter.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconArrowLeft from "@/components/ui/icons/ArrowLeft.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
+import IconChevronDown from "@/components/ui/icons/ChevronDown.vue";
+import IconMagnifier from "@/components/ui/icons/Magnifier.vue";
 
 export default {
   components: {
     IconCollection,
+    IconChevronDown,
     IconFilter,
     IconCross,
     IconUser,
     IconArrowLeft,
     IconArrowRight,
+    IconMagnifier,
     IconLogo,
     IconList
   },
@@ -109,9 +127,28 @@ export default {
     toggleFilter() {
       this.$parent.toggleFilter();
     },
+    
     toggleSelector() {
       this.$parent.toggleSelector();
     },
+
+    toggleSearch() {
+      this.$parent.toggleSearch();
+    },
+
+    showDropdown() {
+      // query selector for .dropdown
+      const dropdown = document.querySelector('.dropdown');
+      // add class 'is-open'
+      dropdown.classList.add('is-open');
+    },
+
+    hideDropdown() {
+      // query selector for .dropdown
+      const dropdown = document.querySelector('.dropdown');
+      // add class 'is-open'
+      dropdown.classList.remove('is-open');
+    }
   },
 
   watch: {
