@@ -18,7 +18,8 @@ header.site-header {
     }
   }
 
-  &.is-collection {
+  &.is-collection,
+  &.is-users {
     margin-bottom: 0;
   }
 

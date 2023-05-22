@@ -29,7 +29,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
+  Route::get('users', [UserController::class, 'get']);
   Route::get('user', [UserController::class, 'find']);
+  Route::post('user', [UserController::class, 'create']);
+  Route::put('user/{user}', [UserController::class, 'update']);
+  Route::delete('user/{user}', [UserController::class, 'destroy']);
 
   // Apartments
   Route::post('apartments/filter', [ApartmentController::class, 'filter']);
@@ -62,5 +66,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Tenants
   Route::get('tenants/{searchTerm?}', [TenantController::class, 'get']);
+
 
 });

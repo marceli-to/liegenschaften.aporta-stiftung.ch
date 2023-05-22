@@ -33,6 +33,8 @@ Vue.use(VueRouter);
 import baseRoutes from '@/config/routes';
 import apartmentRoutes from '@/views/backend/pages/apartment/config/routes';
 import collectionRoutes from '@/views/backend/pages/collection/config/routes';
+import tenantRoutes from '@/views/backend/pages/tenant/config/routes';
+import userRoutes from '@/views/backend/pages/user/config/routes';
 
 const router = new VueRouter(
   { 
@@ -41,6 +43,8 @@ const router = new VueRouter(
       ...baseRoutes,
       ...apartmentRoutes,
       ...collectionRoutes,
+      ...tenantRoutes,
+      ...userRoutes,
     ]
   }
 );

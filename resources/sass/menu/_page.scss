@@ -60,7 +60,7 @@ nav.page-menu {
     }
   }
 
-
+  &.page-menu__users,
   &.page-menu__collection {
     
     ul {
@@ -71,12 +71,15 @@ nav.page-menu {
       @extend %span-3;
     }
 
-    &.is-disabled {
-      * {
-        border-color: $color-light-grey;
-        color: $color-light-grey;
-        pointer-events: none;
-      }
+    a.is-disabled {
+      color: $color-light-grey;
+      pointer-events: none;
+    }
+  }
+
+  &.page-menu__users {
+    li {
+      @extend %span-4;
     }
   }
 

@@ -41,7 +41,7 @@
             <router-link 
               :to="{name: 'apartments'}"
               class="icon-filter"
-              v-if="$route.name == 'collection-create' || $route.name == 'collections' || $route.name == 'collection-edit'">
+              v-if="$route.name == 'collection-create' || $route.name == 'collections' || $route.name == 'collection-edit' || $route.name == 'users'">
               <icon-filter :active="$store.state.filter.set" />
             </router-link>
             <a 
@@ -63,9 +63,11 @@
             </div>
           </li>
           <li class="span-2 flex justify-center">
-            <a href="/logout" class="icon">
+            <router-link 
+              :to="{name: 'users'}"
+              class="icon">
               <icon-user />
-            </a>
+            </router-link>
           </li>
           <li class="span-1 flex justify-center">
             <router-link 
@@ -169,6 +171,9 @@ export default {
       }
       if (this.$parent.hasSearch) {
         cls = cls + ' has-search';
+      }
+      if (this.$props.view == 'users') {
+        cls = cls + ' is-users';
       }
       if (this.$props.view == 'show' || this.$props.view == 'show-single') {
         cls = cls + ' is-detail';
