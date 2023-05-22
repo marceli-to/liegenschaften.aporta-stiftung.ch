@@ -22,7 +22,8 @@ export default new Vuex.Store({
         current: null,
         prev: null,
         next: null
-      }
+      },
+      referrer: null,
     },
 
     collection: {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     collection(state, collection) {
       state.collection = collection;
-    }
+    },
+    referrer(state, referrer) {
+      state.referrer = referrer;
+    },
   }
 });

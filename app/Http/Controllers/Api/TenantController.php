@@ -30,6 +30,7 @@ class TenantController extends Controller
     else
     {
       $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->orderBy('name')->get();
+      $data = $data->sortByDesc('apartment.floor.order')->sortBy('apartment.building.order');
     }
 
     return new DataCollection($data);

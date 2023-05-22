@@ -59,19 +59,29 @@
           :data-uuid="d.uuid"
           :key="d.id">
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-            <span>{{ d.firstname }} {{ d.name }}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 0, referrer: 'tenants' }}">
+              <span>{{ d.firstname }} {{ d.name }}</span>
+            </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-            <span>{{ d.email }}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 0, referrer: 'tenants' }}">
+              <span>{{ d.email }}</span>
+            </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-            <span>{{ d.phone }}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 0, referrer: 'tenants' }}">
+              <span>{{ d.phone }}</span>
+            </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-            <span>{{ d.apartment.building.street }}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 0, referrer: 'tenants' }}">
+              <span>{{ d.apartment.building.street }}</span>
+            </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item']">
-            <span>{{ d.apartment.number }} / {{ d.apartment.description }}</span>
+            <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 0, referrer: 'tenants' }}">
+              <span>{{ d.apartment.number }} / {{ d.apartment.description }}</span>
+            </router-link>
           </list-item>
         </div>
       </list>

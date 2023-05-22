@@ -63,26 +63,26 @@
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">
             {{ d.collection.firstname }} {{ d.collection.name }}<br>
             {{ d.collection.email }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</router-link>
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.apartment.description }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">{{ d.apartment.building.street }}, {{ d.apartment.estate.city }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">{{ d.apartment.description }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.sent_at ? d.sent_at : '–' }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">{{ d.sent_at ? d.sent_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.read_at ? d.read_at : '–' }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">{{ d.read_at ? d.read_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">{{ d.replied_at ? d.replied_at : '–' }}</router-link>
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">{{ d.replied_at ? d.replied_at : '–' }}</router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1 }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: d.apartment.uuid, single: 1, referrer: 'collections' }}">
             <span v-if="d.replied_at != null && d.accepted == 2">Nicht mehr auf Wohnungssuche<br><br></span>
             <span v-if="d.replied_at != null && d.accepted == 1">Hat Interesse an diesem Angebot<br><br></span>
             <span v-if="d.replied_at != null && d.accepted == 0">Kein Interesse an diesem Angebot, möchte aber auf Warteliste bleiben<br><br><div v-if="d.comment">Begründung:<br>{{d.comment}}</div></span>

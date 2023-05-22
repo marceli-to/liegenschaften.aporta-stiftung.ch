@@ -163,52 +163,52 @@
           </a> 
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.building.street }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.description }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.number }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.rent_gross }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.room.abbreviation }}
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.size }} m<sup>2</sup>
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.size_terrace }} <span v-if="apartment.size_terrace > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.size_patio }} <span v-if="apartment.size_patio > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
             {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid }}" class="icon-state">
+          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}" class="icon-state">
             <icon-state :id="apartment.state_id" />
           </router-link>
         </list-item>

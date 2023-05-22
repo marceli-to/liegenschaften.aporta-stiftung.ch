@@ -3,7 +3,7 @@
   <nav class="page-menu content-block">
     <ul>
       <li>
-        <router-link :to="{name: 'apartments'}">
+        <router-link :to="{name: $store.state.referrer ? $store.state.referrer : 'apartments'}">
           <icon-arrow-left :size="'md'" />
           <span>Zurück</span>
         </router-link>

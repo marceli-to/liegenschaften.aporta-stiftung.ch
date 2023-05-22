@@ -10,7 +10,7 @@ const routes = [
   },
   {
     name: 'apartment-show',
-    path: '/administration/objekt/:uuid/anzeigen/:single?',
+    path: '/administration/objekt/:uuid/anzeigen/:single?/:referrer?',
     component: ApartmentShow,
   },
   {

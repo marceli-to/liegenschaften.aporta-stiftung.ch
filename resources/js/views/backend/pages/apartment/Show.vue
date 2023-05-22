@@ -8,7 +8,7 @@
     <page-menu 
       :id="$route.params.uuid"
       :apartment="apartment"
-      @reset="showResetConfirm()" 
+      @reset="showResetConfirm()"
     ></page-menu>
     <apartment-wrapper>
       <apartment-grid>
@@ -241,6 +241,8 @@ export default {
         number: null,
       },
 
+      referrer: null,
+
       // Routes
       routes: {
         fetch: '/api/apartment',
@@ -262,6 +264,9 @@ export default {
   mounted() {
     this.fetch();
     NProgress.configure({ showBar: false });
+    if (this.$route.params.referrer) {
+      this.$store.commit('referrer', this.$route.params.referrer);
+    }
   },
 
   methods: {
