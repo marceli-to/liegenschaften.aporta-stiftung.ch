@@ -80,20 +80,24 @@
         :data-uuid="d.uuid"
         :key="d.id">
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
-          <a href="">
+          <a href="" @click.prevent="edit(d)">
             <icon-radio :active="'true'" class="icon" />
           </a> 
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-          <a href="" @click.prevent="setUser(d)">
+          <a href="" @click.prevent="edit(d)">
             <span>{{ d.firstname }}</span>
           </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-3 list-item line-after']">
-          <span>{{ d.name }}</span>
+          <a href="" @click.prevent="edit(d)">
+            <span>{{ d.name }}</span>
+          </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-4 list-item line-after']">
-          <span>{{ d.email }}</span>
+          <a href="" @click.prevent="edit(d)">
+            <span>{{ d.email }}</span>
+          </a>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
           <a href="" @click.prevent="showConfirmDelete(d)">
@@ -295,7 +299,7 @@ export default {
       });
     },
 
-    setUser(user) {
+    edit(user) {
       this.user = user;
       this.isUpdate = true;
       this.isValid = true;
