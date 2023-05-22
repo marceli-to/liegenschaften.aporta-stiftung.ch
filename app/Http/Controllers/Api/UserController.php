@@ -55,6 +55,7 @@ class UserController extends Controller
       'name' => $request->input('name'),
       'email' => $request->input('email'),
       'password' => Hash::make($request->input('password')),
+      'email_verified_at' => \Carbon\Carbon::now(),
     ]);
 
     return response()->json($user);
