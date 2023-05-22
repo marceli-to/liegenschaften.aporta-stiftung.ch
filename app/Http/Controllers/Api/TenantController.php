@@ -15,9 +15,6 @@ class TenantController extends Controller
    */
   public function get($searchTerm = NULL)
   { 
-    // If search term is provided, filter by name, firstnam, email or phone
-    // extend search for apartment.building.street
-
     if ($searchTerm)
     {
       $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->where(function($query) use ($searchTerm) {
