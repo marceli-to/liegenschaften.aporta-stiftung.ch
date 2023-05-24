@@ -96,27 +96,61 @@
             <apartment-row>
               <apartment-label :cls="'span-1'">Name *</apartment-label>
               <apartment-input :cls="'span-3'">
-                <input type="text" v-model="apartment.tenant.name">
+                <template v-if="apartment.tenant.uuid && !isEditTenant">
+                  {{ apartment.tenant.name }}
+                </template>
+                <template v-else>
+                  <input type="text" v-model="apartment.tenant.name">
+                </template>
               </apartment-input>
             </apartment-row>
             <apartment-row>
               <apartment-label :cls="'span-1'">Vorname *</apartment-label>
               <apartment-input :cls="'span-3'">
-                <input type="text" v-model="apartment.tenant.firstname">
+                <template v-if="apartment.tenant.uuid && !isEditTenant">
+                  {{ apartment.tenant.firstname }}
+                </template>
+                <template v-else>
+                  <input type="text" v-model="apartment.tenant.firstname">
+                </template>
               </apartment-input>
             </apartment-row>
             <apartment-row>
               <apartment-label :cls="'span-1'">E-Mail</apartment-label>
               <apartment-input :cls="'span-3'">
-                <input type="text" v-model="apartment.tenant.email">
+                <template v-if="apartment.tenant.uuid && !isEditTenant">
+                  {{ apartment.tenant.email }}
+                </template>
+                <template v-else>
+                  <input type="text" v-model="apartment.tenant.email">
+                </template>
               </apartment-input>
             </apartment-row>
             <apartment-row>
               <apartment-label :cls="'span-1'">Telefon</apartment-label>
               <apartment-input :cls="'span-3'">
-                <input type="text" v-model="apartment.tenant.phone">
+                <template v-if="apartment.tenant.uuid && !isEditTenant">
+                  {{ apartment.tenant.phone }}
+                </template>
+                <template v-else>
+                  <input type="text" v-model="apartment.tenant.phone">
+                </template>
               </apartment-input>
             </apartment-row>
+            <apartment-row v-if="apartment.tenant.uuid">
+              <div class="span-2 border-none">
+                <a href="javascript:;" class="btn-primary is-small" @click.prevent="editTenant()">
+                  Mieter bearbeiten
+                </a>
+              </div>
+              <div class="span-2 border-none">
+                <a href="javascript:;" class="btn-secondary is-outline is-small" @click.prevent="removeTenant()">
+                  Mieter entfernen
+                </a>
+              </div>
+            </apartment-row>
+
+
             <h2 class="mt-12x">Informationen</h2>
             <apartment-row>
               <apartment-label :cls="'span-1'">Status</apartment-label>
@@ -210,6 +244,7 @@ export default {
       // States
       isFetched: false,
       isLoading: false,
+      isEditTenant: false,
       hasErrors: false,
 
       // Messages
@@ -258,7 +293,21 @@ export default {
 
     setState(stateId) {
       this.apartment.state_id = stateId;
-    }
+    },
+
+    editTenant() {
+      this.isEditTenant = true;
+    },
+
+    removeTenant() {
+      this.apartment.tenant = {
+        uuid: null,
+        name: null,
+        firstname: null,
+        email: null,
+        phone: null,
+      };
+    },
   },
 
 };

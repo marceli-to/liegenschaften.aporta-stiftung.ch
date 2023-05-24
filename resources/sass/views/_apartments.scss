@@ -67,6 +67,10 @@
       &.is-first {
         border-top: 1px solid $color-grey;
       }
+
+      &.border-none {
+        border-top: none;
+      }
     }
   }
 

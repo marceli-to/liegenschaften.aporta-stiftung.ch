@@ -154,37 +154,34 @@ class ApartmentController extends Controller
     $apartment->available_at = $request->input('available_at') ? $request->input('available_at') : NULL;
     $apartment->save();
 
-
-    // Tenants
-    if (!$request->input('tenant.firstname') && !$request->input('tenant.name'))
+    // If tenant.uuid is set, update tenant
+    if ($request->input('tenant.uuid'))
+    {
+      $tenant = Tenant::where('uuid', $request->input('tenant.uuid'))->get()->first();
+      $tenant->firstname = $request->input('tenant.firstname');
+      $tenant->name = $request->input('tenant.name');
+      $tenant->email = $request->input('tenant.email');
+      $tenant->phone = $request->input('tenant.phone');
+      $tenant->save();
+    }
+    // else if tenant.firstname and tenant.lastname is set, create tenant and add to apartment
+    else if ($request->input('tenant.firstname') && $request->input('tenant.name'))
+    {
+      $tenant = Tenant::create([
+        'uuid' => \Str::uuid(),
+        'firstname' => $request->input('tenant.firstname'),
+        'name' => $request->input('tenant.name'),
+        'email' => $request->input('tenant.email'),
+        'phone' => $request->input('tenant.phone'),
+      ]);
+      $apartment->tenant_id = $tenant->id;
+      $apartment->save();
+    }
+    // else  remove tenant from apartment
+    else
     {
       $apartment->tenant_id = null;
       $apartment->save();
-      return response()->json('successfully updated');
-    }
-
-    if ($request->input('tenant.firstname') && $request->input('tenant.name'))
-    {
-      $tenant = Tenant::where('firstname', $request->input('tenant.firstname'))
-                      ->where('name', $request->input('tenant.name'))
-                      ->get()->first();
-      if (!$tenant)
-      {
-        $tenant = Tenant::create([
-          'uuid' => \Str::uuid(),
-          'firstname' => $request->input('tenant.firstname'),
-          'name' => $request->input('tenant.name'),
-          'email' => $request->input('tenant.email'),
-          'phone' => $request->input('tenant.phone'),
-        ]);
-        $apartment->tenant_id = $tenant->id;
-        $apartment->save();
-      }
-      else
-      {
-        $apartment->tenant_id = $tenant->id;
-        $apartment->save();
-      }
     }
 
     return response()->json('successfully updated');
