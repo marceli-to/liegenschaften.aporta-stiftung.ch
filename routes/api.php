@@ -24,10 +24,6 @@ Route::get('/user-collection/{collection:uuid}/item/{collectionItem:uuid}', [Use
 Route::get('/user-collection/{collection:uuid}', [UserCollectionController::class, 'list']);
 Route::post('/user-collection', [UserCollectionController::class, 'reply']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-  return $request->user();
-});
-
 Route::middleware('auth:sanctum')->group(function() {
   Route::get('users', [UserController::class, 'get']);
   Route::get('user', [UserController::class, 'find']);

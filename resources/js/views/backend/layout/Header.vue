@@ -64,7 +64,7 @@
           </li>
           <li class="span-2 flex justify-center">
             <router-link 
-              :to="{name: 'users'}"
+              :to="{name: $props.user.admin ? 'users' : 'user-profile'}"
               class="icon">
               <icon-user />
             </router-link>

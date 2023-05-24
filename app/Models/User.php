@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array
    */
-  protected $appends = ['full_name', 'role'];
+  protected $appends = ['full_name'];
 
 
   /**
@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $hidden = [
-    'password', 'remember_token', 'role'
+    'password', 'remember_token'
   ];
 
   /**
