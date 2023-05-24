@@ -130,7 +130,7 @@
               <apartment-label :cls="'span-1'">Telefon</apartment-label>
               <apartment-input :cls="'span-3'">
                 <template v-if="apartment.tenant.uuid && !isEditTenant">
-                  {{ apartment.tenant.phone }}
+                  {{ apartment.tenant.phone ? apartment.tenant.phone : '–' }}
                 </template>
                 <template v-else>
                   <input type="text" v-model="apartment.tenant.phone">
