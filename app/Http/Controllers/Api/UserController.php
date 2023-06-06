@@ -56,7 +56,7 @@ class UserController extends Controller
       'name' => $request->input('name'),
       'email' => $request->input('email'),
       'password' => Hash::make($request->input('password')),
-      'role' => 'admin',
+      'role' => $request->input('role'),
       'email_verified_at' => \Carbon\Carbon::now(),
     ]);
 
@@ -97,7 +97,8 @@ class UserController extends Controller
 
     $user->update([
       'firstname' => $request->input('firstname'),
-      'name' => $request->input('name')
+      'name' => $request->input('name'),
+      'role' => $request->input('role'),
     ]);
 
     return response()->json($user);

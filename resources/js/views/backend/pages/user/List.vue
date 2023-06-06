@@ -26,13 +26,14 @@
 
     <list class="mt-8x" v-if="hasForm">
       <list-header class="is-narrow">
-        <list-item :class="'span-2 start-3 list-item-header line-after'">Vorname</list-item>
+        <list-item :class="'span-2 start-2 list-item-header line-after'">Vorname</list-item>
         <list-item :class="'span-2 list-item-header line-after'">Nachname</list-item>
         <list-item :class="'span-2 list-item-header line-after'">E-Mail</list-item>
-        <list-item :class="'span-2 list-item-header'">Passwort</list-item>
+        <list-item :class="'span-2 list-item-header line-after'">Passwort</list-item>
+        <list-item :class="'span-2 list-item-header'">Admin</list-item>
       </list-header>
       <list-row class="no-hover is-narrow mb-5x">
-        <list-item class="span-2 start-3 list-item is-first line-after">
+        <list-item class="span-2 start-2 list-item is-first line-after">
           <input type="text" v-model="user.firstname" required @blur="validate($event, user)" :class="[errors.firstname ? 'is-invalid' : '', '']">
         </list-item>
         <list-item class="span-2 list-item is-first line-after">
@@ -41,8 +42,15 @@
         <list-item class="span-2 list-item is-first line-after">
           <input type="email" v-model="user.email" required @blur="validate($event, user)" :class="[errors.email ? 'is-invalid' : '', '']">
         </list-item>
-        <list-item class="span-2 list-item is-first">
+        <list-item class="span-2 list-item is-first line-after">
           <input type="password" v-model="user.password" required @blur="validate($event, user)" :class="[errors.password ? 'is-invalid' : '', '']">
+        </list-item>
+        <list-item class="span-2 list-item is-first">
+          <div class="mt-1x">
+            <a href="" @click.prevent="toggleRole()">
+              <icon-radio :active="user.role == 'admin' ? true : false" class="icon" />
+            </a> 
+          </div>
         </list-item>
       </list-row>
     </list>
@@ -207,6 +215,7 @@ export default {
         name: null,
         email: null,
         password: null,
+        role: 'editor'
       },
 
       errors: {
@@ -304,6 +313,10 @@ export default {
       this.isUpdate = true;
       this.isValid = true;
       this.showForm();
+    },
+
+    toggleRole() {
+      this.user.role = this.user.role == 'admin' ? 'editor' : 'admin';
     },
 
     destroy() {
