@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Tenant;
 use App\Models\CollectionItem;
 use App\Http\Requests\ApartmentStoreRequest;
+use App\Http\Requests\ApartmentUpdateRequest;
 use Illuminate\Http\Request;
 
 class ApartmentController extends Controller
@@ -139,19 +140,23 @@ class ApartmentController extends Controller
    * Update a apartment
    *
    * @param Apartment $apartment
-   * @param  \Illuminate\Http\Request $request
+   * @param  ApartmentUpdateRequest $request
    * @return \Illuminate\Http\Response
    */
-  public function update(Apartment $apartment, Request $request)
+  public function update(Apartment $apartment, ApartmentUpdateRequest $request)
   {
     $apartment = Apartment::with('tenant')->findOrFail($apartment->id);
 
     // State
     $apartment->state_id = $request->input('state_id');
-    $apartment->save();
 
     // Date available
     $apartment->available_at = $request->input('available_at') ? $request->input('available_at') : NULL;
+
+    // Rent gross, net, additional costs
+    $apartment->rent_gross = $request->input('rent_gross');
+    $apartment->rent_net = $request->input('rent_net');
+    $apartment->additional_cost = $request->input('additional_cost');
     $apartment->save();
 
     // If tenant.uuid is set, update tenant

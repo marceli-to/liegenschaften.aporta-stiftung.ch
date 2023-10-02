@@ -56,16 +56,22 @@
                       <div class="span-2">{{ apartment.description }}</div>
                     </apartment-row>
                     <apartment-row>
-                      <div class="span-2"><label>Miete Netto</label></div>
-                      <div class="span-2">{{ apartment.rent_net }}</div>
+                      <apartment-label :cls="'span-2'">Miete Netto *</apartment-label>
+                      <apartment-input :cls="'span-2'">
+                        <input type="text" v-model="apartment.rent_net" @blur="validate($event, apartment)">
+                      </apartment-input>
                     </apartment-row>
                     <apartment-row>
-                      <div class="span-2"><label>Nebenkosten</label></div>
-                      <div class="span-2">{{ apartment.additional_cost }}</div>
+                      <apartment-label :cls="'span-2'">Nebenkosten *</apartment-label>
+                      <apartment-input :cls="'span-2'">
+                        <input type="text" v-model="apartment.additional_cost" @blur="validate($event, apartment)">
+                      </apartment-input>
                     </apartment-row>
                     <apartment-row>
-                      <div class="span-2"><label>Miete Brutto</label></div>
-                      <div class="span-2">{{ apartment.rent_gross }}</div>
+                      <apartment-label :cls="'span-2'">Miete Brutto *</apartment-label>
+                      <apartment-input :cls="'span-2'">
+                        <input type="text" v-model="apartment.rent_gross" @blur="validate($event, apartment)">
+                      </apartment-input>
                     </apartment-row>
                     <apartment-row>
                       <div class="span-2"><label>Kellerabteil</label></div>
@@ -150,7 +156,6 @@
               </div>
             </apartment-row>
 
-
             <h2 class="mt-12x">Informationen</h2>
             <apartment-row>
               <apartment-label :cls="'span-1'">Status</apartment-label>
@@ -232,6 +237,9 @@ export default {
           name: null,
           firstname: null
         },
+        rent_net: null,
+        additional_cost: null,
+        rent_gross: null,
         state_id: 1,
       },
 
@@ -274,6 +282,9 @@ export default {
     submit() {
       NProgress.start();
       this.isFetched = true;
+      if (this.hasErrors) {
+        return;
+      }
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.apartment).then(response => {
         this.$router.push({ name: 'apartment-show', params: {uuid: this.apartment.uuid} });
         this.isFetched = false;
