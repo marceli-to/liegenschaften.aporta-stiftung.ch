@@ -9,6 +9,9 @@ mix.webpackConfig({
   },
 });
 
+// Enable Vue single-file components
+mix.vue({ version: 2 });
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -27,4 +30,3 @@ mix.js('resources/js/validation.js', 'public/assets/js/validation.js');
 
 // Frontend
 mix.js('resources/js/collection.js', 'public/assets/js/collection.js').version();
-

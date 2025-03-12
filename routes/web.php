@@ -23,7 +23,7 @@ Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [Collectio
 Route::get('/angebot/{collection:uuid}/{hash?}', [CollectionController::class, 'show'])->name('offer.list');
 
 if (
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch.local' || 
+  \App::domain() == 'liegenschaften.aporta-stiftung.ch.test' || 
   \App::domain() == 'liegenschaften.aporta-stiftung.ch.marceli.to' || 
   \App::domain() == 'liegenschaften.aporta-stiftung.ch' ||
   \App::domain() == 'liegenschaften.aporta-stiftung.ch.wbg.ch'
