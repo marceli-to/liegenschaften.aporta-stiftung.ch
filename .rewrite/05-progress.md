@@ -207,8 +207,9 @@ Isometrie and KORO), then QA and deploy.
 - `npm ci && npm run build` reproduces `public/build` (hashes identical on
   rebuild). Dev: `npm run dev` serves HTTPS on the `.test` host (Herd
   cert), both domains work.
-- QA scripts for the next steps: `/tmp/aporta/qa/` (gone after a reboot;
-  see Verified for what they do). Fixtures: `php fixtures.php up|down`.
+- QA scripts: `.rewrite/tools/qa/` (README there; screenshots, styles,
+  65 interaction checks, fixtures). The Vue 2 baseline screenshots were in
+  `/tmp`; for step 6 compare against a fresh run on `cf537d9` instead.
 
 ## Next
 
