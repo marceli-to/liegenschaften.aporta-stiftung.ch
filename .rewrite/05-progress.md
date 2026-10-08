@@ -196,11 +196,30 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     - The apartment menu's edit link passed `{ id }` to a route that needs
       `uuid` (worked by reusing the current route's param).
 
+- 2026-10-08: **frontend step 6, Isometrie data-driven.**
+  - The Eglistrasse SVG moved out of the component into
+    `resources/isometrie/eglistrasse/eglistrasse.svg`, its `cls-*` styles
+    (Illustrator's, estate specific) as a `<style>` inside the SVG. KORO's
+    `ko.svg`/`ro.svg` sit next to it in `koro/`.
+  - `<Isometrie :estate :active>`: loads every `resources/isometrie/{estate}/*.svg`
+    (`import.meta.glob` with `?raw`, lazy, sorted by name) into one wrapper;
+    `active` is watched, so it highlights on change, inside the component only.
+  - The estate key: admin `#app[data-estate]` = `CurrentEstate::key()`
+    (the switcher will change it there), offer page `data-estate-key` = the
+    offer's estate; both `provide('estateKey')`.
+  - Both lists' hover highlight sets `:active` instead of a global
+    `document.querySelector`.
+  - Build: the SVGs are their own chunks (Eglistrasse 112 KB, KORO 155 +
+    174 KB, only fetched for KORO); the shared chunk 262 → 165 KB, the
+    component's CSS chunk is gone.
+  - KORO's SVGs use `iso-*` classes and need styles of their own (the
+    script's `PREVIEW_CSS` is a start); left for KORO, as is how ko/ro sit
+    side by side and how apartment numbers map to their `data-id`s.
+
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–6 done.** **Frontend steps 1–5 done** (Vite + Vue 3,
-pushed). Next: **frontend step 6, Isometrie data-driven** (`03` →
-Isometrie and KORO), then QA and deploy.
+**Backend steps 1–6 done.** **Frontend steps 1–6 done** (Vite + Vue 3,
+Isometrie data-driven, pushed). Next: QA and deploy.
 
 - `php artisan test` (69) stays green; it runs without a Vite build
   (`withoutVite()` in `TestCase`).
@@ -208,19 +227,16 @@ Isometrie and KORO), then QA and deploy.
   rebuild). Dev: `npm run dev` serves HTTPS on the `.test` host (Herd
   cert), both domains work.
 - QA scripts: `.rewrite/tools/qa/` (README there; screenshots, styles,
-  65 interaction checks, fixtures). The Vue 2 baseline screenshots were in
-  `/tmp`; for step 6 compare against a fresh run on `cf537d9` instead.
+  65 interaction checks, isometry checks, fixtures).
 
 ## Next
 
-1. Frontend step 6: Isometrie data-driven (`03`). Re-run the screenshot
-   comparison afterwards (the isometry is on 5 views).
-2. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
+1. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
-3. QA on both domains (staging or production copy of the code with the
+2. QA on both domains (staging or production copy of the code with the
    local DB): login, every admin page, send a collection (mail queue →
    mail), offer link, reply, both Excel exports.
-4. Deploy (`02` → `.env` changes, both files). The server needs no Node:
+3. Deploy (`02` → `.env` changes, both files). The server needs no Node:
    `public/build` is committed. Before: `select role, count(*) from users`
    on production; only `admin` and `editor` get into the admin now
    (locally 7 admins, 1 editor).
@@ -304,6 +320,14 @@ Isometrie and KORO), then QA and deploy.
     save, offer SPA (hash marks read, hover highlight, pagination, reply
     validation and reply, mobile). Local DB checked back to its counts.
   - Vite dev server: admin and offer page load on the `.test` hosts.
+
+- Frontend step 6, against screenshots of `ffa3eac` taken first: all 14
+  (10 admin views, offer list/detail at 1440 and 390 px) **pixel-identical**,
+  text identical, no console errors. `interact.js`: 65/65 (DB dumped and
+  restored). New `isometry.js`: hover on both lists highlights exactly one
+  apartment, moves with the pointer, clears on leave; with
+  `data-estate="koro"` the admin list renders `ko` and `ro`. Vite dev
+  server: admin and offer page with the isometry, no errors. 69 tests green.
 
 ## Left over / follow-ups
 

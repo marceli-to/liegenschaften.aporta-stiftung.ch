@@ -1,31 +1,47 @@
 {
-  "_LinkExternal-COOPGO2l.js": {
-    "file": "assets/LinkExternal-COOPGO2l.js",
+  "_LinkExternal-COeqhj3W.js": {
+    "file": "assets/LinkExternal-COeqhj3W.js",
     "name": "LinkExternal",
-    "css": [
-      "assets/LinkExternal-Cm10OFR8.css"
+    "dynamicImports": [
+      "resources/isometrie/eglistrasse/eglistrasse.svg?raw",
+      "resources/isometrie/koro/ko.svg?raw",
+      "resources/isometrie/koro/ro.svg?raw"
     ]
   },
-  "_LinkExternal-Cm10OFR8.css": {
-    "file": "assets/LinkExternal-Cm10OFR8.css",
-    "src": "_LinkExternal-Cm10OFR8.css"
+  "resources/isometrie/eglistrasse/eglistrasse.svg?raw": {
+    "file": "assets/eglistrasse-os7GQ3EX.js",
+    "name": "eglistrasse",
+    "src": "resources/isometrie/eglistrasse/eglistrasse.svg?raw",
+    "isDynamicEntry": true
+  },
+  "resources/isometrie/koro/ko.svg?raw": {
+    "file": "assets/ko-CXS0XGBL.js",
+    "name": "ko",
+    "src": "resources/isometrie/koro/ko.svg?raw",
+    "isDynamicEntry": true
+  },
+  "resources/isometrie/koro/ro.svg?raw": {
+    "file": "assets/ro-jh_jgcvO.js",
+    "name": "ro",
+    "src": "resources/isometrie/koro/ro.svg?raw",
+    "isDynamicEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-nf1WbTca.js",
+    "file": "assets/app--85RNaHm.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-COOPGO2l.js"
+      "_LinkExternal-COeqhj3W.js"
     ]
   },
   "resources/js/collection.js": {
-    "file": "assets/collection-CAy6Kfkk.js",
+    "file": "assets/collection-B2pXsE94.js",
     "name": "collection",
     "src": "resources/js/collection.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-COOPGO2l.js"
+      "_LinkExternal-COeqhj3W.js"
     ]
   },
   "resources/js/validation.js": {

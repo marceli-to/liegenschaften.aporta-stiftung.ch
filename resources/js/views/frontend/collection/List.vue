@@ -9,7 +9,7 @@
           <p>Hier finden Sie sämtliche Informationen zu unserem Wohnungsangebot. Unter An-/Abmeldung haben Sie die Möglichkeit Ihre Rückmeldung direkt an uns zu richten. <strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung. Die Vermietung erfolgt <strong>ohne</strong> Wohnungsbesichtigung.</p>
         </div>
         <div class="xs:hide span-5 collection__iso">
-          <isometrie />
+          <isometrie :estate="estateKey" :active="hovered" />
         </div>
         <div class="xs:hide span-3 flex justify-end">
           <a :href="estate.maps" target="_blank" title="Auf Google Maps anzeigen" class="link-maps">
@@ -79,8 +79,8 @@
           v-for="(d, index) in sortedData" 
           class="list-row" 
           :key="d.uuid" 
-          @mouseover="show(d.number)" 
-          @mouseleave="hide(d.number)">
+          @mouseover="hovered = d.number" 
+          @mouseleave="hovered = null">
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-2 list-item line-after']">
             <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
               {{ d.street }}
@@ -164,6 +164,10 @@ import IconLinkExternal from '@/components/ui/icons/LinkExternal.vue';
 
 const route = useRoute();
 const estateName = inject('estate');
+const estateKey = inject('estateKey');
+
+// Highlighted in the isometry
+const hovered = ref(null);
 
 const uuid = ref(null);
 const data = ref([]);
@@ -186,14 +190,5 @@ function fetch() {
     isFetched.value = true;
     NProgress.done();
   });
-}
-
-// Highlight the hovered apartment in the isometry
-function show(number) {
-  document.querySelector(`[data-id="${number}"]`)?.classList.add('is-visible');
-}
-
-function hide(number) {
-  document.querySelector(`[data-id="${number}"]`)?.classList.remove('is-visible');
 }
 </script>

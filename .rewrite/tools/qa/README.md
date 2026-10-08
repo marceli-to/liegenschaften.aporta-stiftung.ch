@@ -20,3 +20,5 @@ Against the Herd hosts (`*.test`, `ignoreHTTPSErrors`), local DB.
   `mysqldump -h127.0.0.1 -uroot liegenschaften_aporta > db-before.sql`
   first, `mysql … < db-before.sql` after, then `fixtures.php down`.
 - `dev.js` — pages through the Vite dev server (`npx vite` running).
+- `isometry.js` — hover highlight on the admin and offer lists; swaps
+  `data-estate` to `koro` to check an estate with two SVGs.

@@ -72,7 +72,7 @@
                   </apartment-row>
                 </div>
                 <div class="span-6">
-                  <isometrie :active="apartment.number" />
+                  <isometrie :estate="estateKey" :active="apartment.number" />
                 </div>
               </div>
             </div>
@@ -191,7 +191,7 @@
 </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NProgress from 'nprogress';
 import http from '@/lib/http';
@@ -211,6 +211,7 @@ import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 
 const route = useRoute();
+const estateKey = inject('estateKey');
 
 const apartment = ref({ number: null });
 const collectionItemUuid = ref(null);

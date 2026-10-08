@@ -89,7 +89,7 @@
                     </apartment-row>
                   </div>
                   <div class="span-6">
-                    <isometrie :active="apartment.number" />
+                    <isometrie :estate="estateKey" :active="apartment.number" />
                   </div>
                 </div>
               </div>
@@ -190,7 +190,7 @@
 </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import NProgress from 'nprogress';
 import http from '@/lib/http';
@@ -207,6 +207,7 @@ import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
 const route = useRoute();
 const router = useRouter();
+const estateKey = inject('estateKey');
 
 const apartment = ref({
   tenant: {

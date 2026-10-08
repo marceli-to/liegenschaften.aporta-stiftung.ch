@@ -73,7 +73,7 @@
     </nav>
   </site-header>
   <site-main v-if="isFetched">
-    <isometrie />
+    <isometrie :estate="estateKey" :active="hovered" />
     <div class="my-6x pr-6x w-full align-right">
       <a :href="`/export/objekte?v=${randomString()}`" target="_blank" class="link-export">
         Export Excel
@@ -152,8 +152,8 @@
         v-for="(apartment, index) in sortedData" 
         :class="[apartment.collection_items.length > 0 ? 'has-collections' : '', 'list-row']" 
         :key="apartment.uuid" 
-        @mouseover="show(apartment.number)" 
-        @mouseleave="hide(apartment.number)">
+        @mouseover="hovered = apartment.number" 
+        @mouseleave="hovered = null">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
           <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
             <icon-checkbox class="icon icon-light" />
@@ -221,7 +221,7 @@
 </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import NProgress from 'nprogress';
 import http from '@/lib/http';
 import { store } from '@/store';
@@ -241,6 +241,11 @@ import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
+
+const estateKey = inject('estateKey');
+
+// Highlighted in the isometry
+const hovered = ref(null);
 
 const data = ref([]);
 
@@ -337,14 +342,5 @@ function fetchFiltered() {
     isFetched.value = true;
     NProgress.done();
   });
-}
-
-// Highlight the hovered apartment in the isometry
-function show(number) {
-  document.querySelector(`[data-id="${number}"]`)?.classList.add('is-visible');
-}
-
-function hide(number) {
-  document.querySelector(`[data-id="${number}"]`)?.classList.remove('is-visible');
 }
 </script>

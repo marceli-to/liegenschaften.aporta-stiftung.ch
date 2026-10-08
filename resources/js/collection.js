@@ -19,7 +19,7 @@ const router = createRouter({
 // The estate comes from the page (data-estate), not from the API
 const el = document.getElementById('collection');
 if (el) {
-  createApp(Collection, { estate: el.dataset.estate })
+  createApp(Collection, { estate: el.dataset.estate, estateKey: el.dataset.estateKey })
     .use(router)
     .mount(el);
 }
