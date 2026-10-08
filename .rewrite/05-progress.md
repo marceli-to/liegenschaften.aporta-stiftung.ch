@@ -365,5 +365,5 @@ For KORO (not this rework):
 
 - `mails/offer.blade.php` says «Neubau «Eglistrasse»» in the text; make it
   the estate's description.
-- Not scoped by estate today: `TenantExport`, collection/tenant lists in the
-  admin. Fine with one estate; scope them when the admin switcher comes.
+- ~~Not scoped by estate today: `TenantExport`, collection/tenant lists in the
+  admin.~~ Done in KORO step 3 (`06-koro.md`).

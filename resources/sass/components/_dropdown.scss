@@ -24,7 +24,8 @@
     font-weight: 400 !important;
     text-decoration: none !important;
 
-    &:hover {
+    &:hover,
+    &.is-active {
       background-color: $color-secondary;
     }
   }
@@ -40,4 +41,8 @@
     margin-top: 2px;
     margin-left: 8px;
   }
+}
+// Estate selector, left of the user icon
+.estate-select {
+  margin-right: $space-4x;
 }

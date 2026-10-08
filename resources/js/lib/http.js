@@ -36,9 +36,12 @@ export function handleErrors(router) {
         notify({ type: 'error', text: '404 Nicht gefunden' });
         router.push({ name: 'not-found' });
         break;
-      case 422:
-        notify({ type: 'error', text: 'Bitte alle mit * markierten Felder prüfen!' });
+      case 422: {
+        // Picked apartments of another estate (switched in another tab) have no field to mark
+        const items = Object.keys(response.data?.errors ?? {}).find(key => key.startsWith('items.'));
+        notify({ type: 'error', text: items ? response.data.errors[items][0] : 'Bitte alle mit * markierten Felder prüfen!' });
         break;
+      }
       default:
         notify({ type: 'error', text: `${response?.status ?? 'Netzwerkfehler'} ${response?.data?.message ?? ''}`.trim() });
     }

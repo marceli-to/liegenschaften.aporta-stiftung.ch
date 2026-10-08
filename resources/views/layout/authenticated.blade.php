@@ -18,6 +18,6 @@
 </head>
 <body>
 @php($estate = app(\App\Support\CurrentEstate::class))
-<div id="app" data-estate="{{ $estate->key() }}" data-estate-name="{{ $estate->get()->description }}" data-exteriors="{{ json_encode($estate->setting('exteriors')) }}"></div>
+<div id="app" data-estate="{{ $estate->key() }}" data-estate-name="{{ $estate->get()->description }}" data-exteriors="{{ json_encode($estate->setting('exteriors')) }}" data-estates="{{ $estate->all()->map(fn($e) => ['key' => $e->domain, 'name' => $e->description])->toJson() }}"></div>
 </body>
 </html>

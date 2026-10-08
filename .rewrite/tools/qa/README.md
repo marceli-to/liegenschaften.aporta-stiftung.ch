@@ -25,3 +25,7 @@ Against the Herd hosts (`*.test`, `ignoreHTTPSErrors`), local DB.
 - `dev.js` — pages through the Vite dev server (`npx vite` running).
 - `isometry.js` — hover highlight on the admin and offer lists; swaps
   `data-estate` to `koro` to check an estate with two SVGs.
+- `estate.js <outdir>` — the admin's estate selector: switch to KORO (title,
+  list, Loggia column, offers and tenants scoped), switch back.
+- `tabs.js` — apartments picked on Eglistrasse, KORO chosen in a second tab,
+  offer sent: the toast, no offer. Destructive, like `interact.js`.

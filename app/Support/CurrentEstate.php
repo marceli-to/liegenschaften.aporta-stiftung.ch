@@ -5,9 +5,8 @@ use App\Models\Estate;
 /**
  * The estate the current request works on.
  *
- * Today that is the estate configured for the domain (estates.current).
- * Once the admin manages several estates, key() is the one place that
- * reads the chosen estate from the session instead.
+ * On the admin domain the estate chosen in the header (session), else the
+ * estate configured for the domain (estates.current).
  */
 
 class CurrentEstate
@@ -21,7 +20,28 @@ class CurrentEstate
    */
   public function key()
   {
-    return config('estates.current');
+    return $this->chosen() ?? config('estates.current');
+  }
+
+  /**
+   * Choose the estate the admin works on (session)
+   *
+   * @param string $key
+   * @return void
+   */
+  public function set($key)
+  {
+    request()->session()->put('estate', $key);
+  }
+
+  /**
+   * The estates the admin can choose from
+   *
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+  public function all()
+  {
+    return Estate::whereIn('domain', array_keys(config('estates.estates')))->where('publish', 1)->orderBy('id')->get();
   }
 
   /**
@@ -31,7 +51,13 @@ class CurrentEstate
    */
   public function get()
   {
-    return $this->estate ??= Estate::where('domain', $this->key())->firstOrFail();
+    // Cached per key: the choice can change within the instance's lifetime
+    $key = $this->key();
+    if ($this->estate?->domain !== $key)
+    {
+      $this->estate = Estate::where('domain', $key)->firstOrFail();
+    }
+    return $this->estate;
   }
 
   /**
@@ -64,5 +90,22 @@ class CurrentEstate
   public function url($key = null)
   {
     return config('estates.estates.' . ($key ?? $this->key()) . '.url');
+  }
+
+  /**
+   * Key chosen in the admin, if any (and still configured)
+   *
+   * @return string|null
+   */
+  protected function chosen()
+  {
+    $request = request();
+    if (!$request->hasSession() || $request->getHost() != config('client.admin_domain'))
+    {
+      return null;
+    }
+
+    $key = $request->session()->get('estate');
+    return is_string($key) && config()->has('estates.estates.' . $key) ? $key : null;
   }
 }

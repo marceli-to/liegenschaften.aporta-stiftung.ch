@@ -10,6 +10,7 @@
     <server name="APP_NAME" value="à Porta Stiftung"/>
     <server name="APP_URL" value="https://liegenschaften.aporta-stiftung.ch"/>
     <server name="ADMIN_DOMAIN" value="liegenschaften.aporta-stiftung.ch"/>
+    <server name="SANCTUM_STATEFUL_DOMAINS" value="liegenschaften.aporta-stiftung.ch"/>
     <server name="ESTATE_DOMAIN_KEY" value="eglistrasse"/>
     <server name="ESTATE_EGLISTRASSE_URL" value="https://eglistrasse.aporta-stiftung.ch"/>
     <server name="APORTA_REPLY_TO" value="vermietung@example.invalid"/>

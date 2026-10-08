@@ -4,20 +4,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Apartment;
 use App\Models\Tenant;
+use App\Support\CurrentEstate;
 use Illuminate\Http\Request;
 
 class TenantController extends Controller
 {
   /**
-   * Get a list of tenants
+   * Get a list of the current estate's tenants
    * 
+   * @param CurrentEstate $estate
+   * @param string|null $searchTerm
    * @return \Illuminate\Http\Response
    */
-  public function get($searchTerm = NULL)
+  public function get(CurrentEstate $estate, $searchTerm = NULL)
   { 
     if ($searchTerm)
     {
-      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->where(function($query) use ($searchTerm) {
+      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereRelation('apartment', 'estate_id', $estate->id())->where(function($query) use ($searchTerm) {
         $query->where('name', 'LIKE', "%{$searchTerm}%")
           ->orWhere('firstname', 'LIKE', "%{$searchTerm}%")
           ->orWhere('email', 'LIKE', "%{$searchTerm}%")
@@ -29,7 +32,7 @@ class TenantController extends Controller
     }
     else
     {
-      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->orderBy('name')->get();
+      $data = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereRelation('apartment', 'estate_id', $estate->id())->orderBy('name')->get();
     }
     $data = $data->sortByDesc('apartment.floor.order')->sortBy('apartment.building.order');
     return new DataCollection($data);

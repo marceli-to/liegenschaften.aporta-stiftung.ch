@@ -27,6 +27,7 @@ class ExportTest extends TestCase
 
         $koro = $this->estate(['domain' => 'kornhaus-roetelstrasse', 'description' => 'Kornhaus-/Rötelstrasse']);
         $this->apartment($this->building($koro, ['street' => 'Kornhausstrasse 48']), $floor, $room, ['number' => 'H1_101', 'size_patio' => '6.4', 'size_loggia' => '6.3', 'size_balcony' => null]);
+        $this->apartment($this->building($koro, ['street' => 'Rötelstrasse 1']), $floor, $room, ['number' => 'H7_101', 'order' => 2, 'size_balcony' => null, 'tenant_id' => $this->tenant(['firstname' => 'Kora', 'email' => 'kora@example.invalid'])->id, 'state_id' => State::RENTED]);
 
         $this->actingAs($this->user());
     }
@@ -64,16 +65,16 @@ class ExportTest extends TestCase
         $this->assertEquals(['Eglistrasse 1', '1. OG links', '1.01', 1700, '3.5', 85.5, '–', '–', 12, 'Vermietet', 'Erika Muster'], $rows[2]);
     }
 
-    public function testApartmentsOfAnEstateWithLoggias()
+    public function testApartmentsOfTheChosenEstateWithLoggias()
     {
-        config(['estates.current' => 'kornhaus-roetelstrasse']);
+        $this->withSession(['estate' => 'kornhaus-roetelstrasse']);
 
         [$rows, $bold] = $this->sheet('/export/objekte', 'objekte', 'kornhaus-roetelstrasse');
 
         $this->assertTrue($bold);
         $this->assertSame(['Adresse', 'Lage', 'Nummer', 'Mietzins', 'Zimmer', 'M2', 'Balkon', 'Loggia', 'Sitzplatz', 'Status', 'Mieter'], $rows[0]);
-        $this->assertCount(2, $rows);
-        $this->assertEquals(['Kornhausstrasse 48', '1. OG links', 'H1_101', 1700, '3.5', 85.5, '–', 6.3, 6.4, 'Frei', ' '], $rows[1]);
+        $this->assertCount(3, $rows);
+        $this->assertEquals(['Kornhausstrasse 48', '1. OG links', 'H1_101', 1700, '3.5', 85.5, '–', 6.3, 6.4, 'Frei', ' '], $rows[2]);
     }
 
     public function testTenants()
@@ -84,6 +85,18 @@ class ExportTest extends TestCase
         $this->assertSame([
             ['Vorname', 'Name', 'Telefon', 'E-Mail', 'Adresse', 'Wohnung'],
             ['Erika', 'Muster', '044 000 00 00', 'erika@example.invalid', 'Eglistrasse 1', '1.01 / 1. OG links'],
+        ], $rows);
+    }
+
+    public function testTenantsOfTheChosenEstate()
+    {
+        $this->withSession(['estate' => 'kornhaus-roetelstrasse']);
+
+        [$rows] = $this->sheet('/export/mieter', 'mieter', 'kornhaus-roetelstrasse');
+
+        $this->assertSame([
+            ['Vorname', 'Name', 'Telefon', 'E-Mail', 'Adresse', 'Wohnung'],
+            ['Kora', 'Muster', '044 000 00 00', 'kora@example.invalid', 'Rötelstrasse 1', 'H7_101 / 1. OG links'],
         ], $rows);
     }
 }

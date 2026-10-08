@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\CollectionItemController;
 use App\Http\Controllers\Api\UserCollectionController;
 use App\Http\Controllers\Api\TenantController;
+use App\Http\Controllers\Api\EstateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('user', [UserController::class, 'create']);
     Route::delete('user/{user}', [UserController::class, 'destroy']);
   });
+
+  // The estate the admin works on
+  Route::put('estate', [EstateController::class, 'update']);
 
   // Apartments
   Route::post('apartments/filter', [ApartmentController::class, 'filter']);

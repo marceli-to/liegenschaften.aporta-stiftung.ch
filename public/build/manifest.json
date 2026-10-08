@@ -1,6 +1,6 @@
 {
-  "_LinkExternal-COeqhj3W.js": {
-    "file": "assets/LinkExternal-COeqhj3W.js",
+  "_LinkExternal-CJ7hipQV.js": {
+    "file": "assets/LinkExternal-CJ7hipQV.js",
     "name": "LinkExternal",
     "dynamicImports": [
       "resources/isometrie/eglistrasse/eglistrasse.svg?raw",
@@ -27,21 +27,21 @@
     "isDynamicEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BwEpkRPd.js",
+    "file": "assets/app-DEoP0CjP.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-COeqhj3W.js"
+      "_LinkExternal-CJ7hipQV.js"
     ]
   },
   "resources/js/collection.js": {
-    "file": "assets/collection-C_GJJZcK.js",
+    "file": "assets/collection-WMZR0pFZ.js",
     "name": "collection",
     "src": "resources/js/collection.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-COeqhj3W.js"
+      "_LinkExternal-CJ7hipQV.js"
     ]
   },
   "resources/js/validation.js": {
@@ -51,7 +51,7 @@
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-CmOLaFJh.css",
+    "file": "assets/app-DRFimRAh.css",
     "name": "app",
     "names": [
       "app.css"

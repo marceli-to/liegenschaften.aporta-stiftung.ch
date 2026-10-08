@@ -97,6 +97,32 @@ Ausbaubeschrieb (`.docx`).
   Rooms and m² cross-checked against the plans' titles (not their file
   names, which are partly out of date).
 
+- 2026-10-08: **step 3, estate selector.**
+  - `CurrentEstate::key()`: on the admin domain the session's `estate` (if
+    still in `config/estates.php`), else `estates.current`; `set()`, `all()`
+    (configured and published). `get()` caches per key.
+  - `PUT api/estate {key}` (`EstateController`, any logged-in user); the
+    admin gets the estates as `data-estates`. Header: a chevron dropdown
+    left of the user icon (current one highlighted), the title is the
+    estate's name. Switching reloads on the apartment list, so the filter,
+    the picked apartments and the page start fresh.
+  - Scoped to the chosen estate: offers (`collections`), collection items,
+    tenants (list and search, via apartment), both exports (apartments
+    already were). New offers get the chosen estate, an edited offer keeps
+    its own; `items.*` must be apartments of that estate (two tabs: picked on
+    Eglistrasse, switched in the other tab → 422, the toast says to reload).
+  - `phpunit.xml` pins `SANCTUM_STATEFUL_DOMAINS` (the local `.env` set the
+    `.test` host, so API tests never had a session).
+  - Tests: 83 (+11: `EstateApiTest`, the KORO exports via the session).
+- Verified: Eglistrasse screenshots (14) against ones taken first: offer
+  pages pixel-identical; admin views differ only by the chevron (50 × 20 px
+  left of the user icon) and the hidden dropdown's two names in the text.
+  `interact.js` 65/65 (DB dumped and restored). `estate.js`: switch to KORO
+  and back, title, 96 KORO apartments with the Loggia column, no offers and
+  tenants on KORO, no console errors. `tabs.js`: toast, no offer.
+  Local data: reset `H1_101` (rent 1234 and reserved, left from step 2's
+  re-import check) to the imported values.
+
 ## Left over
 
 - **H7_502:** sheet 124.2 m², its plans 113.1 (upper level) / 111.9 (lower).
@@ -106,12 +132,10 @@ Ausbaubeschrieb (`.docx`).
 
 - Offer page list: the «Bezug» header sorts by `size_balcony` (pre-existing).
 
-## Where we are (paused 2026-10-08)
+## Where we are (2026-10-08)
 
-Steps 1 and 2 done and pushed; KORO is imported in the local DB. **Next: step 3,
-the estate selector** (`CurrentEstate::key()` from the session on the admin
-domain, header selector next to the user icon, title = `data-estate-name`;
-scope tenants via apartment, offers, collection items, both exports; clear
-picked apartments on switch). Then step 4: rename
-`resources/isometrie/koro/` → `kornhaus-roetelstrasse/`, `iso-*` styles,
-`.env` for the KORO domain, offer mail text by estate.
+Steps 1–3 done and pushed; KORO is imported in the local DB and selectable
+in the admin. **Next: step 4**: rename `resources/isometrie/koro/` →
+`kornhaus-roetelstrasse/` (KORO's admin list has no isometry until then),
+`iso-*` styles and the ko/ro layout, `.env` for the KORO domain, offer mail
+text by estate.

@@ -1,6 +1,7 @@
 <?php
 namespace App\Exports;
 use App\Models\Tenant;
+use App\Support\CurrentEstate;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -15,7 +16,7 @@ class TenantExport implements FromCollection, WithHeadings, WithEvents, ShouldAu
    */
   public function collection(): Collection
   {
-    $tenants = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->get();
+    $tenants = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereRelation('apartment', 'estate_id', app(CurrentEstate::class)->id())->get();
     
     $data = [];
     foreach($tenants as $tenant)

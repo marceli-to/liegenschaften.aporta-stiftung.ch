@@ -13,13 +13,14 @@ use Illuminate\Http\Request;
 class CollectionController extends Controller
 {
   /**
-   * Get a list of collections
+   * Get a list of collections of the current estate
    * 
+   * @param CurrentEstate $estate
    * @return \Illuminate\Http\Response
    */
-  public function get()
+  public function get(CurrentEstate $estate)
   { 
-    return new DataCollection(Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->get());
+    return new DataCollection(Collection::with('estate', 'items.apartment.room', 'items.apartment.floor', 'items.apartment.building')->where('estate_id', $estate->id())->get());
   }
 
   /**
@@ -44,7 +45,7 @@ class CollectionController extends Controller
   {
     foreach($request->input('candidates') as $candidate)
     {
-      $collection = $this->create($candidate, $request->input('items'), $request->input('remarks'));
+      $collection = $this->create($request->estateId(), $candidate, $request->input('items'), $request->input('remarks'));
     }
  
     return response()->json(['collectionId' => $collection->id]);
@@ -64,13 +65,13 @@ class CollectionController extends Controller
 
     foreach($request->input('candidates') as $candidate)
     {
-      $collection = $this->create($candidate, $request->input('items'), $request->input('remarks'));
+      $collection = $this->create($request->estateId(), $candidate, $request->input('items'), $request->input('remarks'));
     }
 
     return response()->json(['collectionId' => $collection->id]);
   }
 
-  protected function create($candidate, $items, $remarks = null)
+  protected function create($estateId, $candidate, $items, $remarks = null)
   {
     $collection = Collection::create([
       'uuid' => \Str::uuid(),
@@ -80,7 +81,7 @@ class CollectionController extends Controller
       'email' => $candidate['email'],
       'remarks' => $remarks,
       'valid_until' => \Carbon\Carbon::now()->addDays(5),
-      'estate_id' => app(CurrentEstate::class)->id(),
+      'estate_id' => $estateId,
     ]);
     $collection->save();
 

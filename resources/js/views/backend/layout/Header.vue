@@ -9,7 +9,7 @@
           </li>
           <li class="span-2 page-title relative">
             <a href="javascript:;" class="dropdown-button" @mouseover="showDropdown()">
-              Eglistrasse
+              {{ estateName }}
               <icon-chevron-down />
             </a>
             <div :class="[isDropdownOpen ? 'is-open' : '', 'dropdown']" @mouseleave="hideDropdown()">
@@ -63,6 +63,21 @@
             </div>
           </li>
           <li class="span-2 flex justify-center">
+            <div class="relative estate-select" v-if="estates.length > 1" @mouseleave="isEstatesOpen = false">
+              <a href="javascript:;" class="dropdown-button" title="Liegenschaft wählen" @mouseover="isEstatesOpen = true">
+                <icon-chevron-down />
+              </a>
+              <div :class="[isEstatesOpen ? 'is-open' : '', 'dropdown']">
+                <a
+                  href=""
+                  v-for="estate in estates"
+                  :key="estate.key"
+                  :class="{ 'is-active': estate.key == estateKey }"
+                  @click.prevent="switchEstate(estate.key)">
+                  {{ estate.name }}
+                </a>
+              </div>
+            </div>
             <router-link 
               :to="{name: store.user.admin ? 'users' : 'user-profile'}"
               class="icon">
@@ -92,8 +107,9 @@
 </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, inject } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import http from '@/lib/http';
 import { store } from '@/store';
 import { padStart } from '@/lib/utils';
 import IconLogo from "@/components/ui/icons/Logo.vue";
@@ -115,7 +131,25 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
 const isDropdownOpen = ref(false);
+const isEstatesOpen = ref(false);
+
+const estateKey = inject('estateKey');
+const estateName = inject('estateName');
+const estates = inject('estates');
+
+// Reload on the apartment list: the page, the filter and the picked
+// apartments all belong to the estate
+function switchEstate(key) {
+  isEstatesOpen.value = false;
+  if (key == estateKey) {
+    return;
+  }
+  http.put('/api/estate', { key }).then(() => {
+    window.location.href = router.resolve({ name: 'apartments' }).href;
+  });
+}
 
 function toggleFilter() {
   store.ui.hasFilter = !store.ui.hasFilter;
