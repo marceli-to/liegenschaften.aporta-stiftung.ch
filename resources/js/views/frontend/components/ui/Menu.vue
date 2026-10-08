@@ -12,13 +12,13 @@
         <router-link :to="{name: 'collection-show', params: { uuid: $route.params.uuid, itemUuid: pagination.prev }}" class="icon-browse">
           <icon-arrow-left :size="'md'" />
         </router-link>
-          <span>{{ pagination.index | padStart}} / {{ pagination.count | padStart }}</span>
+          <span>{{ padStart(pagination.index) }} / {{ padStart(pagination.count) }}</span>
         <router-link :to="{name: 'collection-show', params: { uuid: $route.params.uuid, itemUuid: pagination.next }}" class="icon-browse">
           <icon-arrow-right :size="'md'" />
         </router-link>
       </li>
       <li :class="[pagination.count > 1 ? 'sm:span-4' : 'sm:span-5', 'xs:hide']">
-        <a :href="`/assets/media/${$props.fileUuid}.pdf`" target="_blank" class="flex justify-end" title="Weitere Informationen (PDF)">
+        <a :href="`/assets/media/${fileUuid}.pdf`" target="_blank" class="flex justify-end" title="Weitere Informationen (PDF)">
           <span>Weitere Informationen (PDF)</span>
           <icon-document />
         </a>
@@ -27,22 +27,14 @@
   </nav>
 </div>
 </template>
-<script>
+<script setup>
+import { padStart } from '@/lib/utils';
 import IconArrowLeft from "@/components/ui/icons/ArrowLeft.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import IconDocument from "@/components/ui/icons/Document.vue";
 
-export default {
-
-  components: {
-    IconArrowLeft,
-    IconArrowRight,
-    IconDocument
-  },
-
-  props: {
-    pagination: [ Object ],
-    fileUuid: String,
-  },
-}
+defineProps({
+  pagination: [ Object ],
+  fileUuid: String,
+});
 </script>

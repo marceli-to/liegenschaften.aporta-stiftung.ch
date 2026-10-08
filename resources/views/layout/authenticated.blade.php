@@ -14,12 +14,9 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="format-detection" content="telephone=no">
 <link href="https://use.typekit.net/kcs4ept.css" rel="stylesheet">
-<link href="{{ mix('assets/css/app.css') }}" rel="stylesheet">
+@vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-<div id="app">
-  <app-component />
-</div>
-<script src="{{ mix('assets/js/app.js') }}" defer></script>
+<div id="app"></div>
 </body>
 </html>

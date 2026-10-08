@@ -1,11 +1,11 @@
 <template>
 <div>
-  <site-header :user="$store.state.user" :view="'users'"></site-header>
+  <site-header :view="'users'"></site-header>
   <site-main v-if="isFetched">
     <nav class="page-menu page-menu__users">
       <ul>
         <li class="start-3">
-          <a href="/logout">
+          <a href="/logout" @click.prevent="logout()">
             <icon-cross class="icon" :size="'md'" />
             <span>Abmelden</span>
           </a>
@@ -48,7 +48,7 @@
     <template #message>
       <div>
         <strong>Es sind Fehler aufgetreten:</strong>
-        <div class="mt-2x" v-for="error in validationErrors">
+        <div class="mt-2x" v-for="error in validationErrors" :key="error">
           {{error}}
         </div>
       </div>
@@ -67,29 +67,19 @@
       </div>
     </template>
     <template #button>
-      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="$refs.dialogSucess.hide()">Schliessen</a>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="dialogSucess.hide()">Schliessen</a>
     </template>
   </dialog-wrapper>
 
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Helpers from "@/mixins/Helpers";
-import Sort from "@/mixins/Sort";
+import http, { logout } from '@/lib/http';
+import { validateRequired, validateEmail } from '@/lib/utils';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
-import IconSort from "@/components/ui/icons/Sort.vue";
-import IconState from "@/components/ui/icons/State.vue";
-import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
-import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
-import IconHourglass from "@/components/ui/icons/Hourglass.vue";
-import IconTrash from "@/components/ui/icons/Trash.vue";
-import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
-import IconPencil from "@/components/ui/icons/Pencil.vue";
-import IconDocument from "@/components/ui/icons/Document.vue";
-import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
@@ -97,161 +87,87 @@ import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
-import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-export default {
+const user = ref({
+  firstname: null,
+  name: null,
+  email: null,
+  password: null,
+});
+const errors = ref({});
+const validationErrors = ref([]);
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    IconSort,
-    IconState,
-    IconPlus,
-    IconCross,
-    IconCheckmark,
-    IconHourglass,
-    IconTrash,
-    IconLinkExternal,
-    IconPencil,
-    IconDocument,
-    IconRadio,
-    IconArrowRight,
-    DialogWrapper,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    ListAction,
-    ListEmpty,
-  },
-  
-  mixins: [ErrorHandling, Helpers, Sort],
+const isFetched = ref(false);
+const isValid = ref(true);
 
-  data() {
-    return {
+const dialogValidationErrors = ref(null);
+const dialogSucess = ref(null);
 
-      // Data
-      data: [],
+const routes = {
+  find: '/api/user',
+  put: '/api/user',
+};
 
-      user: {
-        firstname: null,
-        name: null,
-        email: null,
-        password: null,
-      },
+onMounted(() => find());
 
-      errors: {
-        firstname: null,
-        name: null,
-        email: null,
-        password: null,
-      },
+function find() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(routes.find).then(response => {
+    user.value = response.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      tempUser: null,
+function update() {
+  NProgress.start();
+  isFetched.value = false;
+  http.put(`${routes.put}/${user.value.id}`, user.value, { handleErrors: false }).then(() => {
+    NProgress.done();
+    isFetched.value = true;
+    dialogSucess.value.show();
+  })
+  .catch(error => {
+    isFetched.value = true;
+    handleValidationErrors(error);
+  });
+}
 
-      validationErrors: [],
+function validate(event, user) {
+  if (validateRequired(user.name) && validateRequired(user.firstname) && validateEmail(user.email)) {
+    event.target.classList.remove('is-invalid');
+    isValid.value = true;
+    return true;
+  }
+  if (event.target.type == 'email' && validateEmail(event.target.value)) {
+    event.target.classList.remove('is-invalid');
+    return;
+  }
+  if ((event.target.type == 'text' || event.target.type == 'password') && validateRequired(event.target.value)) {
+    event.target.classList.remove('is-invalid');
+    return;
+  }
+  event.target.classList.add('is-invalid');
+  isValid.value = false;
+}
 
-      // Routes
-      routes: {
-        find: '/api/user',
-        put: '/api/user',
-      },
+// 422: the first message per field in a dialog, the fields marked
+function handleValidationErrors(error) {
+  NProgress.done();
+  if (error.response?.status !== 422) {
+    return;
+  }
+  validationErrors.value = [];
+  errors.value = {};
+  for (const key in error.response.data.errors) {
+    validationErrors.value.push(error.response.data.errors[key][0]);
+    errors.value[key] = true;
+  }
+  dialogValidationErrors.value.show();
+}
 
-      // States
-      isFetched: false,
-      isValid: true,
-
-      // Messages
-      messages: {
-        emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
-      },
-    };
-  },
-
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.find();
-  },
-
-  methods: {
-
-    find() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.find}`).then(response => {
-        this.user = response.data;
-        console.log(this.user);
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    update() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.put(`${this.routes.put}/${this.user.id}`, this.user).then(response => {
-        NProgress.done();
-        this.isFetched = true;
-        this.$refs.dialogSucess.show();
-      })
-      .catch(error => {
-        NProgress.done();
-        this.isFetched = true;
-        this.handleValidationErrors(error.response.data);
-      });
-    },
-
-    validate(event, user) {
-
-      if (
-        this.validateRequired(user.name) && 
-        this.validateRequired(user.firstname) && 
-        this.validateEmail(user.email)
-        ) {
-        event.target.classList.remove('is-invalid');
-        this.isValid = true;
-        return true;
-      }
-      else {
-        if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'password' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-      }
-      event.target.classList.add('is-invalid');
-      this.isValid = false;
-      return;
-    },
-
-    handleValidationErrors(data) {
-      let errors = [];
-      for (let key in data.errors) {
-        this.validationErrors.push(
-          data.errors[key][0]
-        );
-        this.errors[key] = true;
-      }
-      // scroll to top
-      this.showValidationErrors();
-    },
-
-    showValidationErrors() {
-      this.$refs.dialogValidationErrors.show();
-    },
-
-    hideValidationErrors() {
-      this.$refs.dialogValidationErrors.hide();
-    },
-  },
+function hideValidationErrors() {
+  dialogValidationErrors.value.hide();
 }
 </script>

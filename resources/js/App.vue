@@ -1,19 +1,19 @@
 <template>
-  <router-view></router-view>
+  <Notifications />
+  <router-view :key="route.fullPath" />
 </template>
-<script>
-export default {
-  mounted() {
-    this.fetchUser();
-  },
-  methods: {
-    fetchUser() {
-      if (!this.$store.state.user) {
-        this.axios.get(`/api/user`).then(response => {
-          this.$store.commit('user', response.data);
-        });
-      }
-    },
+<script setup>
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import http from '@/lib/http';
+import { store } from '@/store';
+import Notifications from '@/components/ui/misc/Notifications.vue';
+
+const route = useRoute();
+
+onMounted(() => {
+  if (!store.user) {
+    http.get('/api/user').then(response => store.user = response.data);
   }
-}
+});
 </script>

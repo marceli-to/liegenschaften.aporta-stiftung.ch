@@ -1,6 +1,6 @@
 <template>
   <div>
-    <site-header :user="$store.state.user"></site-header>
+    <site-header></site-header>
     <site-main v-if="isFetched">
       <list v-if="data">
         <list-header>
@@ -132,7 +132,7 @@
       <list-empty v-else>
         {{messages.emptyData}}
       </list-empty>
-      <form @submit.prevent="submit" class="collection__form" v-if="data">
+      <form @submit.prevent class="collection__form" v-if="data">
         <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
           <ul>
             <li class="start-4">
@@ -218,210 +218,95 @@
     </dialog-wrapper>
   </div>
   </template>
-  <script>
-  import NProgress from 'nprogress';
-  import ErrorHandling from '@/mixins/ErrorHandling';
-  import Helpers from "@/mixins/Helpers";
-  import Sort from "@/mixins/Sort";
-  import Filter from "@/views/backend/pages/mixins/Filter";
-  import Collection from "@/views/backend/pages/mixins/Collection";
-  import DialogWrapper from "@/components/ui/misc/Dialog.vue";
-  import IconSort from "@/components/ui/icons/Sort.vue";
-  import IconState from "@/components/ui/icons/State.vue";
-  import IconRadio from "@/components/ui/icons/Radio.vue";
-  import IconPlus from "@/components/ui/icons/Plus.vue";
-  import IconTrash from "@/components/ui/icons/Trash.vue";
-  import IconCross from "@/components/ui/icons/Cross.vue";
-  import IconReset from "@/components/ui/icons/Reset.vue";
-  import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
-  import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
-  import SiteHeader from '@/views/backend/layout/Header.vue';
-  import SiteMain from '@/views/backend/layout/Main.vue';
-  import List from "@/components/ui/layout/List.vue";
-  import ListHeader from "@/components/ui/layout/ListHeader.vue";
-  import ListRow from "@/components/ui/layout/ListRow.vue";
-  import ListItem from "@/components/ui/layout/ListItem.vue";
-  import ListAction from "@/components/ui/layout/ListAction.vue";
-  import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-  
-  export default {
-  
-    components: {
-      NProgress,
-      SiteHeader,
-      SiteMain,
-      DialogWrapper,
-      IconSort,
-      IconState,
-      IconRadio,
-      IconPlus,
-      IconTrash,
-      IconCross,
-      IconArrowRight,
-      IconCheckbox,
-      IconReset,
-      List,
-      ListRow,
-      ListHeader,
-      ListItem,
-      ListAction,
-      ListEmpty,
-    },
-   
-    mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
-  
-    data() {
-      return {
-  
-        // Data
-        data: [],
-  
-        // Candidates
-        candidates: [],
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import NProgress from 'nprogress';
+import http from '@/lib/http';
+import { store } from '@/store';
+import { useSort } from '@/composables/useSort';
+import { useCollection } from '@/composables/useCollection';
+import { useCandidates } from '@/composables/useCandidates';
+import DialogWrapper from "@/components/ui/misc/Dialog.vue";
+import IconSort from "@/components/ui/icons/Sort.vue";
+import IconState from "@/components/ui/icons/State.vue";
+import IconPlus from "@/components/ui/icons/Plus.vue";
+import IconTrash from "@/components/ui/icons/Trash.vue";
+import IconReset from "@/components/ui/icons/Reset.vue";
+import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
+import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
+import SiteHeader from '@/views/backend/layout/Header.vue';
+import SiteMain from '@/views/backend/layout/Main.vue';
+import List from "@/components/ui/layout/List.vue";
+import ListHeader from "@/components/ui/layout/ListHeader.vue";
+import ListRow from "@/components/ui/layout/ListRow.vue";
+import ListItem from "@/components/ui/layout/ListItem.vue";
+import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-        // Remarks
-        remarks: null,
-  
-        // Routes
-        routes: {
-          fetch: '/api/collection',
-          put: '/api/collection'
-        },
-  
-        // States
-        isFetched: false,
-        isValid: true,
-        hasErrors: false,
-  
-        // Messages
-        messages: {
-          emptyData: 'Es sind noch keine Daten vorhanden...',
-          updated: 'Status geändert',
-        },
-      };
-    },
-  
-    mounted() {
-      NProgress.configure({ showBar: false });
-      this.hasCollection = true;
-      this.fetch();
-    },
-  
-    methods: {
-  
-      fetch() {
-        NProgress.start();
-        this.isFetched = false;
-        this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
-          this.data = response.data;
-          this.remarks = this.data.remarks;
-          this.candidates.push({
-            uuid: this.data.uuid,
-            salutation: this.data.salutation,
-            name: this.data.name,
-            firstname: this.data.firstname,
-            email: this.data.email,
-          });
-          this.isFetched = true;
-          NProgress.done();
-        });
-      },
-  
-      update() {
-        this.$refs.dialogUpdateConfirm.hide();
+const route = useRoute();
 
-        const data = {
-          candidates: this.candidates,
-          remarks: this.remarks,
-          items: this.data.items.map(item => item.apartment.uuid),
-        };
-        
-        NProgress.start();
-        this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, data).then(response => {
-          this.reset();
-          this.showStoreSuccess();
-          NProgress.done();
-        });
-      },
-  
-      reset() {
-        this.resetCollection();
-        this.resetCandidates();
-      },
-  
-      addCandidate() {
-        this.candidates.push({
-          name: null,
-          firstname: null,
-          email: null,
-        });
-        this.isValid = false;
-      },
-  
-      removeCandidate() {
-        this.candidates.pop();
-        this.isValid = true;
-      },
-  
-      resetCandidates() {
-        this.candidates = [
-          {
-            salutation: null,
-            name: null,
-            firstname: null,
-            email: null,
-          },
-        ]
-      },
-  
-      validate(event, candidate) {
-  
-        if (this.validateRequired(candidate.name) && this.validateRequired(candidate.firstname) && this.validateEmail(candidate.email)) {
-          event.target.classList.remove('is-invalid');
-          this.isValid = true;
-          return true;
-        }
-        else {
-          if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
-            event.target.classList.remove('is-invalid');
-            return;
-          }
-          if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
-            event.target.classList.remove('is-invalid');
-            return;
-          }
-        }
-        event.target.classList.add('is-invalid');
-        this.isValid = false;
-        return;
-      },
-  
-      showUpdateConfirm() {
-        this.$refs.dialogUpdateConfirm.show();
-      },
-  
-      showStoreSuccess() {
-        this.$refs.dialogStoreSuccess.show();
-      },
-    },
-  
-    computed: {
-      candidateList() {
-        if (this.candidates.length == 1) {
-          return this.candidates[0].email;
-        }
-        
-        if (this.candidates.length == 2) {
-          return Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(" und ");
-        }
-        
-        if (this.candidates.length > 2) {
-          let candidates = this.candidates;
-          const last_candidate = candidates.pop();
-          const candidate_list = Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(", ");
-          return `${candidate_list} und ${last_candidate.email}`;
-        }
-      }
-    },
-  }
-  </script>
+const data = ref([]);
+const remarks = ref(null);
+const isFetched = ref(false);
+const dialogUpdateConfirm = ref(null);
+const dialogStoreSuccess = ref(null);
+
+const routes = {
+  fetch: '/api/collection',
+  put: '/api/collection'
+};
+
+const messages = {
+  emptyData: 'Es sind noch keine Daten vorhanden...',
+};
+
+// The headers sort nothing here: the list shows the offer's items as they are
+const { sort } = useSort(data);
+const { resetCollection } = useCollection();
+const { candidates, isValid, addCandidate, removeCandidate, resetCandidates, validate, candidateList } = useCandidates({ valid: true });
+
+onMounted(() => {
+  store.ui.hasCollection = true;
+  fetch();
+});
+
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(`${routes.fetch}/${route.params.uuid}`).then(response => {
+    data.value = response.data;
+    remarks.value = data.value.remarks;
+    candidates.value = [{
+      uuid: data.value.uuid,
+      salutation: data.value.salutation,
+      name: data.value.name,
+      firstname: data.value.firstname,
+      email: data.value.email,
+    }];
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
+
+function update() {
+  dialogUpdateConfirm.value.hide();
+
+  const payload = {
+    candidates: candidates.value,
+    remarks: remarks.value,
+    items: data.value.items.map(item => item.apartment.uuid),
+  };
+
+  NProgress.start();
+  http.put(`${routes.put}/${route.params.uuid}`, payload).then(() => {
+    resetCollection();
+    resetCandidates();
+    dialogStoreSuccess.value.show();
+    NProgress.done();
+  });
+}
+
+function showUpdateConfirm() {
+  dialogUpdateConfirm.value.show();
+}
+</script>

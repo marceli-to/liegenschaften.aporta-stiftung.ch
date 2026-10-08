@@ -22,8 +22,7 @@ Route::middleware('guest')->group(function() {
   Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
-// GET until the admin's logout link becomes a form (Vue 3 port)
-Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Frontend Routes
 Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [CollectionController::class, 'show'])->name('offer.show');

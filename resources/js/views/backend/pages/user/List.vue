@@ -1,11 +1,11 @@
 <template>
 <div>
-  <site-header :user="$store.state.user" :view="'users'"></site-header>
+  <site-header :view="'users'"></site-header>
   <site-main v-if="isFetched">
     <nav class="page-menu page-menu__users">
       <ul>
         <li class="start-3">
-          <a href="/logout">
+          <a href="/logout" @click.prevent="logout()">
             <icon-cross class="icon" :size="'md'" />
             <span>Abmelden</span>
           </a>
@@ -123,7 +123,7 @@
     <template #message>
       <div>
         <strong>Es sind Fehler aufgetreten:</strong>
-        <div class="mt-2x" v-for="error in validationErrors">
+        <div class="mt-2x" v-for="error in validationErrors" :key="error">
           {{error}}
         </div>
       </div>
@@ -138,7 +138,7 @@
   <dialog-wrapper ref="dialogDeleteConfirm">
     <template #message>
       <div>
-        <strong>Bitte löschen von «{{ tempUser.firstname }} {{ tempUser.name }}» bestätigen!</strong>
+        <strong>Bitte löschen von «{{ tempUser?.firstname }} {{ tempUser?.name }}» bestätigen!</strong>
       </div>
     </template>
     <template #actions>
@@ -148,22 +148,17 @@
 
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Helpers from "@/mixins/Helpers";
-import Sort from "@/mixins/Sort";
+import http, { logout } from '@/lib/http';
+import { validateRequired, validateEmail } from '@/lib/utils';
+import { useSort } from '@/composables/useSort';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
-import IconState from "@/components/ui/icons/State.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
-import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
-import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
-import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
-import IconPencil from "@/components/ui/icons/Pencil.vue";
-import IconDocument from "@/components/ui/icons/Document.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
@@ -172,249 +167,181 @@ import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-export default {
+function emptyUser() {
+  return {
+    firstname: null,
+    name: null,
+    email: null,
+    password: null,
+    role: 'editor'
+  };
+}
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    IconSort,
-    IconState,
-    IconPlus,
-    IconCross,
-    IconCheckmark,
-    IconHourglass,
-    IconTrash,
-    IconLinkExternal,
-    IconPencil,
-    IconDocument,
-    IconRadio,
-    IconArrowRight,
-    DialogWrapper,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    ListAction,
-    ListEmpty,
-  },
-  
-  mixins: [ErrorHandling, Helpers, Sort],
+const data = ref([]);
+const user = ref(emptyUser());
+const errors = ref({});
+const tempUser = ref(null);
+const validationErrors = ref([]);
 
-  data() {
-    return {
+const isFetched = ref(false);
+const isValid = ref(false);
+const isUpdate = ref(false);
+const hasForm = ref(false);
 
-      // Data
-      data: [],
+const dialogValidationErrors = ref(null);
+const dialogDeleteConfirm = ref(null);
 
-      user: {
-        firstname: null,
-        name: null,
-        email: null,
-        password: null,
-        role: 'editor'
-      },
+const routes = {
+  get: '/api/users',
+  post: '/api/user',
+  put: '/api/user',
+  delete: '/api/user',
+};
 
-      errors: {
-        firstname: null,
-        name: null,
-        email: null,
-        password: null,
-      },
+const messages = {
+  emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
+};
 
-      tempUser: null,
+const { sort, sortedData } = useSort(data);
 
-      validationErrors: [],
+onMounted(() => get());
 
-      // Routes
-      routes: {
-        get: '/api/users',
-        post: '/api/user',
-        put: '/api/user',
-        delete: '/api/user',
-      },
+function get() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(routes.get).then(response => {
+    data.value = response.data.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      // States
-      isFetched: false,
-      isValid: false,
-      isUpdate: false,
-      hasForm: false,
+function submit() {
+  if (isValid.value) {
+    isUpdate.value ? update() : create();
+  }
+}
 
-      // Messages
-      messages: {
-        emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
-      },
-    };
-  },
+function create() {
+  NProgress.start();
+  isFetched.value = false;
+  http.post(routes.post, user.value, { handleErrors: false }).then(response => {
+    data.value.push(response.data);
+    toggleForm();
+    resetForm();
+    NProgress.done();
+    isFetched.value = true;
+  })
+  .catch(error => {
+    isFetched.value = true;
+    handleValidationErrors(error);
+  });
+}
 
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.get();
-  },
+// The form edits the list's row itself, so the list shows the changes already
+function update() {
+  NProgress.start();
+  isFetched.value = false;
+  http.put(`${routes.put}/${user.value.id}`, user.value, { handleErrors: false }).then(() => {
+    hideForm();
+    NProgress.done();
+    isFetched.value = true;
+    isUpdate.value = false;
+  })
+  .catch(error => {
+    isFetched.value = true;
+    handleValidationErrors(error);
+  });
+}
 
-  methods: {
+function edit(d) {
+  user.value = d;
+  isUpdate.value = true;
+  isValid.value = true;
+  showForm();
+}
 
-    get() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.get}`).then(response => {
-        this.data = response.data.data;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
+function toggleRole() {
+  user.value.role = user.value.role == 'admin' ? 'editor' : 'admin';
+}
 
-    submit() {
-      if (this.isValid) {
-        this.isUpdate ? this.update() : this.create();
-      }
-    },
+function destroy() {
+  NProgress.start();
+  isFetched.value = false;
+  http.delete(`${routes.delete}/${tempUser.value.id}`).then(() => {
+    data.value.splice(data.value.indexOf(tempUser.value), 1);
+    tempUser.value = null;
+    dialogDeleteConfirm.value.hide();
+    NProgress.done();
+    isFetched.value = true;
+  });
+}
 
-    create() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.post(this.routes.post, this.user).then(response => {
-        this.data.push(response.data);
-        this.toggleForm();
-        this.resetForm();
-        NProgress.done();
-        this.isFetched = true;
-      })
-      .catch(error => {
-        NProgress.done();
-        this.isFetched = true;
-        this.handleValidationErrors(error.response.data);
-      });
-    },
+function resetForm() {
+  user.value = emptyUser();
+  tempUser.value = null;
+  isValid.value = false;
+}
 
-    update() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.put(`${this.routes.put}/${this.user.id}`, this.user).then(response => {
-        this.data[this.data.indexOf(this.tempUser)] = response.data;
-        this.hideForm();
-        NProgress.done();
-        this.isFetched = true;
-        this.isUpdate = false;
-      })
-      .catch(error => {
-        NProgress.done();
-        this.data[this.data.indexOf(this.tempUser)] = this.tempUser;
-        this.isFetched = true;
-        this.handleValidationErrors(error.response.data);
-      });
-    },
+function toggleForm() {
+  if (hasForm.value) resetForm();
+  hasForm.value = !hasForm.value;
+}
 
-    edit(user) {
-      this.user = user;
-      this.isUpdate = true;
-      this.isValid = true;
-      this.showForm();
-    },
+function hideForm() {
+  hasForm.value = false;
+  resetForm();
+}
 
-    toggleRole() {
-      this.user.role = this.user.role == 'admin' ? 'editor' : 'admin';
-    },
+function showForm() {
+  hasForm.value = true;
+}
 
-    destroy() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.delete(`${this.routes.delete}/${this.tempUser.id}`).then(response => {
-        this.data.splice(this.data.indexOf(this.tempUser), 1);
-        this.tempUser = null;
-        this.$refs.dialogDeleteConfirm.hide();
-        NProgress.done();
-        this.isFetched = true;
-      });
-    },
+function validate(event, user) {
+  if (
+    validateRequired(user.name) &&
+    validateRequired(user.firstname) &&
+    validateEmail(user.email) &&
+    (validateRequired(user.password) || isUpdate.value)) {
+    event.target.classList.remove('is-invalid');
+    isValid.value = true;
+    return true;
+  }
+  if (event.target.type == 'email' && validateEmail(event.target.value)) {
+    event.target.classList.remove('is-invalid');
+    return;
+  }
+  if ((event.target.type == 'text' || event.target.type == 'password') && validateRequired(event.target.value)) {
+    event.target.classList.remove('is-invalid');
+    return;
+  }
+  event.target.classList.add('is-invalid');
+  isValid.value = false;
+}
 
-    resetForm() {
-      this.user = {
-        firstname: null,
-        name: null,
-        email: null,
-        password: null,
-      };
-      this.tempUser = null;
-      this.isValid = false;
-    },
+// 422: the first message per field in a dialog, the fields marked
+function handleValidationErrors(error) {
+  NProgress.done();
+  if (error.response?.status !== 422) {
+    return;
+  }
+  validationErrors.value = [];
+  errors.value = {};
+  for (const key in error.response.data.errors) {
+    validationErrors.value.push(error.response.data.errors[key][0]);
+    errors.value[key] = true;
+  }
+  dialogValidationErrors.value.show();
+}
 
-    toggleForm() {
-      if (this.hasForm) this.resetForm();
-      this.hasForm = this.hasForm ? false : true;
-    },
+function showConfirmDelete(d) {
+  tempUser.value = d;
+  dialogDeleteConfirm.value.show();
+}
 
-    hideForm() {
-      this.hasForm = false;
-      this.resetForm();
-    },
-
-    showForm() {
-      this.hasForm = true;
-    },
-
-    validate(event, user) {
-
-      if (
-        this.validateRequired(user.name) && 
-        this.validateRequired(user.firstname) && 
-        this.validateEmail(user.email) &&
-        (this.validateRequired(user.password) || this.isUpdate)) {
-        event.target.classList.remove('is-invalid');
-        this.isValid = true;
-        return true;
-      }
-      else {
-        if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'password' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-      }
-      event.target.classList.add('is-invalid');
-      this.isValid = false;
-      return;
-    },
-
-    handleValidationErrors(data) {
-      let errors = [];
-      for (let key in data.errors) {
-        this.validationErrors.push(
-          data.errors[key][0]
-        );
-        this.errors[key] = true;
-      }
-      // scroll to top
-      this.showValidationErrors();
-    },
-
-    showValidationErrors() {
-      this.$refs.dialogValidationErrors.show();
-    },
-
-    showConfirmDelete(user) {
-      this.tempUser = user;
-      this.$refs.dialogDeleteConfirm.show();
-    },
-
-    hideValidationErrors() {
-      this.$refs.dialogValidationErrors.hide();
-    },
-
-    hideConfirmDelete() {
-      this.$refs.dialogDeleteConfirm.hide();
-    },
-
-  },
+function hideValidationErrors() {
+  dialogValidationErrors.value.hide();
 }
 </script>

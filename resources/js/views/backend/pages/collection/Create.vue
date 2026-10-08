@@ -1,6 +1,6 @@
 <template>
 <div>
-  <site-header :user="$store.state.user"></site-header>
+  <site-header></site-header>
   <site-main v-if="isFetched">
     <list v-if="sortedData.length">
       <list-header>
@@ -75,7 +75,7 @@
         class="list-row" 
         :key="apartment.uuid">
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-action']">
-          <a href="" @click.prevent="removeFromCollection(apartment.uuid, true)" v-if="isInCollection(apartment.uuid)">
+          <a href="" @click.prevent="remove(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
            <icon-checkbox :active="'true'" class="icon icon-secondary" />
           </a> 
         </list-item>
@@ -134,7 +134,7 @@
     <list-empty v-else>
       {{messages.emptyData}}
     </list-empty>
-    <form @submit.prevent="submit" class="collection__form" v-if="sortedData.length">
+    <form @submit.prevent class="collection__form" v-if="sortedData.length">
       <nav :class="[!isValid ? 'is-disabled' : '', 'page-menu page-menu__collection']">
         <ul>
           <li class="start-4">
@@ -205,7 +205,7 @@
       </div>
     </template>
     <template #actions>
-      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="store()">Senden</a>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="submit()">Senden</a>
     </template>
   </dialog-wrapper>
   <dialog-wrapper ref="dialogStoreSuccess">
@@ -224,20 +224,19 @@
   </dialog-wrapper>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Helpers from "@/mixins/Helpers";
-import Sort from "@/mixins/Sort";
-import Filter from "@/views/backend/pages/mixins/Filter";
-import Collection from "@/views/backend/pages/mixins/Collection";
+import http from '@/lib/http';
+import { store } from '@/store';
+import { useSort } from '@/composables/useSort';
+import { useCollection } from '@/composables/useCollection';
+import { useCandidates } from '@/composables/useCandidates';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
-import IconRadio from "@/components/ui/icons/Radio.vue";
 import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconTrash from "@/components/ui/icons/Trash.vue";
-import IconCross from "@/components/ui/icons/Cross.vue";
 import IconReset from "@/components/ui/icons/Reset.vue";
 import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
 import IconArrowRight from "@/components/ui/icons/ArrowRight.vue";
@@ -247,185 +246,66 @@ import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
 import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-export default {
+const data = ref([]);
+const remarks = ref(null);
+const isFetched = ref(false);
+const dialogStoreConfirm = ref(null);
+const dialogStoreSuccess = ref(null);
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    DialogWrapper,
-    IconSort,
-    IconState,
-    IconRadio,
-    IconPlus,
-    IconTrash,
-    IconCross,
-    IconArrowRight,
-    IconCheckbox,
-    IconReset,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    ListAction,
-    ListEmpty,
-  },
- 
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
+const routes = {
+  get: '/api/apartments',
+  post: '/api/collection'
+};
 
-  data() {
-    return {
+const messages = {
+  emptyData: 'Es sind noch keine Daten vorhanden...',
+};
 
-      // Data
-      data: [],
+const { sort, sortedData } = useSort(data);
+const { resetCollection, removeFromCollection, isInCollection } = useCollection();
+const { candidates, isValid, addCandidate, removeCandidate, resetCandidates, validate, candidateList } = useCandidates();
 
-      // Candidates
-      candidates: [
-        {
-          salutation: null,
-          name: null,
-          firstname: null,
-          email: null,
-        },
-      ],
+onMounted(() => {
+  store.ui.hasCollection = true;
+  get();
+});
 
-      // Remarks
-      remarks: null,
+function get() {
+  NProgress.start();
+  isFetched.value = false;
+  http.post(routes.get, store.collection).then(response => {
+    data.value = response.data.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      // Routes
-      routes: {
-        get: '/api/apartments',
-        post: '/api/collection'
-      },
+// Unpick an apartment and show the list without it
+function remove(uuid) {
+  removeFromCollection(uuid);
+  get();
+}
 
-      // States
-      isFetched: false,
-      isValid: false,
-      hasErrors: false,
+function submit() {
+  dialogStoreConfirm.value.hide();
+  const data = {
+    candidates: candidates.value,
+    remarks: remarks.value ? remarks.value : null,
+    items: store.collection.items
+  };
 
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Daten vorhanden...',
-        updated: 'Status geändert',
-      },
-    };
-  },
+  NProgress.start();
+  http.post(routes.post, data).then(() => {
+    resetCollection();
+    resetCandidates();
+    dialogStoreSuccess.value.show();
+    NProgress.done();
+  });
+}
 
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.hasCollection = true;
-    this.get();
-  },
-
-  methods: {
-    
-    get() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.post(`${this.routes.get}`, this.$store.state.collection).then(response => {
-        this.data = response.data.data;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    store() {
-      this.$refs.dialogStoreConfirm.hide();
-      const data = {
-        candidates: this.candidates,
-        remarks: this.remarks ? this.remarks : null,
-        items: this.$store.state.collection.items
-      };
-      
-      NProgress.start();
-      this.axios.post(`${this.routes.post}`, data).then(response => {
-        this.reset();
-        this.showStoreSuccess();
-        NProgress.done();
-      });
-    },
-
-    reset() {
-      this.resetCollection();
-      this.resetCandidates();
-    },
-
-    addCandidate() {
-      this.candidates.push({
-        name: null,
-        firstname: null,
-        email: null,
-      });
-      this.isValid = false;
-    },
-
-    removeCandidate() {
-      this.candidates.pop();
-      this.isValid = true;
-    },
-
-    resetCandidates() {
-      this.candidates = [
-        {
-          salutation: null,
-          name: null,
-          firstname: null,
-          email: null,
-        },
-      ]
-    },
-
-    validate(event, candidate) {
-
-      if (this.validateRequired(candidate.name) && this.validateRequired(candidate.firstname) && this.validateEmail(candidate.email)) {
-        event.target.classList.remove('is-invalid');
-        this.isValid = true;
-        return true;
-      }
-      else {
-        if (event.target.type == 'email' && this.validateEmail(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-        if (event.target.type == 'text' && this.validateRequired(event.target.value)) {
-          event.target.classList.remove('is-invalid');
-          return;
-        }
-      }
-      event.target.classList.add('is-invalid');
-      this.isValid = false;
-      return;
-    },
-
-    showStoreConfirm() {
-      this.$refs.dialogStoreConfirm.show();
-    },
-
-    showStoreSuccess() {
-      this.$refs.dialogStoreSuccess.show();
-    },
-  },
-
-  computed: {
-    candidateList() {
-      if (this.candidates.length == 1) {
-        return this.candidates[0].email;
-      }
-      
-      if (this.candidates.length == 2) {
-        return Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(" und ");
-      }
-      
-      if (this.candidates.length > 2) {
-        let candidates = this.candidates;
-        const last_candidate = candidates.pop();
-        const candidate_list = Object.keys(this.candidates).map(index => `${this.candidates[index].email}`).join(", ");
-        return `${candidate_list} und ${last_candidate.email}`;
-      }
-    }
-  },
+function showStoreConfirm() {
+  dialogStoreConfirm.value.show();
 }
 </script>

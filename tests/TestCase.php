@@ -24,6 +24,14 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Views render without a Vite build
+        $this->withoutVite();
+    }
+
     protected function user(array $attributes = []): User
     {
         $user = new User();

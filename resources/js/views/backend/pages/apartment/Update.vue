@@ -1,12 +1,10 @@
 <template>
 <div>
   <site-header 
-    :user="$store.state.user" 
     :view="'show'">
   </site-header>
   <site-main v-if="isFetched">
     <page-menu 
-      :uuid="$route.params.uuid"
       :apartment="apartment" 
       class="has-selection mb-20x"
     ></page-menu>
@@ -177,13 +175,11 @@
             <apartment-row>
               <apartment-label :cls="'span-1'">Bezugstermin</apartment-label>
               <apartment-input :cls="'span-3'">
-                <the-mask
+                <input
                   type="text"
-                  mask="##.##.####"
-                  :masked="true"
                   name="date"
-                  v-model="apartment.available_at"
-                ></the-mask>
+                  :value="apartment.available_at"
+                  @input="maskDate">
               </apartment-input>
             </apartment-row>
           </div>
@@ -193,12 +189,12 @@
   </site-main>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import NProgress from 'nprogress';
-import { TheMask } from "vue-the-mask";
-import ErrorHandling from '@/mixins/ErrorHandling';
+import http from '@/lib/http';
 import IconRadio from "@/components/ui/icons/Radio.vue";
-import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import PageMenu from '@/components/ui/apartment/Menu.vue';
@@ -209,117 +205,87 @@ import ApartmentLabel from '@/components/ui/apartment/Label.vue';
 import ApartmentInput from '@/components/ui/apartment/Input.vue';
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
-export default {
-  components: {
-    NProgress,
-    TheMask,
-    DialogWrapper,
-    IconRadio,
-    SiteHeader,
-    SiteMain,
-    PageMenu,
-    ApartmentWrapper,
-    ApartmentGrid,
-    ApartmentRow,
-    ApartmentLabel,
-    ApartmentInput,
-    Isometrie
+const route = useRoute();
+const router = useRouter();
+
+const apartment = ref({
+  tenant: {
+    name: null,
+    firstname: null
   },
+  rent_net: null,
+  additional_cost: null,
+  rent_gross: null,
+  state_id: 1,
+});
 
-  mixins: [ErrorHandling],
-
-  data() {
-    return {
-      
-      // Model
-      apartment: {
-        tenant: {
-          name: null,
-          firstname: null
-        },
-        rent_net: null,
-        additional_cost: null,
-        rent_gross: null,
-        state_id: 1,
-      },
-
-      // Routes
-      routes: {
-        fetch: '/api/apartment',
-        put: '/api/apartment',
-      },
-
-      // States
-      isFetched: false,
-      isLoading: false,
-      isEditTenant: false,
-      hasErrors: false,
-
-      // Messages
-      messages: {
-        updated: 'Änderungen gespeichert!',
-      },
-    };
-  },
-
-  created() {
-    this.fetch();
-    NProgress.configure({ showBar: false });
-  },
-
-  methods: {
-
-    fetch() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
-        this.apartment = response.data;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    submit() {
-      NProgress.start();
-      this.isFetched = true;
-      if (this.hasErrors) {
-        return;
-      }
-      this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.apartment).then(response => {
-        this.$router.push({ name: 'apartment-show', params: {uuid: this.apartment.uuid} });
-        this.isFetched = false;
-        NProgress.done();
-      });
-    },
-
-    validate(event) {
-      if (event.target.value.length > 0) {
-        event.target.classList.remove('is-invalid');
-        this.hasErrors = false;
-        return;
-      }
-      event.target.classList.add('is-invalid');
-      this.hasErrors = true;
-    },
-
-    setState(stateId) {
-      this.apartment.state_id = stateId;
-    },
-
-    editTenant() {
-      this.isEditTenant = true;
-    },
-
-    removeTenant() {
-      this.apartment.tenant = {
-        uuid: null,
-        name: null,
-        firstname: null,
-        email: null,
-        phone: null,
-      };
-    },
-  },
-
+const routes = {
+  fetch: '/api/apartment',
+  put: '/api/apartment',
 };
+
+const isFetched = ref(false);
+const isEditTenant = ref(false);
+const hasErrors = ref(false);
+
+onMounted(() => fetch());
+
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(`${routes.fetch}/${route.params.uuid}`).then(response => {
+    apartment.value = response.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
+
+function submit() {
+  NProgress.start();
+  isFetched.value = true;
+  if (hasErrors.value) {
+    return;
+  }
+  http.put(`${routes.put}/${route.params.uuid}`, apartment.value).then(() => {
+    router.push({ name: 'apartment-show', params: { uuid: apartment.value.uuid } });
+    isFetched.value = false;
+    NProgress.done();
+  });
+}
+
+function validate(event) {
+  if (event.target.value.length > 0) {
+    event.target.classList.remove('is-invalid');
+    hasErrors.value = false;
+    return;
+  }
+  event.target.classList.add('is-invalid');
+  hasErrors.value = true;
+}
+
+// dd.mm.yyyy while typing (was vue-the-mask «##.##.####»)
+function maskDate(event) {
+  const digits = event.target.value.replace(/\D/g, '').slice(0, 8);
+  const masked = [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4, 8)].filter(Boolean).join('.');
+  event.target.value = masked;
+  apartment.value.available_at = masked;
+}
+
+function setState(stateId) {
+  apartment.value.state_id = stateId;
+}
+
+function editTenant() {
+  isEditTenant.value = true;
+}
+
+function removeTenant() {
+  apartment.value.tenant = {
+    uuid: null,
+    name: null,
+    firstname: null,
+    email: null,
+    phone: null,
+  };
+}
 </script>

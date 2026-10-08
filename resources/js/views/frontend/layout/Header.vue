@@ -8,7 +8,7 @@
             <icon-logo class="icon-logo" />
           </li>
           <li class="xs:hide span-6 page-title">
-            <h1>{{ $parent.$parent.$props.estate }}</h1>
+            <h1>{{ estate }}</h1>
           </li>
           <li class="xs:span-8 span-4 page-title flex justify-end">
             <h2>Ihre Wohnungsangebote</h2>
@@ -20,33 +20,27 @@
   <slot />
 </div>
 </template>
-<script>
+<script setup>
+import { computed, inject } from 'vue';
 import IconLogo from "@/components/ui/icons/Logo.vue";
 
-export default {
-  components: {
-    IconLogo,
+const props = defineProps({
+  view: {
+    type: String,
+    default: 'list'
   },
+});
 
-  props: {
+const estate = inject('estate');
 
-    view: {
-      type: String,
-      default: 'list'
-    },
-  },
-
-  computed: {
-    cls() {
-      let cls = 'site-header';
-      if (this.$props.view == 'show') {
-        cls = cls + ' is-collection-detail';
-      }
-      if (this.$props.view == 'list') {
-        cls = cls + ' is-collection-list';
-      }
-      return cls; 
-    }
-  },
-}
+const cls = computed(() => {
+  let cls = 'site-header';
+  if (props.view == 'show') {
+    cls = cls + ' is-collection-detail';
+  }
+  if (props.view == 'list') {
+    cls = cls + ' is-collection-list';
+  }
+  return cls;
+});
 </script>

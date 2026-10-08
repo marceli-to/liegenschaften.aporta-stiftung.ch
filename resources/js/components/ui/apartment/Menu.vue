@@ -3,7 +3,7 @@
   <nav class="page-menu content-block">
     <ul>
       <li>
-        <router-link :to="{name: $store.state.referrer ? $store.state.referrer : 'apartments'}">
+        <router-link :to="{name: store.referrer ? store.referrer : 'apartments'}">
           <icon-arrow-left :size="'md'" />
           <span>Zurück</span>
         </router-link>
@@ -15,23 +15,23 @@
         </a>
       </li>
       <li>
-        <router-link :to="{name: 'apartment-edit', params: { id: $props.id }}" :active-class="'is-active'">
+        <router-link :to="{name: 'apartment-edit', params: { uuid: apartment.uuid }}" :active-class="'is-active'">
           <icon-pencil />
           <span>Bearbeiten</span>
         </router-link>
       </li>
       <li>
-        <a href="" @click.prevent="addToCollection($props.apartment.uuid)" v-if="!isInCollection($props.apartment.uuid)">
+        <a href="" @click.prevent="addToCollection(apartment.uuid)" v-if="!isInCollection(apartment.uuid)">
           <icon-checkbox class="icon icon-dark" />
           <span>Merken</span>
         </a>
-        <a href="" @click.prevent="removeFromCollection($props.apartment.uuid)" v-if="isInCollection($props.apartment.uuid)">
+        <a href="" @click.prevent="removeFromCollection(apartment.uuid)" v-if="isInCollection(apartment.uuid)">
           <icon-checkbox :active="true" class="icon" />
           <span>Merken</span>
         </a> 
       </li>
       <li>
-        <a :href="`/assets/media/${$props.apartment.number}-${$props.apartment.uuid}.pdf`" target="_blank">
+        <a :href="`/assets/media/${apartment.number}-${apartment.uuid}.pdf`" target="_blank">
           <icon-document />
           <span>Download PDF</span>
         </a>
@@ -42,31 +42,20 @@
 
 </div>
 </template>
-<script>
+<script setup>
+import { store } from '@/store';
+import { useCollection } from '@/composables/useCollection';
 import IconArrowLeft from "@/components/ui/icons/ArrowLeft.vue";
 import IconReset from "@/components/ui/icons/Reset.vue";
 import IconPencil from "@/components/ui/icons/Pencil.vue";
-import IconBubble from "@/components/ui/icons/Bubble.vue";
 import IconDocument from "@/components/ui/icons/Document.vue";
 import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
-import Collection from "@/views/backend/pages/mixins/Collection";
 
-export default {
+defineProps({
+  apartment: Object,
+});
 
-  components: {
-    IconArrowLeft,
-    IconReset,
-    IconPencil,
-    IconBubble,
-    IconDocument,
-    IconCheckbox,
-  },
+defineEmits(['reset']);
 
-  props: {
-    id: [ String, Number ],
-    apartment: Object,
-  },
-
-  mixins: [Collection],
-}
+const { addToCollection, removeFromCollection, isInCollection } = useCollection();
 </script>

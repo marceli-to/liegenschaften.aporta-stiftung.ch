@@ -4,7 +4,7 @@
   <site-main v-if="isFetched">
     <div v-if="isValid">
       <div class="sm:grid-cols-12">
-        <h1 class="sm:hide">{{ $parent.$props.estate }}</h1>
+        <h1 class="sm:hide">{{ estateName }}</h1>
         <div class="span-4 collection__intro mb-8x sm:mb-0">
           <p>Hier finden Sie sämtliche Informationen zu unserem Wohnungsangebot. Unter An-/Abmeldung haben Sie die Möglichkeit Ihre Rückmeldung direkt an uns zu richten. <strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung. Die Vermietung erfolgt <strong>ohne</strong> Wohnungsbesichtigung.</p>
         </div>
@@ -147,93 +147,53 @@
   </site-main>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, inject, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Sort from "@/mixins/Sort";
+import http from '@/lib/http';
+import { useSort } from '@/composables/useSort';
 import SiteHeader from '@/views/frontend/layout/Header.vue';
 import SiteMain from '@/views/frontend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
-import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconLinkExternal from '@/components/ui/icons/LinkExternal.vue';
 
-export default {
+const route = useRoute();
+const estateName = inject('estate');
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    Isometrie,
-    IconSort,
-    IconLinkExternal
-  },
+const uuid = ref(null);
+const data = ref([]);
+const estate = ref({});
+const isFetched = ref(false);
+const isValid = ref(false);
 
-  mixins: [ErrorHandling, Sort],
+const { sort, sortedData } = useSort(data);
 
-  data() {
-    return { 
+onMounted(() => fetch());
 
-      // Uuid
-      uuid: null,
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(`/api/user-collection/${route.params.uuid}`).then(response => {
+    data.value = response.data.items;
+    uuid.value = response.data.uuid;
+    estate.value = response.data.estate;
+    isValid.value = response.data.valid;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      // Items
-      data: [],
+// Highlight the hovered apartment in the isometry
+function show(number) {
+  document.querySelector(`[data-id="${number}"]`)?.classList.add('is-visible');
+}
 
-      // Estate
-      estate: {},
-
-      // States
-      isFetched: false,
-      isValid: false,
-
-      // Routes
-      routes: {
-        list: '/api/user-collection'
-      },
-
-      // Messages
-      messages: {},
-    };
-  },
-
-
-  mounted(){
-    NProgress.configure({ showBar: false });
-    this.fetch();
-  },
-
-  methods: {
-    
-    fetch() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`).then(response => {
-        this.data = response.data.items;
-        this.uuid = response.data.uuid;
-        this.estate = response.data.estate;
-        this.isValid = response.data.valid;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    show(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.add('is-visible');
-    },
-
-    hide(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.remove('is-visible');
-    },
-  }
+function hide(number) {
+  document.querySelector(`[data-id="${number}"]`)?.classList.remove('is-visible');
 }
 </script>

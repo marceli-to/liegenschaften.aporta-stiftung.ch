@@ -88,15 +88,14 @@ class AuthTest extends TestCase
         $this->actingAs($this->user(['role' => 'guest', 'email' => 'b@example.invalid']))->get('/administration/objekte')->assertForbidden();
     }
 
-    public function testLogout()
+    public function testLogoutOnlyByPost()
     {
         $user = $this->user();
 
-        $this->actingAs($user)->post('/logout')->assertRedirect('/');
-        $this->assertGuest();
+        $this->actingAs($user)->get('/logout')->assertStatus(405);
+        $this->assertAuthenticatedAs($user);
 
-        // GET until the admin's logout link becomes a form (Vue 3 port)
-        $this->actingAs($user)->get('/logout')->assertRedirect('/');
+        $this->actingAs($user)->post('/logout')->assertRedirect('/');
         $this->assertGuest();
     }
 

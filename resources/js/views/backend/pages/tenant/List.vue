@@ -1,9 +1,8 @@
 <template>
   <div>
     <site-header 
-      :user="$store.state.user" 
       :view="'tenants'">
-      <nav class="selector" v-if="hasSearch">
+      <nav class="selector" v-if="store.ui.hasSearch">
         <div>
           <div class="grid-cols-12">
             <div class="span-6">
@@ -12,7 +11,7 @@
             </div>
           </div>
         </div>
-        <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="fetch()">Suchen</a>
+        <a href="javascript:;" :class="[store.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="fetch()">Suchen</a>
         <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetSearch()">Zurücksetzen</a>
       </nav>
     </site-header>
@@ -92,105 +91,63 @@
 
   </div>
   </template>
-  <script>
-  import NProgress from 'nprogress';
-  import ErrorHandling from '@/mixins/ErrorHandling';
-  import Helpers from "@/mixins/Helpers";
-  import Sort from "@/mixins/Sort";
-  import Search from "@/views/backend/pages/mixins/TenantSearch";
-  import IconSort from "@/components/ui/icons/Sort.vue";
-  import IconState from "@/components/ui/icons/State.vue";
-  import IconPlus from "@/components/ui/icons/Plus.vue";
-  import IconCross from "@/components/ui/icons/Cross.vue";
-  import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
-  import IconHourglass from "@/components/ui/icons/Hourglass.vue";
-  import IconTrash from "@/components/ui/icons/Trash.vue";
-  import IconLinkExternal from "@/components/ui/icons/LinkExternal.vue";
-  import IconPencil from "@/components/ui/icons/Pencil.vue";
-  import IconDocument from "@/components/ui/icons/Document.vue";
-  import SiteHeader from '@/views/backend/layout/Header.vue';
-  import SiteMain from '@/views/backend/layout/Main.vue';
-  import List from "@/components/ui/layout/List.vue";
-  import ListHeader from "@/components/ui/layout/ListHeader.vue";
-  import ListRow from "@/components/ui/layout/ListRow.vue";
-  import ListItem from "@/components/ui/layout/ListItem.vue";
-  import ListAction from "@/components/ui/layout/ListAction.vue";
-  import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-  
-  export default {
-  
-    components: {
-      NProgress,
-      SiteHeader,
-      SiteMain,
-      IconSort,
-      IconState,
-      IconPlus,
-      IconCross,
-      IconCheckmark,
-      IconHourglass,
-      IconTrash,
-      IconLinkExternal,
-      IconPencil,
-      IconDocument,
-      List,
-      ListRow,
-      ListHeader,
-      ListItem,
-      ListAction,
-      ListEmpty,
-    },
-   
-    mixins: [ErrorHandling, Helpers, Sort, Search],
-  
-    data() {
-      return {
-  
-        // Data
-        data: [],
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import NProgress from 'nprogress';
+import http from '@/lib/http';
+import { store } from '@/store';
+import { randomString } from '@/lib/utils';
+import { useSort } from '@/composables/useSort';
+import IconSort from "@/components/ui/icons/Sort.vue";
+import IconDocument from "@/components/ui/icons/Document.vue";
+import SiteHeader from '@/views/backend/layout/Header.vue';
+import SiteMain from '@/views/backend/layout/Main.vue';
+import List from "@/components/ui/layout/List.vue";
+import ListHeader from "@/components/ui/layout/ListHeader.vue";
+import ListItem from "@/components/ui/layout/ListItem.vue";
+import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-        // Search term
-        searchTerm: '',
-  
-        // Routes
-        routes: {
-          get: '/api/tenants',
-        },
-  
-  
-        // States
-        isFetched: false,
-  
-        // Messages
-        messages: {
-          emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
-        },
-      };
-    },
-  
-    mounted() {
-      NProgress.configure({ showBar: false });
-      this.fetch();
+const data = ref([]);
+const searchTerm = ref('');
+const isFetched = ref(false);
 
-      document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 13 && this.hasSearch && this.searchTerm !== '') {
-          this.fetch();
-        }
-      });
-    },
-  
-    methods: {
-  
-      fetch() {
-        NProgress.start();
-        this.isFetched = false;
-        this.axios.get(`${this.routes.get}/${this.searchTerm}`).then(response => {
-          this.data = response.data.data;
-          this.isFetched = true;
-          this.hideSearch();
-          NProgress.done();
-        });
-      },
-    },
+const routes = {
+  get: '/api/tenants',
+};
+
+const messages = {
+  emptyData: 'Sorry, es sind keine Datensätze vorhanden.',
+};
+
+const { sort, sortedData } = useSort(data);
+
+function onEnter(e) {
+  if (e.key === 'Enter' && store.ui.hasSearch && searchTerm.value !== '') {
+    fetch();
   }
-  </script>
+}
+
+onMounted(() => {
+  fetch();
+  document.addEventListener('keydown', onEnter);
+});
+
+onBeforeUnmount(() => document.removeEventListener('keydown', onEnter));
+
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(`${routes.get}/${searchTerm.value}`).then(response => {
+    data.value = response.data.data;
+    isFetched.value = true;
+    store.ui.hasSearch = false;
+    NProgress.done();
+  });
+}
+
+function resetSearch() {
+  store.ui.hasSearch = false;
+  searchTerm.value = '';
+  fetch();
+}
+</script>

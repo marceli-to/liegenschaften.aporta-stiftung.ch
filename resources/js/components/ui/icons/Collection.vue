@@ -1,6 +1,6 @@
 <template>
  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
-  <g v-if="!$props.active">
+  <g v-if="!active">
     <path fill="currentColor" d="M28 28H12V12h6v-2h-8v20h20v-8h-2z"/>
     <path fill="currentColor" d="M22 10v2h4.727L20 18.727 21.273 20 28 13.273V18h2v-8z"/>
   </g>
@@ -9,13 +9,11 @@
   </g>
  </svg>
 </template>
-<script>
-export default {
-  props: {
-    active: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+defineProps({
+  active: {
+    type: Boolean,
+    default: false,
   },
-}
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
 <div>
-  <site-header :user="$store.state.user">
-    <nav class="selector" v-if="hasFilter && isFetchedFilterItems">
+  <site-header>
+    <nav class="selector" v-if="store.ui.hasFilter && isFetchedFilterItems">
       <div>
         <div class="grid-cols-12">
           <div class="span-2">
@@ -36,7 +36,7 @@
             <h2>Mietzins</h2>
             <div v-for="(value, key) in filterItems.rent" :key="key">
               <a href="javascript:;" @click.prevent="setFilterItem('rent', key)">
-                <icon-radio :active="$store.state.filter['rent'] == key" />
+                <icon-radio :active="store.filter['rent'] == key" />
                 <span>{{value}}</span>
               </a>
             </div>
@@ -46,7 +46,7 @@
             <h2>Aussenraum</h2>
             <div v-for="(value, key) in filterItems.exteriors" :key="key">
               <a href="javascript:;" @click.prevent="setFilterItem('exterior', key)">
-                <icon-radio :active="$store.state.filter['exterior'] == key" />
+                <icon-radio :active="store.filter['exterior'] == key" />
                 <span>{{value}}</span>
               </a>
             </div>
@@ -61,14 +61,14 @@
             </div>
             <div>
               <a href="javascript:;" @click.prevent="setFilterItem('collections', 1)">
-                <icon-radio :active="$store.state.filter.collections == 1" />
+                <icon-radio :active="store.filter.collections == 1" />
                 <span>Angebote</span>
               </a>
             </div>
           </div>
         </div>
       </div>
-      <a href="javascript:;" :class="[$store.state.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen ({{ sortedData.length }})</a>
+      <a href="javascript:;" :class="[store.filter.set ? 'is-active' : '', 'btn-primary is-filter']" @click.prevent="hideFilter()">Anzeigen ({{ sortedData.length }})</a>
       <a href="javascript:;" class="btn-secondary is-outline" @click.prevent="resetFilter()">Zurücksetzen</a>
     </nav>
   </site-header>
@@ -220,177 +220,131 @@
   </site-main>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Helpers from "@/mixins/Helpers";
-import Sort from "@/mixins/Sort";
-import Filter from "@/views/backend/pages/mixins/Filter";
-import Collection from "@/views/backend/pages/mixins/Collection";
+import http from '@/lib/http';
+import { store } from '@/store';
+import { randomString } from '@/lib/utils';
+import { useSort } from '@/composables/useSort';
+import { useFilter } from '@/composables/useFilter';
+import { useCollection } from '@/composables/useCollection';
 import IconSort from "@/components/ui/icons/Sort.vue";
 import IconState from "@/components/ui/icons/State.vue";
 import IconRadio from "@/components/ui/icons/Radio.vue";
-import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconDocument from "@/components/ui/icons/Document.vue";
 import IconCheckbox from "@/components/ui/icons/Checkbox.vue";
-import Bullet from "@/components/ui/misc/Bullet.vue";
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
-import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
-export default {
+const data = ref([]);
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    Bullet,
-    IconSort,
-    IconState,
-    IconRadio,
-    IconPlus,
-    IconDocument,
-    IconCheckbox,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    ListAction,
-    ListEmpty,
-    Isometrie
-  },
+const filterItems = ref({
+  buildings: [],
+  rooms: [],
+  floors: [],
+  exteriors: [],
+  states: [],
+});
 
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
+const routes = {
+  list: '/api/apartments',
+  filter: '/api/apartments/filter',
+  settings: {
+    buildings: '/api/settings/buildings',
+    rooms: '/api/settings/rooms',
+    floors: '/api/settings/floors',
+    exteriors: '/api/settings/exteriors',
+    states: '/api/settings/states',
+    rent: '/api/settings/rent',
+  }
+};
 
-  data() {
-    return {
+const isFetched = ref(false);
+const isFetchedFilterItems = ref(false);
 
-      // Data
-      data: [],
+const messages = {
+  emptyData: 'Es sind noch keine Wohnungen vorhanden...',
+};
 
-      // Filter items
-      filterItems: {
-        buildings: [],
-        rooms: [],
-        floors: [],
-        exteriors: [],
-        states: [],
-      },
+const { sort, sortedData } = useSort(data);
+const { addToCollection, removeFromCollection, isInCollection } = useCollection();
+const { hideFilter, resetFilter, isFilterAttribute, setFilterItem, setFilterMenu } = useFilter({ fetch, fetchFiltered });
 
-      // Routes
-      routes: {
-        list: '/api/apartments',
-        filter: '/api/apartments/filter',
-        settings: {
-          buildings: '/api/settings/buildings',
-          rooms: '/api/settings/rooms',
-          floors: '/api/settings/floors',
-          exteriors: '/api/settings/exteriors',
-          states: '/api/settings/states',
-          rent: '/api/settings/rent',
-        }
-      },
+onMounted(() => {
+  fetchFilterItems();
+  if (store.filter.set) {
+    fetchFiltered();
+    return;
+  }
+  fetch();
+});
 
-      // States
-      isFetched: false,
-      isFetchedFilterItems: false,
+function fetch() {
+  isFetched.value = false;
+  NProgress.start();
+  http.get(routes.list).then(response => {
+    data.value = response.data.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Wohnungen vorhanden...',
-        updated: 'Status geändert',
-      },
+function fetchFilterItems() {
+  isFetchedFilterItems.value = false;
+  const settings = routes.settings;
+  Promise.all([
+    http.get(settings.buildings),
+    http.get(settings.rooms),
+    http.get(settings.floors),
+    http.get(settings.exteriors),
+    http.get(settings.states),
+    http.get(settings.rent),
+  ]).then(responses => {
+    filterItems.value = {
+      buildings: responses[0].data,
+      rooms: responses[1].data,
+      floors: responses[2].data,
+      exteriors: responses[3].data,
+      states: responses[4].data,
+      rent: responses[5].data,
     };
-  },
+    isFetchedFilterItems.value = true;
+  });
+}
 
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.beforeFetch()
-  },
+function fetchFiltered() {
+  const filter = store.filter;
+  const param = {
+    buildings: filter.buildings ? filter.buildings : null,
+    rooms: filter.rooms ? filter.rooms : null,
+    floors: filter.floors ? filter.floors : null,
+    states: filter.states ? filter.states : null,
+    rent: filter.rent ? filter.rent : null,
+    collections: filter.collections ? filter.collections : null,
+    exterior: filter.exterior ? filter.exterior : null,
+  };
+  NProgress.start();
+  isFetched.value = false;
+  http.post(routes.filter, param).then(response => {
+    data.value = response.data.data;
+    setFilterMenu(data.value);
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-  methods: {
+// Highlight the hovered apartment in the isometry
+function show(number) {
+  document.querySelector(`[data-id="${number}"]`)?.classList.add('is-visible');
+}
 
-    beforeFetch() {
-      this.fetchFilterItems();
-      if (this.$store.state.filter.set) {
-        this.fetchFiltered();
-        return;
-      }
-      this.fetch();
-    },
-
-    fetch() {
-      this.isFetched = false;
-      NProgress.start();
-      this.axios.get(`${this.routes.list}`).then(response => {
-        this.data = response.data.data;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    fetchFilterItems() {
-      this.isFetchedFilterItems = false;
-      this.axios.all([
-        this.axios.get(this.routes.settings.buildings),
-        this.axios.get(this.routes.settings.rooms),
-        this.axios.get(this.routes.settings.floors),
-        this.axios.get(this.routes.settings.exteriors),
-        this.axios.get(this.routes.settings.states),
-        this.axios.get(this.routes.settings.rent),
-      ]).then(axios.spread((...responses) => {
-        this.filterItems = {
-          buildings: responses[0].data,
-          rooms: responses[1].data,
-          floors: responses[2].data,
-          exteriors: responses[3].data,
-          states: responses[4].data,
-          rent: responses[5].data,
-        };
-        this.isFetchedFilterItems = true;
-      }));
-    },
-
-    fetchFiltered() {
-      let param = {
-        buildings: this.$store.state.filter.buildings ? this.$store.state.filter.buildings : null,
-        rooms: this.$store.state.filter.rooms ? this.$store.state.filter.rooms : null,
-        floors: this.$store.state.filter.floors ? this.$store.state.filter.floors : null,
-        states: this.$store.state.filter.states ? this.$store.state.filter.states : null,
-        rent: this.$store.state.filter.rent ? this.$store.state.filter.rent : null,
-        collections: this.$store.state.filter.collections ? this.$store.state.filter.collections : null,
-      };
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.post(`${this.routes.filter}`, param).then(response => {
-        this.data = response.data.data;
-        this.setFilterMenu(this.data);
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    show(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.add('is-visible');
-    },
-
-    hide(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.remove('is-visible');
-    },
-  },
-
-  watch: {
-    '$route'() {
-      this.beforeFetch()
-    }
-  },
+function hide(number) {
+  document.querySelector(`[data-id="${number}"]`)?.classList.remove('is-visible');
 }
 </script>

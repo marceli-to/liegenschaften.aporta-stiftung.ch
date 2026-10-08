@@ -1,0 +1,46 @@
+{
+  "_LinkExternal-COOPGO2l.js": {
+    "file": "assets/LinkExternal-COOPGO2l.js",
+    "name": "LinkExternal",
+    "css": [
+      "assets/LinkExternal-Cm10OFR8.css"
+    ]
+  },
+  "_LinkExternal-Cm10OFR8.css": {
+    "file": "assets/LinkExternal-Cm10OFR8.css",
+    "src": "_LinkExternal-Cm10OFR8.css"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-nf1WbTca.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_LinkExternal-COOPGO2l.js"
+    ]
+  },
+  "resources/js/collection.js": {
+    "file": "assets/collection-CAy6Kfkk.js",
+    "name": "collection",
+    "src": "resources/js/collection.js",
+    "isEntry": true,
+    "imports": [
+      "_LinkExternal-COOPGO2l.js"
+    ]
+  },
+  "resources/js/validation.js": {
+    "file": "assets/validation-Co4Nv5hr.js",
+    "name": "validation",
+    "src": "resources/js/validation.js",
+    "isEntry": true
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-CmOLaFJh.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}

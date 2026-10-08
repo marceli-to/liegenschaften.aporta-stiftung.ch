@@ -1,6 +1,6 @@
 <template>
 <div>
-  <site-header :user="$store.state.user"></site-header>
+  <site-header></site-header>
   <site-main v-if="isFetched">
     <list class="mt-6x" v-if="sortedData.length">
       <list-header>
@@ -113,17 +113,13 @@
   </dialog-wrapper>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
-import Helpers from "@/mixins/Helpers";
-import Sort from "@/mixins/Sort";
-import Filter from "@/views/backend/pages/mixins/Filter";
-import Collection from "@/views/backend/pages/mixins/Collection";
+import http from '@/lib/http';
+import { useSort } from '@/composables/useSort';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import IconSort from "@/components/ui/icons/Sort.vue";
-import IconState from "@/components/ui/icons/State.vue";
-import IconPlus from "@/components/ui/icons/Plus.vue";
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
@@ -134,93 +130,49 @@ import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import List from "@/components/ui/layout/List.vue";
 import ListHeader from "@/components/ui/layout/ListHeader.vue";
-import ListRow from "@/components/ui/layout/ListRow.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
-export default {
+const data = ref([]);
+const itemToDelete = ref(null);
+const isFetched = ref(false);
+const dialogDestroyConfirm = ref(null);
 
-  components: {
-    NProgress,
-    SiteHeader,
-    SiteMain,
-    DialogWrapper,
-    IconSort,
-    IconState,
-    IconPlus,
-    IconCross,
-    IconCheckmark,
-    IconHourglass,
-    IconTrash,
-    IconLinkExternal,
-    IconPencil,
-    List,
-    ListRow,
-    ListHeader,
-    ListItem,
-    ListAction,
-    ListEmpty,
-  },
- 
-  mixins: [ErrorHandling, Helpers, Sort, Filter, Collection],
+const routes = {
+  get: '/api/collection-items',
+  delete: '/api/collection-item',
+};
 
-  data() {
-    return {
+const messages = {
+  emptyData: 'Es sind noch keine Angebote vorhanden.',
+};
 
-      // Data
-      data: [],
+const { sort, sortedData } = useSort(data);
 
-      // Routes
-      routes: {
-        get: '/api/collection-items',
-        delete: '/api/collection-item',
-      },
+onMounted(() => fetch());
 
-      itemToDelete: null,
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(routes.get).then(response => {
+    data.value = response.data.data;
+    isFetched.value = true;
+    NProgress.done();
+  });
+}
 
-      // States
-      isFetched: false,
+function destroy() {
+  NProgress.start();
+  http.delete(`${routes.delete}/${itemToDelete.value}`).then(() => {
+    fetch();
+    itemToDelete.value = null;
+    dialogDestroyConfirm.value.hide();
+    NProgress.done();
+  });
+}
 
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Angebote vorhanden.',
-      },
-    };
-  },
-
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.fetch();
-  },
-
-  methods: {
-
-    fetch() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.get}`).then(response => {
-        this.data = response.data.data;
-        this.isFetched = true;
-        NProgress.done();
-      });
-    },
-
-    destroy() {
-      NProgress.start();
-      this.axios.delete(`${this.routes.delete}/${this.itemToDelete}`).then(response => {
-        this.fetch();
-        this.itemToDelete = null;
-        this.$refs.dialogDestroyConfirm.hide();
-        NProgress.done();
-      });
-    },
-
-    showConfirm(uuid) {
-      this.itemToDelete = uuid;
-      this.$refs.dialogDestroyConfirm.show();
-    },
-
-  },
+function showConfirm(uuid) {
+  itemToDelete.value = uuid;
+  dialogDestroyConfirm.value.show();
 }
 </script>

@@ -1,17 +1,15 @@
 <template>
-  <div :class="[$props.cls ? $props.cls : '']">
+  <div :class="[cls ? cls : '']">
     <label>
       <slot />
     </label>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    cls: {
-      type: String,
-      default: ''
-    },
+<script setup>
+defineProps({
+  cls: {
+    type: String,
+    default: ''
   },
-}
+});
 </script>

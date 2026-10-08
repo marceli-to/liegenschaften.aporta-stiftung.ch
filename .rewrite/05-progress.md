@@ -139,26 +139,90 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
   `npm audit`: 69 → 64. `lodash` (only `window._` in `bootstrap.js`) goes
   with `bootstrap.js` in step 3.
 
+- 2026-10-08: **frontend steps 2–5, Vite + Vue 3** (one commit, as cra
+  `6f3bf84`: Vue 3 can't build the Vue 2 entries, so the build switch and
+  the port go together). Straight port, no visual change.
+  - Build: Vite 8 + `laravel-vite-plugin` 3 + `@vitejs/plugin-vue` 6,
+    `vite.config.js` as cra (inputs `sass/app.scss`, `app.js`,
+    `collection.js`, `validation.js`; `@` alias; absolute `/assets/` urls
+    kept; Sass deprecations silenced) plus `whitespace: 'preserve'` (Vue 2
+    kept the space between inline tags across line breaks; without it the
+    «Google Maps» link moved). `public/build/` committed; the Mix output
+    (`public/assets/js/{app,collection,validation}.js`, `css/app.css`,
+    both `mix-manifest.json`) and `webpack.mix.js` removed. Blades use
+    `@vite`; the guest pages load only `validation.js` (they loaded the
+    whole admin bundle before). `npm audit`: 64 → **0**. Packages now:
+    vue 3.5, vue-router 4, nprogress, axios; Vuex, vue-axios(-interceptors),
+    vue-notification, vue-the-mask, lodash, Mix and loaders gone.
+  - Sass for lightningcss (Vite's minifier), each checked against the old
+    CSS: `$url-icons` absolute (`/assets/img/icons/`, was relative to
+    `/assets/css/`); removed `*zoom: 1` (IE 7 hack, a syntax error now);
+    removed the `:-ms-input-placeholder` / single-colon `:-moz-placeholder`
+    rules (no current browser has them; lightningcss rewrites the ms one to
+    `:placeholder-shown`, which hit the empty inputs themselves) and one
+    placeholder rule with a missing comma (browsers always dropped it). The
+    button `line-height: 1` now sits in a `width < 700px` query: in Sass's
+    output it came after the font-size media queries, Mix's cssnano merged it
+    before them, lightningcss keeps the source order; this states what was
+    rendered.
+  - Code (`<script setup>` throughout, as cra): `lib/http.js` (axios
+    instance; admin interceptor: 401/419 → login, 403/404 → toast + error
+    route, 422/500 → toast; `{ handleErrors: false }` for the user forms;
+    `logout()` posts a form), `lib/notify.js` + `Notifications.vue` (cra),
+    `lib/utils.js` (padStart, randomString, validators, an `orderBy` for
+    lodash's), `store.js` (reactive, in place of Vuex; the header's
+    filter/search/collection panels live there instead of `$parent`),
+    composables `useSort`, `useFilter`, `useCollection`, `useCandidates`
+    (create + edit offer), `router.js`; the offer SPA gets the estate from
+    `data-estate` + `provide`. `<router-view :key="route.fullPath">`
+    replaces the route watchers. Isometrie: straight port (highlight scoped
+    to the component); data-driven is step 6.
+  - **`/logout` is POST-only now** (`AuthTest::testLogoutOnlyByPost`).
+  - **Bugs fixed on the way** (all pre-existing):
+    - Errors were never shown: nothing rendered vue-notification's
+      `<notifications>`, and the 422 handler threw (`forEach` on an object).
+      Toasts now appear top right (red for errors).
+    - The «Aussenraum» filter was never sent to the API
+      (`fetchFiltered` left out `exterior`); with the backend fix it works.
+    - Offer with 3+ recipients: the confirm text `pop()`ed the last
+      recipient off the real list, so they got no offer.
+    - Unpicking an apartment on the offer form threw (`this.fetch` doesn't
+      exist there), so the list didn't refresh.
+    - Users: after one create/reset the form had no role, so the next create
+      gave a 500 unless «Admin» was toggled; the error dialog kept every
+      earlier message.
+    - Tenant search added a new Enter listener on every visit; dialogs a
+      new Escape listener per instance. Both removed on unmount now.
+    - The apartment menu's edit link passed `{ id }` to a route that needs
+      `uuid` (worked by reusing the current route's param).
+
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–6 done** (`ab468a6` … `c2cb5cb`, plus two fixes; pushed).
-**Frontend step 1 done.** Next: **frontend step 2, Vite** (`03` → Order).
+**Backend steps 1–6 done.** **Frontend steps 1–5 done** (Vite + Vue 3,
+pushed). Next: **frontend step 6, Isometrie data-driven** (`03` →
+Isometrie and KORO), then QA and deploy.
 
-- `php artisan test` must stay green through the frontend steps (the API
-  tests pin what the Vue 3 admin talks to).
-- `npm ci && npm run production` (Mix 6, Vue 2) still reproduces the
-  committed `public/assets`.
+- `php artisan test` (69) stays green; it runs without a Vite build
+  (`withoutVite()` in `TestCase`).
+- `npm ci && npm run build` reproduces `public/build` (hashes identical on
+  rebuild). Dev: `npm run dev` serves HTTPS on the `.test` host (Herd
+  cert), both domains work.
+- QA scripts for the next steps: `/tmp/aporta/qa/` (gone after a reboot;
+  see Verified for what they do). Fixtures: `php fixtures.php up|down`.
 
 ## Next
 
-1. Frontend steps 2–6 (`03`). Then `/logout` POST-only (adjust `AuthTest::testLogout`).
+1. Frontend step 6: Isometrie data-driven (`03`). Re-run the screenshot
+   comparison afterwards (the isometry is on 5 views).
 2. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
-3. QA on both domains: login, every admin page, create + send a collection
-   (mail queue → mail), open the offer link, reply, both Excel exports.
-4. Deploy (`02` → `.env` changes, both files). Before: `select role,
-   count(*) from users` on production; only `admin` and `editor` get into
-   the admin now (locally 7 admins, 1 editor).
+3. QA on both domains (staging or production copy of the code with the
+   local DB): login, every admin page, send a collection (mail queue →
+   mail), offer link, reply, both Excel exports.
+4. Deploy (`02` → `.env` changes, both files). The server needs no Node:
+   `public/build` is committed. Before: `select role, count(*) from users`
+   on production; only `admin` and `editor` get into the admin now
+   (locally 7 admins, 1 editor).
 
 ## Verified
 
@@ -219,6 +283,26 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 - Frontend step 1: `npm ci && npm run production` from the new lockfile
   still reproduces the committed `public/assets` byte for byte (so nothing
   removed was in a bundle). `php artisan test` green.
+
+- Frontend steps 2–5, against a Vue 2 baseline recorded first (Playwright,
+  temporary admin/editor + a valid 3-item offer, removed afterwards):
+  - Screenshots of all 10 admin views, the offer list/detail (1440 and
+    390 px) and the 4 guest pages: **pixel-identical** (ImageMagick AE = 0),
+    visible text identical, no console errors.
+  - Computed style of every element (old Mix CSS swapped in vs new) on 16
+    pages/states (filter panel, dropdown, dialogs, invalid fields, search,
+    user form, offer reply): identical apart from the new notifications
+    container and an equivalent gradient notation.
+  - 65 interaction checks, between a dump and restore of the local DB:
+    sort, dropdown, filters incl. «Terrasse» = 21, filter pagination on the
+    detail, pick → offer form → unpick → 3 recipients → send (3 offers, 3
+    queued mails), edit offer, delete offer, apartment edit (date mask,
+    validation, tenant), offer reply → assign → finalize → reset, tenant
+    search (Enter, reset), users (create, duplicate e-mail dialog, second
+    create, edit, delete), 404 toast + route, POST logout, editor profile
+    save, offer SPA (hash marks read, hover highlight, pagination, reply
+    validation and reply, mobile). Local DB checked back to its counts.
+  - Vite dev server: admin and offer page load on the `.test` hosts.
 
 ## Left over / follow-ups
 

@@ -66,18 +66,4 @@ section.auth {
     line-height: 1;
   }
   
-  input[type=email]:-ms-input-placeholder,
-  input[type=password]:-ms-input-placeholder {
-    color: $color-primary;
-    padding: 0;
-    line-height: 1;
-  }
-  
-  input[type=email]:-moz-placeholder,
-  input[type=password]:-moz-placeholder {
-    color: $color-primary;
-    padding: 0;
-    opacity: 1 !important;
-    line-height: 1;
-  }
 }

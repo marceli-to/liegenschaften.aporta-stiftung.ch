@@ -226,15 +226,17 @@
       </div>
     </template>
     <template #button>
-      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="$refs.dialogSubmitConfirm.hide()">Schliessen</a>
+      <a href="javascript:;" class="btn-primary mb-3x" @click.stop="dialogSubmitConfirm.hide()">Schliessen</a>
     </template>
   </dialog-wrapper>
 
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import NProgress from 'nprogress';
-import ErrorHandling from '@/mixins/ErrorHandling';
+import http from '@/lib/http';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
 import SiteHeader from '@/views/frontend/layout/Header.vue';
 import SiteMain from '@/views/frontend/layout/Main.vue';
@@ -242,139 +244,85 @@ import PageMenu from '@/views/frontend/components/ui/Menu.vue';
 import ApartmentWrapper from '@/components/ui/apartment/Wrapper.vue';
 import ApartmentGrid from '@/components/ui/apartment/Grid.vue';
 import ApartmentRow from '@/components/ui/apartment/Row.vue';
-import ApartmentRowHeader from '@/components/ui/apartment/RowHeader.vue';
 import ApartmentLabel from '@/components/ui/apartment/Label.vue';
 import ApartmentInput from '@/components/ui/apartment/Input.vue';
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
-import IconCross from "@/components/ui/icons/Cross.vue";
-import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconRadio from '@/components/ui/icons/Radio.vue';
-import IconDocument from '@/components/ui/icons/Document.vue';
 
-export default {
-  components: {
-    NProgress,
-    DialogWrapper,
-    SiteHeader,
-    SiteMain,
-    PageMenu,
-    ApartmentWrapper,
-    ApartmentGrid,
-    ApartmentRow,
-    ApartmentInput,
-    ApartmentLabel,
-    ApartmentRowHeader,
-    Isometrie,
-    IconCross,
-    IconCheckmark,
-    IconRadio,
-    IconDocument
-  },
+const route = useRoute();
 
-  mixins: [ErrorHandling],
+const data = ref({});
+const pagination = ref({});
+const form = ref({
+  accepted: null,
+  parking: 0,
+  comment: null,
+});
+const isFetched = ref(false);
+const isValid = ref(false);
+const hasValidationErrors = ref(false);
+const dialogSubmitConfirm = ref(null);
 
-  data() {
-    return {
+const routes = {
+  show: '/api/user-collection',
+  reply: '/api/user-collection'
+};
 
-      // Data
-      data: {},
+onMounted(() => fetch());
 
-      // Pagination
-      pagination: {},
+function fetch() {
+  NProgress.start();
+  isFetched.value = false;
+  http.get(`${routes.show}/${route.params.uuid}/item/${route.params.itemUuid}`).then(response => {
+    data.value = response.data.item;
+    pagination.value = response.data.pagination;
+    isFetched.value = true;
+    isValid.value = response.data.valid;
+    NProgress.done();
+  });
+}
 
-      // Form data
-      form: {
-        accepted: null,
-        parking: 0,
-        comment: null,
-      },
-
-      // Routes
-      routes: {
-        show: '/api/user-collection',
-        reply: '/api/user-collection'
-      },
-
-      // States
-      isFetched: false,
-      isValid: false,
-
-      // Validation errors
-      hasValidationErrors: false,
-    };
-  },
-
-  mounted() {
-    NProgress.configure({ showBar: false });
-    this.fetch();
-  },
-
-  methods: {
-
-    fetch() {
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.get(`${this.routes.show}/${this.$route.params.uuid}/item/${this.$route.params.itemUuid}`).then(response => {
-        this.data = response.data.item;
-        this.pagination = response.data.pagination;
-        this.isFetched = true;
-        this.isValid = response.data.valid;
-        NProgress.done();
-      });
-    },
-
-    reply() {
-
-      if (this.form.accepted == 0 && !this.form.comment) {
-        this.hasValidationErrors = true;
-        return false;
-      }
-
-      let data = {
-        'uuid': this.$route.params.itemUuid,
-        'accepted': this.form.accepted,
-        'parking': this.form.parking,
-        'comment': this.form.comment,
-      };
-      NProgress.start();
-      this.axios.post(`${this.routes.reply}`, data).then(response => {
-        this.reset();
-        this.data.has_reply = true;
-        this.data.parking = data.parking;
-        this.data.accepted = data.accepted;
-        this.data.comment = data.comment;
-        NProgress.done();
-        this.$refs.dialogSubmitConfirm.show();
-      });
-    },
-
-    toggleAccept(value) {
-      this.form.accepted = value;
-      if (this.form.accepted !== 1) {
-        this.form.parking = 0;
-      }
-    },
-
-    toggleParking() {
-      this.form.parking = this.form.parking ? 0 : 1;
-    },
-
-    reset() {
-      this.form.accepted = null;
-      this.form.parking = 0;
-    },
-
-    removeValidationError() {
-      this.hasValidationErrors = false;
-    }
-
-  },
-
-  watch: {
-    '$route'() {
-      this.fetch();
-    }
+function reply() {
+  if (form.value.accepted == 0 && !form.value.comment) {
+    hasValidationErrors.value = true;
+    return false;
   }
 
-};
+  const payload = {
+    'uuid': route.params.itemUuid,
+    'accepted': form.value.accepted,
+    'parking': form.value.parking,
+    'comment': form.value.comment,
+  };
+  NProgress.start();
+  http.post(routes.reply, payload).then(() => {
+    reset();
+    data.value.has_reply = true;
+    data.value.parking = payload.parking;
+    data.value.accepted = payload.accepted;
+    data.value.comment = payload.comment;
+    NProgress.done();
+    dialogSubmitConfirm.value.show();
+  });
+}
+
+function toggleAccept(value) {
+  form.value.accepted = value;
+  if (form.value.accepted !== 1) {
+    form.value.parking = 0;
+  }
+}
+
+function toggleParking() {
+  form.value.parking = form.value.parking ? 0 : 1;
+}
+
+function reset() {
+  form.value.accepted = null;
+  form.value.parking = 0;
+}
+
+function removeValidationError() {
+  hasValidationErrors.value = false;
+}
 </script>

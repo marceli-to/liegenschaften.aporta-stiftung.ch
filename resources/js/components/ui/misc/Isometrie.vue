@@ -1,5 +1,5 @@
 <template>
-<div class="iso-wrapper">
+<div class="iso-wrapper" ref="root">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1526.2 1022" class="iso">
     <g data-id="HOFGEBÄUDE_B">
       <g data-id="Schatten_02">
@@ -1970,30 +1970,23 @@
   </svg>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 
-export default {
-
-  props: {
-    active: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  active: {
+    type: String,
+    default: null,
   },
+});
 
-  mounted() {
-    if (this.$props.active) {
-      this.activate(this.$props.active)
-    }
-  },
+const root = ref(null);
 
-  methods: {
-    activate(number) {
-      let apt = document.querySelector(`[data-id="${number}"]`);
-      apt.classList.add('is-visible');
-    },
+onMounted(() => {
+  if (props.active) {
+    root.value.querySelector(`[data-id="${props.active}"]`)?.classList.add('is-visible');
   }
-}
+});
 </script>
 <style>
 .cls-1 {

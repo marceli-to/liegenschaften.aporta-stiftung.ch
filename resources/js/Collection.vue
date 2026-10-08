@@ -1,15 +1,21 @@
 <template>
   <div>
-    <router-view></router-view>
+    <router-view :key="route.fullPath" />
   </div>
 </template>
-<script>
-export default {
-  props: {
-    estate: {
-      type: String,
-      default: null,
-    }
+<script setup>
+import { provide } from 'vue';
+import { useRoute } from 'vue-router';
+
+const props = defineProps({
+  estate: {
+    type: String,
+    default: null,
   },
-}
+});
+
+const route = useRoute();
+
+// Header and list show it
+provide('estate', props.estate);
 </script>

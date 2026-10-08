@@ -15,13 +15,17 @@
   @include font-bold();
   @include font-size($fs-md);
   height: 36px;
-  line-height: 1;
   outline: none !important;
   text-transform: uppercase;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: $color-white;
   transition: all .08s ease-in;
   width: 100%;
+
+  // Below the first font-size breakpoint only (as the Mix build rendered it)
+  @media screen and (width < 700px) {
+    line-height: 1;
+  }
 
   &.is-small {
     height: 24px;

@@ -20,32 +20,27 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      isOpen: false,
-    }
-  },
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-  created() {
-    const onEscape = (e) => {
-      if (this.isOpen && e.keyCode === 27) {
-        this.hide();
-      }
-    }
-    document.addEventListener('keydown', onEscape);
-  },
+const isOpen = ref(false);
 
-  methods: {
+function show() {
+  isOpen.value = true;
+}
 
-    show() {
-      this.isOpen = true;
-    },
+function hide() {
+  isOpen.value = false;
+}
 
-    hide() {
-      this.isOpen = false;
-    }
+function onEscape(e) {
+  if (isOpen.value && e.key === 'Escape') {
+    hide();
   }
 }
+
+onMounted(() => document.addEventListener('keydown', onEscape));
+onBeforeUnmount(() => document.removeEventListener('keydown', onEscape));
+
+defineExpose({ show, hide });
 </script>

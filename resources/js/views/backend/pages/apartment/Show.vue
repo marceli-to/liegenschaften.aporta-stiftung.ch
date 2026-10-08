@@ -1,12 +1,10 @@
 <template>
 <div>
   <site-header 
-    :user="$store.state.user" 
-    :view="$route.params.single ? 'show-single' : 'show'">
+    :view="$route.params.single == 1 ? 'show-single' : 'show'">
   </site-header>
   <site-main v-if="isFetched">
     <page-menu 
-      :id="$route.params.uuid"
       :apartment="apartment"
       @reset="showResetConfirm()"
     ></page-menu>
@@ -192,11 +190,14 @@
   </dialog-wrapper>
 </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import NProgress from 'nprogress';
+import http from '@/lib/http';
+import { store } from '@/store';
+import { useFilter } from '@/composables/useFilter';
 import DialogWrapper from "@/components/ui/misc/Dialog.vue";
-import Filter from "@/views/backend/pages/mixins/Filter";
-import ErrorHandling from '@/mixins/ErrorHandling';
 import SiteHeader from '@/views/backend/layout/Header.vue';
 import SiteMain from '@/views/backend/layout/Main.vue';
 import PageMenu from '@/components/ui/apartment/Menu.vue';
@@ -204,163 +205,103 @@ import ApartmentWrapper from '@/components/ui/apartment/Wrapper.vue';
 import ApartmentGrid from '@/components/ui/apartment/Grid.vue';
 import ApartmentRow from '@/components/ui/apartment/Row.vue';
 import ApartmentRowHeader from '@/components/ui/apartment/RowHeader.vue';
-import ApartmentLabel from '@/components/ui/apartment/Label.vue';
-import ApartmentInput from '@/components/ui/apartment/Input.vue';
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 import IconCross from "@/components/ui/icons/Cross.vue";
 import IconCheckmark from '@/components/ui/icons/Checkmark.vue';
 import IconHourglass from "@/components/ui/icons/Hourglass.vue";
 
-export default {
+const route = useRoute();
 
-  components: {
-    NProgress,
-    DialogWrapper,
-    SiteHeader,
-    SiteMain,
-    PageMenu,
-    ApartmentWrapper,
-    ApartmentGrid,
-    ApartmentRow,
-    ApartmentInput,
-    ApartmentLabel,
-    ApartmentRowHeader,
-    Isometrie,
-    IconCross,
-    IconCheckmark,
-    IconHourglass
-  },
+const apartment = ref({ number: null });
+const collectionItemUuid = ref(null);
+const isFetched = ref(false);
 
-  mixins: [ErrorHandling, Filter],
+const dialogResetConfirm = ref(null);
+const dialogDestroyConfirm = ref(null);
+const dialogFinalizeConfirm = ref(null);
 
-  data() {
-    return {
-      
-      // Model
-      apartment: {
-        number: null,
-      },
-
-      referrer: null,
-
-      // Routes
-      routes: {
-        fetch: '/api/apartment',
-        reset: '/api/apartment',
-        assign:'/api/apartment/assign',
-        finalize:'/api/apartment/finalize',
-        delete: '/api/collection-item',
-      },
-
-      collectionItemUuid: null,
-
-      // States
-      isFetched: false,
-      isLoading: false,
-      hasErrors: false,
-    };
-  },
-
-  mounted() {
-    this.fetch();
-    NProgress.configure({ showBar: false });
-    if (this.$route.params.referrer) {
-      this.$store.commit('referrer', this.$route.params.referrer);
-    }
-  },
-
-  methods: {
-
-    fetch() {
-      this.isFetched = false;
-      NProgress.start();
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
-        this.apartment = response.data;
-        this.isFetched = true;
-        this.updateFilterMenu(this.$route.params.uuid);
-        NProgress.done();
-      });
-    },
-
-    assign(collectionItemUuid) {
-      const data = {
-        collectionItemUuid: collectionItemUuid
-      };
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.put(`${this.routes.assign}/${this.$route.params.uuid}`, data).then(response => {
-        this.isFetched = true;
-        this.fetch();
-        NProgress.done();
-      });
-    },
-
-    finalize() {
-      const data = {
-        collectionItemUuid: this.collectionItemUuid,
-        final: true,
-      };
-      NProgress.start();
-      this.isFetched = false;
-      this.axios.put(`${this.routes.finalize}/${this.$route.params.uuid}`, data).then(response => {
-        this.isFetched = true;
-        this.collectionItemUuid = null;
-        this.$refs.dialogFinalizeConfirm.hide();
-        this.fetch();
-        NProgress.done();
-      });
-    },
-
-    validate(event) {
-      if (event.target.value.length > 0) {
-        event.target.classList.remove('is-invalid');
-        this.hasErrors = false;
-        return;
-      }
-      event.target.classList.add('is-invalid');
-      this.hasErrors = true;
-    },
-
-    reset() {
-      NProgress.start();
-      this.axios.delete(`${this.routes.reset}/${this.apartment.uuid}`).then(response => {
-        this.apartment = response.data;
-        this.$refs.dialogResetConfirm.hide();
-        NProgress.done();
-      });
-    },
-
-    destroyCollectionItem() {
-      NProgress.start();
-      this.axios.delete(`${this.routes.delete}/${this.collectionItemUuid}`).then(response => {
-        this.fetch();
-        this.collectionItemUuid = null;
-        this.$refs.dialogDestroyConfirm.hide();
-        NProgress.done();
-      });
-    },
-
-    showFinalizeConfirm(uuid) {
-      this.collectionItemUuid = uuid;
-      this.$refs.dialogFinalizeConfirm.show();
-    },
-
-    showResetConfirm() {
-      this.$refs.dialogResetConfirm.show();
-    },
-
-    showDestroyCollectionItemConfirm(uuid) {
-      this.collectionItemUuid = uuid;
-      this.$refs.dialogDestroyConfirm.show();
-    },
-
-  },
-
-  watch: {
-    '$route'() {
-      this.fetch();
-    }
-  }
-
+const routes = {
+  fetch: '/api/apartment',
+  reset: '/api/apartment',
+  assign: '/api/apartment/assign',
+  finalize: '/api/apartment/finalize',
+  delete: '/api/collection-item',
 };
+
+const { updateFilterMenu } = useFilter();
+
+onMounted(() => {
+  fetch();
+  if (route.params.referrer) {
+    store.referrer = route.params.referrer;
+  }
+});
+
+function fetch() {
+  isFetched.value = false;
+  NProgress.start();
+  http.get(`${routes.fetch}/${route.params.uuid}`).then(response => {
+    apartment.value = response.data;
+    isFetched.value = true;
+    updateFilterMenu(route.params.uuid);
+    NProgress.done();
+  });
+}
+
+function assign(uuid) {
+  NProgress.start();
+  isFetched.value = false;
+  http.put(`${routes.assign}/${route.params.uuid}`, { collectionItemUuid: uuid }).then(() => {
+    fetch();
+    NProgress.done();
+  });
+}
+
+function finalize() {
+  const data = {
+    collectionItemUuid: collectionItemUuid.value,
+    final: true,
+  };
+  NProgress.start();
+  isFetched.value = false;
+  http.put(`${routes.finalize}/${route.params.uuid}`, data).then(() => {
+    collectionItemUuid.value = null;
+    dialogFinalizeConfirm.value.hide();
+    fetch();
+    NProgress.done();
+  });
+}
+
+function reset() {
+  NProgress.start();
+  http.delete(`${routes.reset}/${apartment.value.uuid}`).then(response => {
+    apartment.value = response.data;
+    dialogResetConfirm.value.hide();
+    NProgress.done();
+  });
+}
+
+function destroyCollectionItem() {
+  NProgress.start();
+  http.delete(`${routes.delete}/${collectionItemUuid.value}`).then(() => {
+    fetch();
+    collectionItemUuid.value = null;
+    dialogDestroyConfirm.value.hide();
+    NProgress.done();
+  });
+}
+
+function showFinalizeConfirm(uuid) {
+  collectionItemUuid.value = uuid;
+  dialogFinalizeConfirm.value.show();
+}
+
+function showResetConfirm() {
+  dialogResetConfirm.value.show();
+}
+
+function showDestroyCollectionItemConfirm(uuid) {
+  collectionItemUuid.value = uuid;
+  dialogDestroyConfirm.value.show();
+}
 </script>
