@@ -4,7 +4,7 @@
 <h1>Passwort vergessen</h1>
 <div class="mb-6x">{{__('messages.password_recovery')}}</div>
 @if ($errors->any())
-  <x-alert type="danger" message="{{__('messages.general_error')}}" />
+  <x-alert type="danger" message="{{ implode(' ', $errors->all()) }}" />
 @endif
 @if (session('status'))
   <x-alert type="success" message="{{ session('status') }}" />

@@ -77,6 +77,15 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     `auth/passwords/confirm` views, `verified` on the admin routes,
     `MustVerifyEmail` on `User` (all 8 users verified; `UserController` sets it).
   - `resources/lang/de.json` from cra: the reset mail and the mail layout in German.
+- 2026-10-08: **two fixes after step 5.**
+  - Mail layout (`resources/views/vendor/mail/html/layout.blade.php`) now
+    outputs `$subcopy`, so the reset mail's HTML has «Falls der Button …
+    nicht funktioniert …» with the link. Offer, reply and confirmation
+    mails render byte-identical (they have no subcopy).
+  - Login, forgot- and reset-password views show the actual messages
+    (`$errors->all()`) instead of «Bitte überprüfen Sie Ihre Eingabe!»:
+    wrong credentials, lockout with seconds, unknown address, password too
+    short / not confirmed, missing e-mail, invalid token.
 
 ## Next
 
@@ -144,12 +153,8 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 
 Pre-existing, left as is:
 
-- The HTML part of every notification mail (reset mail) lacks the
-  «If you're having trouble clicking…» line: the overridden
-  `resources/views/vendor/mail/html/message.blade.php` predates the slot
-  syntax. The text part has it; the button works.
-- The login view only ever shows «Bitte überprüfen Sie Ihre Eingabe!», not
-  the actual message (wrong password, lockout).
+- The reset page doesn't prefill the e-mail from the link
+  (`x-text-field` gets no `value`); the user types it again.
 
 - `User::$fillable` lists `uuid`, but `users` has no such column (nothing
   writes it).

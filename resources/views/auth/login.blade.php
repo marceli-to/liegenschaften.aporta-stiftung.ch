@@ -2,7 +2,7 @@
 @section('seo_title', 'Login')
 @section('content')
 @if ($errors->any())
-  <x-alert type="danger" message="{{__('messages.general_error')}}" />
+  <x-alert type="danger" message="{{ implode(' ', $errors->all()) }}" />
 @endif
 <form method="POST" action="{{ route('login') }}">
   @csrf

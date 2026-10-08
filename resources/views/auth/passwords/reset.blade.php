@@ -4,7 +4,7 @@
 <h1>Passwort zurücksetzen</h1>
 <p>{{__('messages.password_reset')}}</p>
 @if ($errors->any())
-  <x-alert type="danger" message="{{__('messages.general_error')}}" />
+  <x-alert type="danger" message="{{ implode(' ', $errors->all()) }}" />
 @endif
 @if (session('status'))
   <x-alert type="success" message="{{ session('status') }}" />
