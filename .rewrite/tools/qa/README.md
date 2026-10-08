@@ -19,6 +19,9 @@ Against the Herd hosts (`*.test`, `ignoreHTTPSErrors`), local DB.
 - `interact.js` — 65 checks of every admin and offer action. Destructive:
   `mysqldump -h127.0.0.1 -uroot liegenschaften_aporta > db-before.sql`
   first, `mysql … < db-before.sql` after, then `fixtures.php down`.
+- `e2e.js` — the whole flow with real mail (MailHog) and `schedule:run`: send
+  an offer, open the link from the mail, reply, assign, finalize, both exports
+  (read with `xlsx.php`). Destructive, like `interact.js`.
 - `dev.js` — pages through the Vite dev server (`npx vite` running).
 - `isometry.js` — hover highlight on the admin and offer lists; swaps
   `data-estate` to `koro` to check an estate with two SVGs.

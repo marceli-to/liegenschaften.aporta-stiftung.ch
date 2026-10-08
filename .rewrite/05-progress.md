@@ -219,7 +219,9 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 ## Where we are (end of session 2026-10-08)
 
 **Backend steps 1–6 done.** **Frontend steps 1–6 done** (Vite + Vue 3,
-Isometrie data-driven, pushed). Next: QA and deploy.
+Isometrie data-driven, pushed). **End-to-end QA done locally.** The
+server checks and the deploy wait until KORO is ready too (decided
+2026-10-08): next is KORO.
 
 - `php artisan test` (69) stays green; it runs without a Vite build
   (`withoutVite()` in `TestCase`).
@@ -231,11 +233,9 @@ Isometrie data-driven, pushed). Next: QA and deploy.
 
 ## Next
 
-1. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
+1. KORO (estate switcher, its isometry styles/layout, scoping by estate).
+2. With KORO ready: check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
-2. QA on both domains (staging or production copy of the code with the
-   local DB): login, every admin page, send a collection (mail queue →
-   mail), offer link, reply, both Excel exports.
 3. Deploy (`02` → `.env` changes, both files). The server needs no Node:
    `public/build` is committed. Before: `select role, count(*) from users`
    on production; only `admin` and `editor` get into the admin now
@@ -329,6 +329,19 @@ Isometrie data-driven, pushed). Next: QA and deploy.
   `data-estate="koro"` the admin list renders `ko` and `ro`. Vite dev
   server: admin and offer page with the isometry, no errors. 69 tests green.
 
+- End-to-end QA, 2026-10-08 (`e2e.js`, 33 checks, between a dump and its
+  restore; queue row 117 parked for the run): login, every admin page; offer
+  with 2 apartments sent from the UI; `php artisan schedule:run` sends it
+  (MailHog): subject, salutation, remark, link
+  `https://eglistrasse…/angebot/{uuid}/{md5}`, one PDF per apartment; the
+  link from the mail opens the offer, marks both read, highlights the
+  apartment; reply «Interesse» → reply mail + confirmation mail; admin sees
+  the reply, assigns (reserved), finalizes (rented, tenant stored); both
+  exports (xlsx, filename, bold header, 134 rows, the apartment «Vermietet»
+  with the tenant, the tenant in the tenant export); logout. No page errors,
+  no 4xx. None of the mailables sets a reply-to header (the reply mail goes
+  *to* `client.email.reply_to`); unchanged.
+
 ## Left over / follow-ups
 
 Pre-existing, left as is:
@@ -345,6 +358,10 @@ Pre-existing, left as is:
 
 - `ApartmentExport`: `$apartments->sortBy('building.order')` discards its
   result, so the export is ordered by `order DESC` only.
+- Local DB: admin user 9 (`mail@0704.ch`, from 2023) is gone. It is in
+  the dump taken before the step 2–5 QA (`/tmp/aporta/qa/db-before.sql`),
+  not in this session's first one; nothing else differs. Lost during that
+  QA run, local only.
 - Local DB has one unprocessed mail-queue row (id 117, confirmation, from
   2025-03-12); the local cron would send it.
 
