@@ -8,7 +8,6 @@ use App\Models\Apartment;
 use App\Models\State;
 use App\Models\Tenant;
 use App\Models\CollectionItem;
-use App\Http\Requests\ApartmentStoreRequest;
 use App\Http\Requests\ApartmentUpdateRequest;
 use App\Support\CurrentEstate;
 use Illuminate\Http\Request;

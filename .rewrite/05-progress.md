@@ -87,34 +87,51 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     wrong credentials, lockout with seconds, unknown address, password too
     short / not confirmed, missing e-mail, invalid token.
 
+- 2026-10-08: **backend step 6, tests.** `php artisan test`: 64 tests, in-memory
+  SQLite (all migrations, incl. the 2022 `alter`/`drop` ones, run there as is).
+  - `tests/TestCase.php` builds the data (estate, building, floor, room,
+    apartment, tenant, offer); no factories. `Api/ApiTestCase` logs in an admin
+    over Sanctum. `phpunit.xml` pins the hosts (`APP_URL` = admin domain,
+    `ADMIN_DOMAIN`, `ESTATE_*`), reply-to and sender, so the local `.env`
+    doesn't leak in.
+  - `AuthTest` (as cra, plus: `/` and the admin only on the admin domain,
+    `/logout` GET still works), one test class per API resource (apartments
+    incl. filter/assign/finalize/reset, collections + items, tenants, users,
+    settings, guests 401), `OfferTest` (offer page on both domains, md5 hash
+    sets `read_at` once, `user-collection` list/show/pagination/expiry/reply),
+    `NotificationTest` (schedule, one mail per run, offer/reply/confirmation
+    content, link, attachments, failure path), `ExportTest` (real download
+    read back: headers bold, cells, only the current estate, filename).
+  - **Fix found by the tests:** `ApartmentUpdateRequest` had array messages
+    (`['field' => …, 'error' => …]`); Laravel 13 throws on those, so a
+    missing rent gave 500 instead of 422 since step 3. Now plain strings, as
+    the other requests. (The admin's `validationError` never read the
+    objects: it calls `forEach` on the response body.)
+  - Removed: `ApartmentStoreRequest` (unused, same array messages), the
+    old-style `database/factories/UserFactory.php` and `database/seeds`
+    (neither autoloadable since Laravel 8) + their composer autoload
+    entries, both `ExampleTest`s.
+
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–5 done** (`ab468a6` … `bbc5614`, pushed). Next session
-starts with **backend step 6: tests** (`02` → Steps → 6).
+**Backend steps 1–6 done** (`ab468a6` … this commit, pushed). The backend
+part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
 
-- `npm ci && npm run production` (Mix 6, Vue 2) still builds and reproduces
-  the committed `public/assets` byte for byte, so the old frontend can be
-  rebuilt if needed before the Vite step.
-- Verification helpers used so far live in `/tmp/aporta/` (not committed,
-  gone after a reboot): before/after HTTP comparison against a `git worktree`
-  of the previous commit, auth flow with MailHog, Excel export dump. Step 6
-  turns them into real tests.
+- `php artisan test` must stay green through the frontend steps (the API
+  tests pin what the Vue 3 admin talks to).
+- `npm ci && npm run production` (Mix 6, Vue 2) still reproduces the
+  committed `public/assets`.
+- Open questions for the user: the exterior filter bug and `CheckRole`
+  letting editors in (see Left over).
 
 ## Next
 
-1. **Backend step 6: tests** (`02`): cra/oxid `AdminTestCase` (in-memory
-   SQLite; check the 2022 `alter`/`drop` migrations run on SQLite), one
-   test per API resource, public `user-collection` endpoints incl. hash,
-   `Tasks\Notification` with `Mail::fake()`, both exports with
-   `Excel::fake()`, `AuthTest` (cra has one; flow as in the step 5 check).
-   Replace `ExampleTest`. Admin routes need the admin host in requests
-   (`Route::domain`).
+1. Frontend steps 1–6 (`03`). Then `/logout` POST-only (adjust `AuthTest::testLogout`).
 2. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
-3. Frontend steps 1–6 (`03`). Then `/logout` POST-only.
-4. QA on both domains: login, every admin page, create + send a collection
+3. QA on both domains: login, every admin page, create + send a collection
    (mail queue → mail), open the offer link, reply, both Excel exports.
-5. Deploy (`02` → `.env` changes, both files).
+4. Deploy (`02` → `.env` changes, both files).
 
 ## Verified
 
@@ -167,10 +184,25 @@ starts with **backend step 6: tests** (`02` → Steps → 6).
 - Pre-existing: `Tests\Feature\ExampleTest` fails (`/` is 404 on the CLI,
   because `routes/web.php` only registers it for the admin hostnames). Gets
   replaced by real tests in step 6.
+- Step 6: the suite run against the previous code (`ApartmentUpdateRequest`
+  from `29638ed`) fails only `ApartmentApiTest::testUpdateValidation` (500);
+  with the fix all 64 pass, alone and per class. The suite doesn't touch the
+  local MySQL DB and removes Excel's temp files.
 
 ## Left over / follow-ups
 
 Pre-existing, left as is:
+
+- **Exterior filter returns everything** (`ApartmentController::filter`,
+  `exterior`): the `size_*` accessors turn 0 into `'–'`, and on PHP 8
+  `'–' > 0` is true. Locally «Terrasse» gives all 134 apartments instead of
+  21. Worked on PHP 7. Not tested yet; waiting for the user's decision.
+- `CheckRole` only rejects users with an empty role (`role !== $role &&
+  !role`), so any role passes `role:admin`. The local DB has 7 admins and
+  1 `editor`, who gets into the admin. Waiting for the user's decision.
+- `GET api/collection-items/{item}`: the parameter is `{item}`, the method
+  takes `$collectionItem`, so nothing is bound and it returns an empty
+  item. The admin doesn't call it.
 
 - The reset page doesn't prefill the e-mail from the link
   (`x-text-field` gets no `value`); the user types it again.

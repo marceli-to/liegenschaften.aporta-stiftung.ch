@@ -38,18 +38,9 @@ class ApartmentUpdateRequest extends FormRequest
   public function messages()
   {
     return [
-      'rent_gross.required' => [
-        'field' => 'name',
-        'error' => 'Mietzins Brutto wird benötigt!'
-      ],
-      'rent_net.required' => [
-        'field' => 'name',
-        'error' => 'Mietzins Netto wird benötigt!'
-      ],
-      'additional_cost.required' => [
-        'field' => 'name',
-        'error' => 'Nebenkosten werden benötigt!'
-      ],
+      'rent_gross.required' => 'Mietzins Brutto wird benötigt!',
+      'rent_net.required' => 'Mietzins Netto wird benötigt!',
+      'additional_cost.required' => 'Nebenkosten werden benötigt!',
     ];
   }
 }

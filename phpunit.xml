@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd" bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".phpunit.cache">
   <testsuites>
-    <testsuite name="Unit">
-      <directory suffix="Test.php">./tests/Unit</directory>
-    </testsuite>
     <testsuite name="Feature">
       <directory suffix="Test.php">./tests/Feature</directory>
     </testsuite>
   </testsuites>
   <php>
     <server name="APP_ENV" value="testing"/>
+    <server name="APP_NAME" value="à Porta Stiftung"/>
+    <server name="APP_URL" value="https://liegenschaften.aporta-stiftung.ch"/>
+    <server name="ADMIN_DOMAIN" value="liegenschaften.aporta-stiftung.ch"/>
+    <server name="ESTATE_DOMAIN_KEY" value="eglistrasse"/>
+    <server name="ESTATE_EGLISTRASSE_URL" value="https://eglistrasse.aporta-stiftung.ch"/>
+    <server name="APORTA_REPLY_TO" value="vermietung@example.invalid"/>
+    <server name="MAIL_FROM_ADDRESS" value="noreply@example.invalid"/>
     <server name="BCRYPT_ROUNDS" value="4"/>
     <server name="CACHE_STORE" value="array"/>
     <server name="DB_CONNECTION" value="sqlite"/>
@@ -17,7 +21,6 @@
     <server name="MAIL_MAILER" value="array"/>
     <server name="QUEUE_CONNECTION" value="sync"/>
     <server name="SESSION_DRIVER" value="array"/>
-    <server name="TELESCOPE_ENABLED" value="false"/>
   </php>
   <source>
     <include>
