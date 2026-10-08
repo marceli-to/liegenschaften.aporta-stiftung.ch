@@ -151,6 +151,10 @@ Ausbaubeschrieb (`.docx`).
     Contact sheet of the 134: same scale, nothing clipped. Admin detail and
     offer detail render the new SVGs, no errors; small flats now show small
     (A1.01, 31 m², was as wide as the column).
+  - Then (on request) removed the XML declaration from 21 of them and
+    Illustrator's comment from 2 (only those lines; not needed for `<img>`,
+    UTF-8 is the default), so every plan SVG starts with `<svg` and the
+    script needs no prolog handling. All 21 render pixel-identical.
 
 ## Left over
 
