@@ -135,8 +135,22 @@ Ausbaubeschrieb (`.docx`).
   (554 × 455.5 pt = the widest and the tallest plan), centred on the plan;
   the clip is unchanged. Runs on every build (a second run changes no byte).
   Verified on a contact sheet of the 96 in equal boxes: same scale, nothing
-  clipped. Eglistrasse's SVGs (not ours) also vary in size (291–680 ×
-  263–518); left as they are.
+  clipped.
+- 2026-10-08: **Eglistrasse's plans on one canvas too** (on request).
+  Their 134 SVGs (Illustrator, 2022) share one scale (lift, doors, labels
+  the same size at the same pt scale) but were cropped to each plan; the
+  ground floors include their Sitzplatz/garden. `tools/eglistrasse/canvas.php`
+  wraps each plan in a nested svg with its old viewBox (still clips) and
+  gives the root one canvas, 679.7 × 517.6 pt, plan centred. Checks every
+  file before it writes; a second run changes no byte.
+  - Backup of the old files (local, gitignored):
+    `.data/backup/eglistrasse-plans-svg-2026-10-08/` (134, byte-identical;
+    also in git before `this commit`).
+  - Verified: each plan rendered old vs new (cropped to the plan) at 2 px/pt:
+    at most 0.02 % of pixels differ (anti-aliasing of the sub-pixel offset).
+    Contact sheet of the 134: same scale, nothing clipped. Admin detail and
+    offer detail render the new SVGs, no errors; small flats now show small
+    (A1.01, 31 m², was as wide as the column).
 
 ## Left over
 

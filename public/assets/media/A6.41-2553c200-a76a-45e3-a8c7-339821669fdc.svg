@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 523.68398 340.29258">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-78.019 -88.657 679.72158 517.6063"><svg class="plan" width="523.68398" height="340.29258" viewBox="0 0 523.68398 340.29258" overflow="hidden">
   <defs>
     <style>
       .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-14, .cls-15, .cls-16, .cls-17, .cls-18, .cls-19, .cls-20, .cls-21, .cls-22, .cls-23, .cls-24, .cls-25, .cls-26, .cls-27, .cls-28, .cls-29, .cls-30, .cls-31 {
@@ -7107,4 +7107,4 @@
       <path d="M131.5999,307.27896c.00879,.18359,.05664,.22461,.28027,.22461h.28027v.52734h-.56836c-.43164-.00781-.59961-.16797-.59961-.57617v-2.57422h-.51172v-.53516h.51172v-1.16016h.60742v1.16016h.56055v.53516h-.56055v2.39844Z"/>
     </g>
   </g>
-</svg>
+</svg></svg>
