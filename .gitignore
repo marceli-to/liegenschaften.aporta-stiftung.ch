@@ -17,3 +17,5 @@ INSTALL.TXT
 
 # tenants storage
 /storage/eglistrasse*
+# architect source files
+/.data
