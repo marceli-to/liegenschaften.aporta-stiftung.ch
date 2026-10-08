@@ -19,3 +19,5 @@ INSTALL.TXT
 /storage/eglistrasse*
 # architect source files
 /.data
+
+/.rewrite/data
