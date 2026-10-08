@@ -1,6 +1,6 @@
 # Open questions
 
-*All answered 2026-10-08. Only the snapshot itself (#5) is still to be delivered.*
+*All answered 2026-10-08.*
 
 ## 1. Production: host, PHP, domains, cron — ANSWERED 2026-10-08
 
@@ -32,11 +32,19 @@ If KORO needs PDFs, add dompdf 3 back then.
 
 Same look. Revisit after KORO if wanted.
 
-## 5. Production snapshot — ANSWERED 2026-10-08: provided by Marcel
+## 5. Production snapshot — ANSWERED 2026-10-08: not needed
 
-Marcel puts a DB dump + `storage/` (both domains) into `.rewrite/data/`
-(gitignored). Load it into a scratch DB `liegenschaften_aporta_prod`; the
-regular local DB stays untouched. Record counts in `01` once loaded.
+Production is mostly DB records with real client data, and there are no
+uploaded files to check. Work with the local DB `liegenschaften_aporta`,
+which has a full working set (2026-10-08):
+
+1 estate, 11 buildings, 6 floors, 8 rooms, 4 states, 134 apartments,
+15 tenants, 10 collections, 8 collection items, 115 mail-queue rows, 8 users,
+39 migrations run. Last collection 2025-03-12. `storage/app/public/uploads` is empty.
+
+Before deploying, compare the production `migrations` table against the repo
+(one `SELECT`, no client data) so step 3's `migrate` holds no surprises.
+`.rewrite/data/` stays gitignored in case a dump is needed later.
 
 ## 6. Deploy — ANSWERED 2026-10-08: as cra/oxid, plus caching
 

@@ -3,8 +3,7 @@
 Survey done **2026-10-08** against commit `3cfd577` (branch `master`, clean tree).
 Written so the next session can skip re-deriving all of this.
 
-**Status: planned, not started.** Open questions answered 2026-10-08
-(`04`); production snapshot still to be delivered.
+**Status: planned, not started.** Open questions answered 2026-10-08 (`04`).
 
 Modelled on the reworks of **cra.ch** (`github.com/marceli-to/cra.ch`) and
 **oxid.ch** (`github.com/jamon-marcel/oxid.ch`), both on branch
