@@ -107,6 +107,11 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     missing rent gave 500 instead of 422 since step 3. Now plain strings, as
     the other requests. (The admin's `validationError` never read the
     objects: it calls `forEach` on the response body.)
+  - **Fixed on request:** the admin's exterior filter returned every
+    apartment: the `size_*` accessors turn 0 into `'–'`, and on PHP 8
+    `'–' > 0` is true. The filter now compares the raw value. Locally
+    terrace / patio / balcony give 21 / 17 / 88 of 134 (= the SQL counts;
+    before: 134 each). Covered in `ApartmentApiTest::testFilter`.
   - Removed: `ApartmentStoreRequest` (unused, same array messages), the
     old-style `database/factories/UserFactory.php` and `database/seeds`
     (neither autoloadable since Laravel 8) + their composer autoload
@@ -121,8 +126,7 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
   tests pin what the Vue 3 admin talks to).
 - `npm ci && npm run production` (Mix 6, Vue 2) still reproduces the
   committed `public/assets`.
-- Open questions for the user: the exterior filter bug and `CheckRole`
-  letting editors in (see Left over).
+- Open question for the user: `CheckRole` letting editors in (see Left over).
 
 ## Next
 
@@ -193,10 +197,6 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
 
 Pre-existing, left as is:
 
-- **Exterior filter returns everything** (`ApartmentController::filter`,
-  `exterior`): the `size_*` accessors turn 0 into `'–'`, and on PHP 8
-  `'–' > 0` is true. Locally «Terrasse» gives all 134 apartments instead of
-  21. Worked on PHP 7. Not tested yet; waiting for the user's decision.
 - `CheckRole` only rejects users with an empty role (`role !== $role &&
   !role`), so any role passes `role:admin`. The local DB has 7 admins and
   1 `editor`, who gets into the admin. Waiting for the user's decision.

@@ -117,7 +117,10 @@ class ApartmentController extends Controller
     // Exterior
     if ($request->input('exterior'))
     {
-      $filtered = collect($data)->where('size_' . $request->input('exterior'), '>', 0);      
+      // Raw value: the size accessors return '–' for 0
+      $filtered = collect($data)->filter(function($d) use ($request) {
+        return $d->getRawOriginal('size_' . $request->input('exterior')) > 0;
+      });
       $data = $filtered->all();
     }
 

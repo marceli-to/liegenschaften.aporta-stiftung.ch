@@ -49,8 +49,8 @@ class ApartmentApiTest extends ApiTestCase
         $ground = $this->floor($this->eglistrasse, ['description' => 'Erdgeschoss', 'abbreviation' => 'EG', 'order' => 0]);
         $small = $this->room($this->eglistrasse, ['description' => '2.5 Zimmer', 'abbreviation' => '2.5']);
 
-        $a = $this->flat(['number' => 'A', 'order' => 1, 'rent_gross' => '900']);
-        $b = $this->flat(['number' => 'B', 'order' => 2, 'rent_gross' => '1500', 'state_id' => State::RENTED, 'room_id' => $small->id]);
+        $a = $this->flat(['number' => 'A', 'order' => 1, 'rent_gross' => '900', 'size_balcony' => '0.0', 'size_terrace' => '20']);
+        $b = $this->flat(['number' => 'B', 'order' => 2, 'rent_gross' => '1500', 'state_id' => State::RENTED, 'room_id' => $small->id, 'size_balcony' => '0.0', 'size_patio' => '15']);
         $c = $this->apartment($back, $ground, $this->threeRooms, ['number' => 'C', 'order' => 3, 'rent_gross' => '2400']);
         $this->collection($this->eglistrasse, [$b]);
 
@@ -65,6 +65,9 @@ class ApartmentApiTest extends ApiTestCase
         $this->assertSame(['B'], $filter(['rent' => '1000:1501']));
         $this->assertSame(['C'], $filter(['rent' => 'gt:2000']));
         $this->assertSame(['B'], $filter(['collections' => true]));
+        $this->assertSame(['A'], $filter(['exterior' => 'terrace']));
+        $this->assertSame(['B'], $filter(['exterior' => 'patio']));
+        $this->assertSame(['C'], $filter(['exterior' => 'balcony']));
         $this->assertSame(['A'], $filter(['buildings' => [$this->house->id], 'states' => [State::FREE]]));
     }
 
