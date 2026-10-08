@@ -1,6 +1,7 @@
 <?php
 namespace App\Exports;
 use App\Models\Tenant;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -12,7 +13,7 @@ class TenantExport implements FromCollection, WithHeadings, WithEvents, ShouldAu
 /**
    * @return \Illuminate\Support\Collection
    */
-  public function collection()
+  public function collection(): Collection
   {
     $tenants = Tenant::with('apartment.room', 'apartment.floor', 'apartment.building')->whereHas('apartment')->get();
     

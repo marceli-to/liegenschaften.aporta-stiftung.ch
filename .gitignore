@@ -21,3 +21,4 @@ INSTALL.TXT
 /.data
 
 /.rewrite/data
+/.phpunit.cache

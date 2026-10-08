@@ -2,6 +2,7 @@
 namespace App\Exports;
 use App\Models\Apartment;
 use App\Support\CurrentEstate;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -13,7 +14,7 @@ class ApartmentExport implements FromCollection, WithHeadings, WithEvents, Shoul
 /**
    * @return \Illuminate\Support\Collection
    */
-  public function collection()
+  public function collection(): Collection
   {
     $apartments = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems', 'state')->orderBy('order', 'DESC')->where('estate_id', app(CurrentEstate::class)->id())->get();
     $apartments->sortBy('building.order');

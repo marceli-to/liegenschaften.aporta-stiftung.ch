@@ -32,6 +32,17 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
   - `APP_NAME` → `config('app.name')` (3 mailables, 3 views);
     `APORTA_REPLY_TO` → `config('client.email.reply_to')`.
   - Local `.env` files: added `ESTATE_EGLISTRASSE_URL=https://eglistrasse.aporta-stiftung.ch.test`.
+- 2026-10-08: **backend step 3, Laravel 13.** `laravel/framework` 13.35.0,
+  `gecche/laravel-multidomain` 13.0, `sanctum` 4.3.3, `tinker` 3.0.2,
+  `laravel/ui` 4.6.3 (until step 5), `maatwebsite/excel` 4.0.3 (PhpSpreadsheet 5),
+  dev: `phpunit` 12.5, `collision` 8.9, `ignition` 2.12. PHP `^8.3`. Explicit
+  `guzzle` and `carbon` requires dropped. **`composer audit`: no advisories**
+  (was 59). The multidomain package's PHP 8.4 deprecation warnings are gone too.
+  - Code change needed: only `collection(): Collection` on both exports (Excel 4
+    has native return types). Nothing from the 11→12 / 12→13 guides applied:
+    no `HasUuids`, config files define cache prefix / session cookie, the
+    `VerifyCsrfToken` subclass still works (deprecated alias, goes in step 4).
+  - `phpunit.xml` migrated to the PHPUnit 12 schema; `CACHE_DRIVER` → `CACHE_STORE`.
 
 ## Next
 
@@ -56,11 +67,35 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
   same link as before (uuid + md5) and the signature; reply subject and
   reply-to as before. **Same results with `config:cache` on**; live offer
   page 200 on both domains with and without the cache.
+- Step 3, compared against a Laravel 11 checkout of `8e0c760`:
+  - 20 requests as a logged-in admin (admin SPA, every GET API endpoint,
+    both exports, offer page, public API): same status codes; all 18
+    non-export bodies byte-identical apart from the random CSRF token. Offer
+    page and public API also identical on the eglistrasse domain.
+  - Both Excel exports cell-for-cell identical (135 / 8 rows, bold header).
+  - Settings/mail checks from step 2 identical. `Tasks\Notification` sends
+    offer (with PDF), reply and confirmation (`Mail::fake`, rolled back).
+  - `route:list` same routes (13 only displays `{collection:uuid}`);
+    `config:cache` and `route:cache` work; `/login` renders.
 - Pre-existing: `Tests\Feature\ExampleTest` fails (`/` is 404 on the CLI,
   because `routes/web.php` only registers it for the admin hostnames). Gets
   replaced by real tests in step 6.
 
 ## Left over / follow-ups
+
+For step 4:
+
+- **`route:cache` trap:** `routes/web.php` registers the admin routes only
+  `if (App::domain() == …)`. On the CLI that's false, so a plain `route:cache`
+  caches a route table **without the admin**. Must be `Route::domain()`
+  before caching goes into the deploy.
+
+Pre-existing, left as is:
+
+- `ApartmentExport`: `$apartments->sortBy('building.order')` discards its
+  result, so the export is ordered by `order DESC` only.
+- Local DB has one unprocessed mail-queue row (id 117, confirmation, from
+  2025-03-12); the local cron would send it.
 
 For KORO (not this rework):
 
