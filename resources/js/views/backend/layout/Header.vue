@@ -19,6 +19,14 @@
               <router-link :to="{name: 'tenants'}">
                 Mieter
               </router-link>
+              <a
+                href=""
+                class="is-estate"
+                v-for="estate in otherEstates"
+                :key="estate.key"
+                @click.prevent="switchEstate(estate.key)">
+                {{ estate.name }}
+              </a>
             </div>
           </li>
           <li class="span-4 flex justify-center site-menu__pagination" v-if="view == 'show' || view == 'show-single'">
@@ -63,21 +71,6 @@
             </div>
           </li>
           <li class="span-2 flex justify-center">
-            <div class="relative estate-select" v-if="estates.length > 1" @mouseleave="isEstatesOpen = false">
-              <a href="javascript:;" class="dropdown-button" title="Liegenschaft wählen" @mouseover="isEstatesOpen = true">
-                <icon-chevron-down />
-              </a>
-              <div :class="[isEstatesOpen ? 'is-open' : '', 'dropdown']">
-                <a
-                  href=""
-                  v-for="estate in estates"
-                  :key="estate.key"
-                  :class="{ 'is-active': estate.key == estateKey }"
-                  @click.prevent="switchEstate(estate.key)">
-                  {{ estate.name }}
-                </a>
-              </div>
-            </div>
             <router-link 
               :to="{name: store.user.admin ? 'users' : 'user-profile'}"
               class="icon">
@@ -133,19 +126,15 @@ const props = defineProps({
 const route = useRoute();
 const router = useRouter();
 const isDropdownOpen = ref(false);
-const isEstatesOpen = ref(false);
 
 const estateKey = inject('estateKey');
 const estateName = inject('estateName');
-const estates = inject('estates');
+const otherEstates = inject('estates').filter(estate => estate.key != estateKey);
 
 // Reload on the apartment list: the page, the filter and the picked
 // apartments all belong to the estate
 function switchEstate(key) {
-  isEstatesOpen.value = false;
-  if (key == estateKey) {
-    return;
-  }
+  hideDropdown();
   http.put('/api/estate', { key }).then(() => {
     window.location.href = router.resolve({ name: 'apartments' }).href;
   });

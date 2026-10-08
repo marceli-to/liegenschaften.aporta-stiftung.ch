@@ -15,8 +15,8 @@ const admin = 'https://liegenschaften.aporta-stiftung.ch.test';
   for (const [n, v] of [[0, 'Frau'], [1, 'Qa'], [2, 'Tab'], [3, 'qa-tab@example.invalid']]) { await r.locator('input').nth(n).fill(v); await r.locator('input').nth(n).blur(); }
   // Second tab switches the estate
   const p2 = await ctx.newPage(); await p2.goto(admin + '/administration/objekte'); await p2.waitForLoadState('networkidle');
-  await p2.hover('.estate-select .dropdown-button');
-  await Promise.all([p2.waitForNavigation(), p2.click('.estate-select .dropdown a:has-text("Kornhaus")')]);
+  await p2.hover('.page-title .dropdown-button');
+  await Promise.all([p2.waitForNavigation(), p2.click('.page-title .dropdown a:has-text("Kornhaus")')]);
   await p.click('.page-menu__collection >> text=Senden'); await p.waitForTimeout(200);
   await p.click('.dialog .actions a:text-is("Senden")'); await settle();
   await p.screenshot({ path: 'koro3/tabs.png' });

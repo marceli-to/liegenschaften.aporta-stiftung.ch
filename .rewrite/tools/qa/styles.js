@@ -12,7 +12,7 @@ const cases = [
   ['bearbeiten+invalid', admin + `/administration/objekt/${apt}/bearbeiten`, async p => { const i = p.locator('input[type=text]').first(); await i.fill(''); await i.blur(); }],
   ['angebote', admin + '/administration/angebote'],
   ['kollektion', admin + `/administration/kollektion/bearbeiten/${col}`],
-  ['mieter+suche', admin + '/administration/mieter', async p => { await p.click('.site-menu a[href=""]'); }],
+  ['mieter+suche', admin + '/administration/mieter', async p => { await p.click('.site-menu li:not(.page-title) a[href=""]'); }],
   ['benutzer+form', admin + '/administration/benutzer', async p => { await p.click('.page-menu__users .flex a'); }],
   ['profil', admin + '/administration/benutzer/profil'],
   ['angebot', offer + `/angebot/${col}`],

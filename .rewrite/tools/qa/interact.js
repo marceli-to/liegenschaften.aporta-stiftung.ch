@@ -179,11 +179,11 @@ const settle = p => p.waitForLoadState('networkidle').then(() => p.waitForTimeou
   // Tenants
   await p.goto(admin + '/administration/mieter'); await settle(p);
   const tenants = await rows();
-  await p.click('.site-menu a[href=""]');
+  await p.click('.site-menu li:not(.page-title) a[href=""]');
   check('search panel', await p.locator('nav.selector input.search').count() === 1);
   await p.fill('input.search', 'strasse'); await p.keyboard.press('Enter'); await settle(p);
   check('search by Enter', await rows() > 0 && await p.locator('nav.selector').count() === 0, await rows());
-  await p.click('.site-menu a[href=""]'); await p.click('nav.selector >> text=Zurücksetzen'); await settle(p);
+  await p.click('.site-menu li:not(.page-title) a[href=""]'); await p.click('nav.selector >> text=Zurücksetzen'); await settle(p);
   check('reset search', await rows() === tenants, `${await rows()} / ${tenants}`);
   check('tenant export link', (await p.locator('a.link-export').getAttribute('href')).startsWith('/export/mieter?v='));
 

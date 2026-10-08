@@ -26,8 +26,8 @@ Ausbaubeschrieb (`.docx`).
   `H6_99xx`).
 - **Offer mail:** attaches every plan of the apartment (plain + furnished;
   `H6_502` has one per level, so 4) and, for KORO, the Ausbaubeschrieb as PDF.
-- **Admin:** one admin for all estates, with an **estate selector of its own**
-  in the header (not in the title dropdown): the apartment list, filters and
+- **Admin:** one admin for all estates, the estate chosen in the header's
+  **title dropdown** (changed 2026-10-08 after trying a selector of its own): the apartment list, filters and
   their settings, offers, tenants, both exports and the isometry follow it.
   The header title shows the current estate. Stored in the session
   (`CurrentEstate::key()`).
@@ -102,10 +102,14 @@ Ausbaubeschrieb (`.docx`).
     still in `config/estates.php`), else `estates.current`; `set()`, `all()`
     (configured and published). `get()` caches per key.
   - `PUT api/estate {key}` (`EstateController`, any logged-in user); the
-    admin gets the estates as `data-estates`. Header: a chevron dropdown
-    left of the user icon (current one highlighted), the title is the
-    estate's name. Switching reloads on the apartment list, so the filter,
-    the picked apartments and the page start fresh.
+    admin gets the estates as `data-estates`. Header: the title is the
+    estate's name; its dropdown lists «Objekte», «Mieter» and below them the
+    other estate(s), light blue (`is-estate`). The user rejected a separate
+    chevron left of the user icon (and it closed on the way into its list).
+    The open dropdown now sits above the sticky isometry (z-index 101, was 1:
+    the isometry, z-index 100, covered anything below the first two entries).
+    Switching reloads on the apartment list, so the filter, the picked
+    apartments and the page start fresh.
   - Scoped to the chosen estate: offers (`collections`), collection items,
     tenants (list and search, via apartment), both exports (apartments
     already were). New offers get the chosen estate, an edited offer keeps
@@ -114,9 +118,11 @@ Ausbaubeschrieb (`.docx`).
   - `phpunit.xml` pins `SANCTUM_STATEFUL_DOMAINS` (the local `.env` set the
     `.test` host, so API tests never had a session).
   - Tests: 83 (+11: `EstateApiTest`, the KORO exports via the session).
-- Verified: Eglistrasse screenshots (14) against ones taken first: offer
-  pages pixel-identical; admin views differ only by the chevron (50 × 20 px
-  left of the user icon) and the hidden dropdown's two names in the text.
+- Verified: Eglistrasse screenshots (14) against ones taken first: all
+  pixel-identical; the text differs only by the hidden dropdown's
+  «Kornhaus-/Rötelstrasse». `estate.js` also checks the dropdown stays open
+  while the pointer moves down to the estate. `interact.js`/`styles.js`: the
+  tenant search selector narrowed (`a[href=""]` now also hit the estate).
   `interact.js` 65/65 (DB dumped and restored). `estate.js`: switch to KORO
   and back, title, 96 KORO apartments with the Loggia column, no offers and
   tenants on KORO, no console errors. `tabs.js`: toast, no offer.
