@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\CollectionController;
-// use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
