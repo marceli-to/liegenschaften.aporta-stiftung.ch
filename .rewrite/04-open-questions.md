@@ -58,8 +58,9 @@ php artisan route:cache
 php artisan route:cache --domain=eglistrasse.aporta-stiftung.ch
 ```
 
-(Check the exact `--domain` behaviour of `route:cache` with the package; the
-README only documents `config:cache`.)
+Verified 2026-10-08 (step 4): with `--domain` the package writes
+`bootstrap/cache/config-{domain}.php` / `routes-{domain}.php` (dots → `_`),
+and every domain's route cache contains the admin routes (`Route::domain`).
 
 ## 7. KORO — ANSWERED 2026-10-08: both
 

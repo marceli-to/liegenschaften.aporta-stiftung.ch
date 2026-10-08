@@ -43,6 +43,25 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     no `HasUuids`, config files define cache prefix / session cookie, the
     `VerifyCsrfToken` subclass still works (deprecated alias, goes in step 4).
   - `phpunit.xml` migrated to the PHPUnit 12 schema; `CACHE_DRIVER` → `CACHE_STORE`.
+- 2026-10-08: **backend step 4, slim skeleton.**
+  - `bootstrap/app.php` on `Gecche\Multidomain\Foundation\Application::configure()`
+    (its builder binds the multidomain HTTP/console kernels): routing (web, api,
+    commands), the old `api` group (Sanctum stateful, `throttle:200,1`,
+    bindings), `role` alias, `redirectUsersTo('/')`, schedule
+    (`Tasks\Notification` every minute). `bootstrap/providers.php` = `AppServiceProvider`.
+  - Deleted: both kernels, `Exceptions/Handler`, `Auth`/`Event`/`Route`
+    providers, 8 stock middleware classes (only `CheckRole` stays). The CSRF
+    `except` list only named two upload routes that no longer exist.
+  - `routes/web.php`: admin routes on `Route::domain(config('client.admin_domain'))`
+    (`ADMIN_DOMAIN`, default production host) instead of `if (App::domain() == …)`
+    with 4 hostnames; `/logout` GET as `[LoginController::class, 'logout']`.
+  - Config 21 → 10 files, each only with what differs from Laravel 13:
+    `app` (locale `de`, multidomain queue provider), `auth` (`password_resets`
+    table), `cache`/`database`/`session` (old fallbacks `file`/`mysql`/`file`,
+    old session cookie name), `logging` (stack = single + slack); own
+    `client`, `estates`, `domain`, `seo`. Removed `cors`, `excel`,
+    `filesystems`, `hashing`, `mail`, `queue`, `sanctum`, `services`, `view`.
+  - Local `.env` files: added `ADMIN_DOMAIN=liegenschaften.aporta-stiftung.ch.test`.
 
 ## Next
 
@@ -77,20 +96,33 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     offer (with PDF), reply and confirmation (`Mail::fake`, rolled back).
   - `route:list` same routes (13 only displays `{collection:uuid}`);
     `config:cache` and `route:cache` work; `/login` renders.
+- Step 4, against a checkout of `5efd789`:
+  - The same 20 requests on **both** hosts: identical status codes and
+    bodies (bar CSRF token); admin routes still 404 on the eglistrasse host.
+  - Effective config diffed key by key (494 keys): changed values are only
+    unused or harmless (bcrypt 10 → 12 rehashes on login, file-cache
+    prefix, log levels of unused channels, CORS for same-origin requests).
+    Mail: unchanged, Laravel 13 already ignored `encryption` since step 3.
+  - Real login over HTTP with a temporary admin (deleted afterwards): wrong
+    password → back to login; login → `/`; admin page, `/api/user`,
+    settings, apartments via the stateful SPA session; write without XSRF
+    header 419; `/login` when logged in → `/`; export is an xlsx; logout
+    closes admin and API; session cookie name unchanged.
+  - Guests: `/administration` → `/login`, `/api/*` 401 JSON, POST without
+    token 419.
+  - `route:list` 49 routes on the CLI (admin routes now visible with their
+    domain); commands and schedule unchanged; `config:cache` and
+    `route:cache`, plain and `--domain`, work and serve pages.
 - Pre-existing: `Tests\Feature\ExampleTest` fails (`/` is 404 on the CLI,
   because `routes/web.php` only registers it for the admin hostnames). Gets
   replaced by real tests in step 6.
 
 ## Left over / follow-ups
 
-For step 4:
-
-- **`route:cache` trap:** `routes/web.php` registers the admin routes only
-  `if (App::domain() == …)`. On the CLI that's false, so a plain `route:cache`
-  caches a route table **without the admin**. Must be `Route::domain()`
-  before caching goes into the deploy.
-
 Pre-existing, left as is:
+
+- `User::$fillable` lists `uuid`, but `users` has no such column (nothing
+  writes it).
 
 - `ApartmentExport`: `$apartments->sortBy('building.order')` discards its
   result, so the export is ordered by `order DESC` only.

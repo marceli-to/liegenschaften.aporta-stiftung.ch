@@ -123,6 +123,10 @@ Apply to **both** `.env` files (`.env` and `.env.eglistrasse.aporta-stiftung.ch`
   `APP_FRONTEND_URL` are no longer read; remove them. `ESTATE_EGLISTRASSE_URL`
   is optional; the default is `https://eglistrasse.aporta-stiftung.ch`. Set it
   only if production differs. `APORTA_REPLY_TO` stays (now `client.email.reply_to`).
+- From step 4: `ADMIN_DOMAIN` is optional (default `liegenschaften.aporta-stiftung.ch`).
+  `DB_CONNECTION`, `SESSION_DRIVER`, `CACHE_STORE` keep their old fallbacks
+  in config (`mysql`, `file`, `file`), so a missing line no longer breaks
+  anything; `CACHE_DRIVER` is not read anymore (fallback is the same `file`).
 - Remove `BROADCAST_DRIVER`, `PUSHER_*`, `MIX_*`, unused `REDIS_*`, `AWS_*`.
 - `config/logging.php` `stack` = `single` + `slack`, so errors go to the
   Slack webhook in `LOG_SLACK_WEBHOOK_URL`. Keep that in the trimmed config

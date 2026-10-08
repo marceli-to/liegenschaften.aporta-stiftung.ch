@@ -34,6 +34,18 @@ return [
 
   /*
   |--------------------------------------------------------------------------
+  | Admin domain
+  |--------------------------------------------------------------------------
+  |
+  | Host the admin routes are registered on. The same in every domain's .env,
+  | so each domain's route cache knows it.
+  |
+  */
+
+  'admin_domain' => env('ADMIN_DOMAIN', 'liegenschaften.aporta-stiftung.ch'),
+
+  /*
+  |--------------------------------------------------------------------------
   | Chunk size for cron jobs
   |--------------------------------------------------------------------------
   |

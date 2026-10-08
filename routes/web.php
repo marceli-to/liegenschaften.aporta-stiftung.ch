@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\CollectionController;
@@ -14,19 +15,14 @@ use App\Http\Controllers\CollectionController;
 
 // Auth routes
 Auth::routes(['verify' => true, 'register' => false]);
-Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/logout', [LoginController::class, 'logout']);
 
 // Frontend Routes
 Route::get('/angebot/{collection:uuid}/detail/{collectionItem:uuid}', [CollectionController::class, 'show'])->name('offer.show');
 Route::get('/angebot/{collection:uuid}/{hash?}', [CollectionController::class, 'show'])->name('offer.list');
 
-if (
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch.test' || 
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch.marceli.to' || 
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch' ||
-  \App::domain() == 'liegenschaften.aporta-stiftung.ch.wbg.ch'
-)
-{
+// Admin, on the admin domain only
+Route::domain(config('client.admin_domain'))->group(function() {
   Route::get('/', [PageController::class, 'index'])->name('home');
 
   // Logged in users
@@ -36,5 +32,5 @@ if (
     Route::get('/administration/{any?}', function () {
       return view('layout.authenticated');
     })->where('any', '.*')->middleware('role:admin')->name('applications');
-  }); 
-}
+  });
+});

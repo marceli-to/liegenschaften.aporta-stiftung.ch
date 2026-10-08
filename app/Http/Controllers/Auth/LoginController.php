@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends BaseController
@@ -38,6 +37,6 @@ class LoginController extends BaseController
    */
   public function redirectTo()
   {
-    return RouteServiceProvider::HOME;
+    return '/';
   }
 }
