@@ -106,4 +106,58 @@ class UserApiTest extends ApiTestCase
         $this->deleteJson("/api/user/{$user->id}")->assertOk()->assertExactJson([true]);
         $this->assertModelMissing($user);
     }
+
+    public function testAdminsKeepTheirRoleWithoutOne()
+    {
+        // As the profile page sends it
+        $this->putJson("/api/user/{$this->admin->id}", ['id' => $this->admin->id, 'firstname' => 'Neu', 'name' => 'Admin', 'email' => 'admin@example.invalid', 'admin' => true])
+            ->assertOk();
+
+        $this->assertSame('admin', $this->admin->fresh()->role);
+        $this->assertSame('Neu', $this->admin->fresh()->firstname);
+    }
+
+    public function testEditorsOnlyChangeTheirOwnProfile()
+    {
+        $editor = $this->user(['email' => 'editor@example.invalid', 'role' => 'editor']);
+        $this->actingAs($editor, 'sanctum');
+
+        $this->getJson('/api/user')->assertOk()->assertJsonMissingPath('admin');
+        $this->putJson("/api/user/{$editor->id}", ['firstname' => 'Eva', 'name' => 'Editor', 'email' => 'eva@example.invalid', 'password' => 'battery-staple'])
+            ->assertOk();
+
+        $editor->refresh();
+        $this->assertSame('Eva Editor', $editor->full_name);
+        $this->assertSame('eva@example.invalid', $editor->email);
+        $this->assertSame('editor', $editor->role);
+        $this->assertTrue(Hash::check('battery-staple', $editor->password));
+
+        // No promotion
+        $this->putJson("/api/user/{$editor->id}", ['firstname' => 'Eva', 'name' => 'Editor', 'email' => 'eva@example.invalid', 'role' => 'admin'])->assertOk();
+        $this->assertSame('editor', $editor->fresh()->role);
+    }
+
+    public function testEditorsCannotManageUsers()
+    {
+        $editor = $this->user(['email' => 'editor@example.invalid', 'role' => 'editor']);
+        $this->actingAs($editor, 'sanctum');
+
+        $this->getJson('/api/users')->assertForbidden();
+        $this->postJson('/api/user', ['firstname' => 'X', 'name' => 'Y', 'email' => 'x@example.invalid', 'password' => 'battery-staple', 'role' => 'admin'])->assertForbidden();
+        $this->putJson("/api/user/{$this->admin->id}", ['firstname' => 'X', 'name' => 'Y', 'email' => 'admin@example.invalid', 'role' => 'editor'])->assertForbidden();
+        $this->deleteJson("/api/user/{$this->admin->id}")->assertForbidden();
+
+        $this->assertSame(2, User::count());
+        $this->assertSame('admin', $this->admin->fresh()->role);
+        $this->assertSame('Test', $this->admin->fresh()->firstname);
+    }
+
+    public function testEditorsUseTheRestOfTheApi()
+    {
+        $this->actingAs($this->user(['email' => 'editor@example.invalid', 'role' => 'editor']), 'sanctum');
+
+        $this->getJson('/api/apartments')->assertOk();
+        $this->getJson('/api/collections')->assertOk();
+        $this->getJson('/api/settings/states')->assertOk();
+    }
 }

@@ -39,6 +39,6 @@ Route::domain(config('client.admin_domain'))->group(function() {
     Route::get('/export/mieter', [DownloadController::class, 'exportTenants'])->name('export_tenants');
     Route::get('/administration/{any?}', function () {
       return view('layout.authenticated');
-    })->where('any', '.*')->middleware('role:admin')->name('applications');
+    })->where('any', '.*')->middleware('role:admin,editor')->name('applications');
   });
 });

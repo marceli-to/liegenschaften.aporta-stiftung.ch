@@ -25,11 +25,14 @@ Route::get('/user-collection/{collection:uuid}', [UserCollectionController::clas
 Route::post('/user-collection', [UserCollectionController::class, 'reply']);
 
 Route::middleware('auth:sanctum')->group(function() {
-  Route::get('users', [UserController::class, 'get']);
+  // Users: editors only see and change their own profile
   Route::get('user', [UserController::class, 'find']);
-  Route::post('user', [UserController::class, 'create']);
   Route::put('user/{user}', [UserController::class, 'update']);
-  Route::delete('user/{user}', [UserController::class, 'destroy']);
+  Route::middleware('role:admin')->group(function() {
+    Route::get('users', [UserController::class, 'get']);
+    Route::post('user', [UserController::class, 'create']);
+    Route::delete('user/{user}', [UserController::class, 'destroy']);
+  });
 
   // Apartments
   Route::post('apartments/filter', [ApartmentController::class, 'filter']);

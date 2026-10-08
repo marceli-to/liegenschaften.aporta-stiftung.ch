@@ -72,6 +72,10 @@ class UserController extends Controller
 
   public function update(UserUpdateRequest $request, User $user)
   {
+    // Editors may only change their own profile, and not their role
+    $isAdmin = $request->user()->isAdmin();
+    abort_unless($isAdmin || $request->user()->is($user), 403);
+
     // Validate the email address if it has changed
     if ($request->input('email') !== $user->email)
     {
@@ -98,7 +102,8 @@ class UserController extends Controller
     $user->update([
       'firstname' => $request->input('firstname'),
       'name' => $request->input('name'),
-      'role' => $request->input('role'),
+      // The profile page sends no role
+      'role' => $isAdmin ? $request->input('role', $user->role) : $user->role,
     ]);
 
     return response()->json($user);

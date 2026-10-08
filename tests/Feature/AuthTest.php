@@ -77,12 +77,15 @@ class AuthTest extends TestCase
         $this->get('/password/reset')->assertRedirect('/');
     }
 
-    public function testUsersWithoutRoleCannotOpenTheAdmin()
+    public function testEditorsCanOpenTheAdmin()
     {
-        $this->user(['role' => '']);
+        $this->actingAs($this->user(['role' => 'editor']))->get('/administration/objekte')->assertOk();
+    }
 
-        $this->post('/login', ['email' => 'admin@example.invalid', 'password' => 'correct-horse']);
-        $this->get('/administration/objekte')->assertForbidden();
+    public function testOtherRolesCannotOpenTheAdmin()
+    {
+        $this->actingAs($this->user(['role' => '']))->get('/administration/objekte')->assertForbidden();
+        $this->actingAs($this->user(['role' => 'guest', 'email' => 'b@example.invalid']))->get('/administration/objekte')->assertForbidden();
     }
 
     public function testLogout()

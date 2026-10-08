@@ -87,7 +87,7 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     wrong credentials, lockout with seconds, unknown address, password too
     short / not confirmed, missing e-mail, invalid token.
 
-- 2026-10-08: **backend step 6, tests.** `php artisan test`: 64 tests, in-memory
+- 2026-10-08: **backend step 6, tests.** `php artisan test`: 69 tests, in-memory
   SQLite (all migrations, incl. the 2022 `alter`/`drop` ones, run there as is).
   - `tests/TestCase.php` builds the data (estate, building, floor, room,
     apartment, tenant, offer); no factories. `Api/ApiTestCase` logs in an admin
@@ -112,6 +112,16 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     `'–' > 0` is true. The filter now compares the raw value. Locally
     terrace / patio / balcony give 21 / 17 / 88 of 134 (= the SQL counts;
     before: 134 each). Covered in `ApartmentApiTest::testFilter`.
+  - **Editors, on request:** `CheckRole` only rejected an empty role
+    (`role !== $role && !role`), and user management was only hidden in
+    the UI: an editor could list, create, delete users and make themselves
+    admin over the API. Now `CheckRole` checks a list (`role:admin,editor`
+    on the admin SPA, unchanged for both roles); `GET users`, `POST user`,
+    `DELETE user/{user}` are `role:admin`; `PUT user/{user}` lets editors
+    change only their own profile and never a role. Also fixes saving the
+    profile page: it sends no `role`, so the update wrote `role = null`
+    (500 on MySQL, checked locally); the role is now kept. The 4 new tests
+    fail on the old code, the rest passes on both.
   - Removed: `ApartmentStoreRequest` (unused, same array messages), the
     old-style `database/factories/UserFactory.php` and `database/seeds`
     (neither autoloadable since Laravel 8) + their composer autoload
@@ -119,14 +129,13 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–6 done** (`ab468a6` … this commit, pushed). The backend
+**Backend steps 1–6 done** (`ab468a6` … `c2cb5cb`, plus two fixes; pushed). The backend
 part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
 
 - `php artisan test` must stay green through the frontend steps (the API
   tests pin what the Vue 3 admin talks to).
 - `npm ci && npm run production` (Mix 6, Vue 2) still reproduces the
   committed `public/assets`.
-- Open question for the user: `CheckRole` letting editors in (see Left over).
 
 ## Next
 
@@ -135,7 +144,9 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
    compare the production `migrations` table (`04` #5). Can run in parallel.
 3. QA on both domains: login, every admin page, create + send a collection
    (mail queue → mail), open the offer link, reply, both Excel exports.
-4. Deploy (`02` → `.env` changes, both files).
+4. Deploy (`02` → `.env` changes, both files). Before: `select role,
+   count(*) from users` on production; only `admin` and `editor` get into
+   the admin now (locally 7 admins, 1 editor).
 
 ## Verified
 
@@ -197,9 +208,6 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
 
 Pre-existing, left as is:
 
-- `CheckRole` only rejects users with an empty role (`role !== $role &&
-  !role`), so any role passes `role:admin`. The local DB has 7 admins and
-  1 `editor`, who gets into the admin. Waiting for the user's decision.
 - `GET api/collection-items/{item}`: the parameter is `{item}`, the method
   takes `$collectionItem`, so nothing is bound and it returns an empty
   item. The admin doesn't call it.
