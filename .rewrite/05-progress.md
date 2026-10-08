@@ -62,6 +62,21 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     `client`, `estates`, `domain`, `seo`. Removed `cors`, `excel`,
     `filesystems`, `hashing`, `mail`, `queue`, `sanctum`, `services`, `view`.
   - Local `.env` files: added `ADMIN_DOMAIN=liegenschaften.aporta-stiftung.ch.test`.
+- 2026-10-08: **backend step 5, own login instead of `laravel/ui`.**
+  - `AuthController` as in cra (`cd14046`): `Auth::attempt` + `RateLimiter`
+    (5 per e-mail and IP, as `laravel/ui`), session regenerate, logout with
+    invalidate + new token, `Password::sendResetLink` / `Password::reset`.
+    Redirects to `/` as before (cra: `/administration`). New passwords
+    `min:8`, as `laravel/ui`'s `Password::defaults()`.
+  - Same URLs and route names (`login`, `password.*`, `logout`); views
+    unchanged. Login and reset routes behind `guest`; reset link request
+    `throttle:6,1`.
+  - **`/logout` still accepts GET** (`Route::match`): the admin's Vue 2 bundle
+    links to it. POST-only once the admin is ported (`03`).
+  - Removed `laravel/ui`, the 6 `Auth/*` controllers, `auth/verify` and
+    `auth/passwords/confirm` views, `verified` on the admin routes,
+    `MustVerifyEmail` on `User` (all 8 users verified; `UserController` sets it).
+  - `resources/lang/de.json` from cra: the reset mail and the mail layout in German.
 
 ## Next
 
@@ -113,6 +128,14 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
   - `route:list` 49 routes on the CLI (admin routes now visible with their
     domain); commands and schedule unchanged; `config:cache` and
     `route:cache`, plain and `--domain`, work and serve pages.
+- Step 5: full auth flow over HTTP before/after with a temporary admin and
+  MailHog (`/tmp`-script, not committed): wrong/right login, redirects,
+  logout, forgot password (unknown and known address), reset mail, reset
+  link, mismatch / too short / ok, token reuse, old vs new password,
+  lockout after 5 failures. **Identical** except the intended: reset mail
+  now German (subject «Passwort zurücksetzen»); the forgot-password page
+  redirects a logged-in user to `/` (`guest`, was 200). The 20 in-process
+  requests from step 4: unchanged on both hosts. `route:cache` works.
 - Pre-existing: `Tests\Feature\ExampleTest` fails (`/` is 404 on the CLI,
   because `routes/web.php` only registers it for the admin hostnames). Gets
   replaced by real tests in step 6.
@@ -120,6 +143,13 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 ## Left over / follow-ups
 
 Pre-existing, left as is:
+
+- The HTML part of every notification mail (reset mail) lacks the
+  «If you're having trouble clicking…» line: the overridden
+  `resources/views/vendor/mail/html/message.blade.php` predates the slot
+  syntax. The text part has it; the button works.
+- The login view only ever shows «Bitte überprüfen Sie Ihre Eingabe!», not
+  the actual message (wrong password, lockout).
 
 - `User::$fillable` lists `uuid`, but `users` has no such column (nothing
   writes it).
