@@ -71,14 +71,16 @@ class CurrentEstate
   }
 
   /**
-   * A setting of the current estate (estates.estates.{key}.settings)
+   * A setting of an estate (estates.estates.{key}.settings), the current one
+   * by default
    *
    * @param string $name
+   * @param string|null $key
    * @return mixed
    */
-  public function setting($name)
+  public function setting($name, $key = null)
   {
-    return config('estates.estates.' . $this->key() . '.settings.' . $name);
+    return config('estates.estates.' . ($key ?? $this->key()) . '.settings.' . $name);
   }
 
   /**

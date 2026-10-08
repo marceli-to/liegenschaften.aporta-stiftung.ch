@@ -96,7 +96,8 @@ class UserCollectionController extends Controller
       'parking' => $item->parking,
       'has_reply' => $item->replied_at == NULL ? FALSE : TRUE,
       'comment' => $item->comment,
-      'available_at' => $item->apartment->available_at ? date('d.m.Y', strtotime($item->apartment->available_at)) : '–'
+      'available_at' => $item->apartment->available_at ? date('d.m.Y', strtotime($item->apartment->available_at)) : '–',
+      'photos' => $item->collection->estate->setting('photos'),
     ];
 
     return response()->json(['valid' => $item->collection->valid(), 'item' => $data, 'pagination' => $this->getPagination($collection, $collectionItemUuid)]);

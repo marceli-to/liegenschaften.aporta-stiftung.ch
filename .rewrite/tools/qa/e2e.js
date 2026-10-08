@@ -1,4 +1,5 @@
-// node e2e.js — the whole flow with real mail: admin sends an offer, the queue
+// node e2e.js [estate] — the whole flow with real mail, for one estate
+// (eglistrasse by default; kornhaus-roetelstrasse switches in the header): admin sends an offer, the queue
 // command sends it (MailHog), the link from the mail is opened and answered,
 // reply + confirmation mails, assign, finalize, both exports.
 // Destructive: run between a DB dump and its restore, with fixtures.php up.
@@ -6,7 +7,14 @@ const { chromium } = require('playwright');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const root = '/Users/marceli.to/Jamon.digital/Webroot/liegenschaften.aporta-stiftung.ch';
-const admin = 'https://liegenschaften.aporta-stiftung.ch.test', offerHost = 'https://eglistrasse.aporta-stiftung.ch.test';
+const admin = 'https://liegenschaften.aporta-stiftung.ch.test';
+const estate = process.argv[2] || 'eglistrasse';
+const offerHost = `https://${estate}.aporta-stiftung.ch.test`;
+// Per estate: the mail's wording, PDFs per apartment (+ estate documents), SVGs, example photos
+const expect = {
+  eglistrasse: { building: 'unserem Neubau «Eglistrasse»', pdfs: 2, svgs: 1, photos: 4 },
+  'kornhaus-roetelstrasse': { building: 'unserer Liegenschaft «Kornhaus-/Rötelstrasse»', pdfs: 5, svgs: 2, photos: 0 },
+}[estate];
 const cand = 'qa-e2e@example.invalid';
 const sql = q => execSync(`mysql -h127.0.0.1 -uroot -N liegenschaften_aporta -e "${q}"`).toString().trim();
 let failures = 0;
@@ -50,9 +58,15 @@ const xlsx = async (ctx, url, file) => {
   await p.goto(admin + '/login'); await p.fill('input[name=email]', 'qa@example.invalid'); await p.fill('input[name=password]', 'qa-password-123');
   await Promise.all([p.waitForNavigation(), p.click('button[type=submit]')]); await settle(p);
   check('login → apartment list', p.url().endsWith('/administration/objekte'), p.url());
+  const estateId = sql(`select id from estates where domain='${estate}'`), aptCount = Number(sql(`select count(*) from apartments where estate_id=${estateId}`));
+  if (estate !== 'eglistrasse') {
+    await p.hover('.page-title .dropdown-button');
+    await Promise.all([p.waitForNavigation(), p.click('.page-title .dropdown a.is-estate')]); await settle(p);
+  }
+  check(`estate ${estate}: list has its ${aptCount} apartments`, await p.locator('.list-row').count() === aptCount, await p.locator('.list-row').count());
 
   // Every admin page
-  const apt0 = sql('select uuid from apartments order by id limit 1');
+  const apt0 = sql(`select uuid from apartments where estate_id=${estateId} order by id limit 1`);
   for (const path of ['objekte', `objekt/${apt0}/anzeigen`, `objekt/${apt0}/bearbeiten`, 'angebote', 'kollektion', 'mieter', 'benutzer', 'benutzer/profil']) {
     await p.goto(`${admin}/administration/${path}`); await settle(p);
     const text = (await p.innerText('body')).trim();
@@ -72,7 +86,7 @@ const xlsx = async (ctx, url, file) => {
   check('offer sent (dialog)', (await p.locator('.dialog').innerText()).includes('versendet'));
   await p.click('.dialog .actions a:text-is("Schliessen")');
   const colUuid = sql(`select uuid from collections where email='${cand}'`);
-  check('offer stored with 2 items, estate 1', sql(`select concat(count(*), '/', max(c.estate_id)) from collection_items ci join collections c on c.id=ci.collection_id where c.email='${cand}'`) === '2/1');
+  check(`offer stored with 2 items, estate ${estateId}`, sql(`select concat(count(*), '/', max(c.estate_id)) from collection_items ci join collections c on c.id=ci.collection_id where c.email='${cand}'`) === `2/${estateId}`);
 
   // The cron sends it
   const t1 = new Date(Date.now() - 1000);
@@ -85,17 +99,20 @@ const xlsx = async (ctx, url, file) => {
   const md5 = require('crypto').createHash('md5').update(cand).digest('hex');
   check('offer mail: link to the estate domain with uuid + hash', link === `${offerHost}/angebot/${colUuid}/${md5}`, link);
   check('offer mail: salutation and remark', offerMail && offerMail.html.includes('Endtoend') && offerMail.html.includes('E2E Bemerkung'));
-  check('offer mail: one PDF per apartment', offerMail && offerMail.attachments.filter(a => a.type.includes('pdf') && a.size > 1000).length === 2, JSON.stringify(offerMail && offerMail.attachments));
+  check('offer mail: names the building', offerMail && offerMail.html.includes(`eine Wohnung in ${expect.building} interessiert`));
+  check(`offer mail: ${expect.pdfs} PDFs (plans + estate documents)`, offerMail && offerMail.attachments.filter(a => a.type.includes('pdf') && a.size > 1000).length === expect.pdfs, JSON.stringify(offerMail && offerMail.attachments));
 
   // The candidate opens the link from the mail and replies
   const o = await (await b.newContext({ ignoreHTTPSErrors: true, viewport: { width: 1440, height: 900 } })).newPage();
   o.on('pageerror', e => errs.push('offer ' + e.message));
   await o.goto(link); await settle(o);
   check('offer page: 2 apartments', await o.locator('.list-row').count() === 2);
-  check('offer page: isometry', await o.locator('.iso').count() === 1);
+  check(`offer page: isometry (${expect.svgs} SVG)`, await o.locator('.iso').count() === expect.svgs);
   check('link marks both read', sql(`select count(*) from collection_items ci join collections c on c.id=ci.collection_id where c.email='${cand}' and read_at is not null`) === '2');
   await o.locator('.list-row').nth(0).locator('a').first().click(); await settle(o);
   check('detail highlights the apartment', await o.locator('.iso [data-id].is-visible').count() === 1);
+  check(`detail: ${expect.photos} example photos`, await o.locator('figure:not(.apartment-floorplan) img').count() === expect.photos, await o.locator('figure:not(.apartment-floorplan) img').count());
+  await o.screenshot({ path: `e2e-${estate}-detail.png`, fullPage: true });
   const itemNumber = await o.locator('.iso [data-id].is-visible').getAttribute('data-id');
   await o.locator('.icon-state').nth(0).click();
   await o.click('text=Antworten'); await settle(o);
@@ -119,9 +136,9 @@ const xlsx = async (ctx, url, file) => {
 
   // Exports
   const ea = await xlsx(ctx, admin + '/export/objekte', 'e2e-objekte.xlsx');
-  check('apartment export: xlsx, filename', ea.status === 200 && ea.type.includes('spreadsheet') && ea.disposition.includes('liegenschaft-eglistrasse'), ea.disposition);
+  check('apartment export: xlsx, filename', ea.status === 200 && ea.type.includes('spreadsheet') && ea.disposition.includes(`liegenschaft-${estate}`), ea.disposition);
   const aptRow = ea.rows.find(r => r.includes(itemNumber));
-  check('apartment export: bold header, 134 rows, the apartment', ea.bold && ea.rows.length === 135 && !!aptRow, JSON.stringify(aptRow));
+  check(`apartment export: bold header, ${aptCount} rows, the apartment`, ea.bold && ea.rows.length === aptCount + 1 && !!aptRow, JSON.stringify(aptRow));
   const et = await xlsx(ctx, admin + '/export/mieter', 'e2e-mieter.xlsx');
   check('tenant export: has the new tenant', et.status === 200 && et.rows.some(r => r.includes(cand)), et.disposition);
 

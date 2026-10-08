@@ -156,6 +156,40 @@ Ausbaubeschrieb (`.docx`).
     UTF-8 is the default), so every plan SVG starts with `<svg` and the
     script needs no prolog handling. All 21 render pixel-identical.
 
+- 2026-10-08: **step 4, public domain, isometry, offer texts.**
+  - Isometry: `dwg2svg.py` writes into `resources/isometrie/kornhaus-roetelstrasse/`
+    (was `koro/`; the committed `preview.html` is gone, `--preview` goes to
+    /tmp) and puts its styles in each SVG (`SVG_CSS`: Eglistrasse's colours,
+    `.is-visible`), so they are self-contained like Eglistrasse's. Output was
+    byte-identical to the committed SVGs before the change.
+  - `Isometrie.vue`: several SVGs side by side (`is-split`), at one scale
+    (flex-grow = drawing width; together at most 960px); prop `focus` on the
+    detail views (admin show/edit, offer detail) shows only the building with
+    the apartment. The architects drew ko and ro as separate pictograms (own
+    north arrows), so they stay two SVGs.
+  - Offer mail: «in {mail_building} interessiert»: Eglistrasse «unserem
+    Neubau «Eglistrasse»» (unchanged), KORO «unserer Liegenschaft
+    «Kornhaus-/Rötelstrasse»» (user: per-estate wording; this phrase is my
+    placeholder, change it in `config/estates.php`). `CurrentEstate::setting()`
+    takes a key (the mail renders from the queued JSON, no model).
+  - Offer page «Beispielbilder»: per-estate `photos` (src, size, span);
+    Eglistrasse's four as before, KORO none yet → the block is left out
+    (user's choice until photos exist).
+  - Local: Herd link + TLS `kornhaus-roetelstrasse.aporta-stiftung.ch.test`;
+    `ESTATE_KORNHAUS_ROETELSTRASSE_URL` in both local `.env` files and pinned
+    in `phpunit.xml`. Production steps in `02` (`.env` section).
+  - Tests: 83 (mail wording for both estates, KORO link domain, photos in the
+    offer API).
+- Verified: Eglistrasse screenshots (14) pixel- and text-identical to the ones
+  after the plan canvas; `interact.js` 65/65; `isometry.js` (now with the real
+  key). `e2e.js` takes the estate now and passes for **both** (each between a
+  dump and its restore): KORO offer sent from the admin after switching, the
+  mail names «unserer Liegenschaft «Kornhaus-/Rötelstrasse»», links to
+  `https://kornhaus-roetelstrasse…test/angebot/…`, 5 PDFs (2 × plan +
+  furnished, Ausbaubeschrieb); offer page with both SVGs, detail with one
+  highlighted building and no photo block; reply, confirmation, assign,
+  finalize, exports with 96 rows. Eglistrasse: 2 PDFs, 4 photos, as before.
+
 ## Left over
 
 - **H7_502:** sheet 124.2 m², its plans 113.1 (upper level) / 111.9 (lower).
@@ -167,8 +201,8 @@ Ausbaubeschrieb (`.docx`).
 
 ## Where we are (2026-10-08)
 
-Steps 1–3 done and pushed; KORO is imported in the local DB and selectable
-in the admin. **Next: step 4**: rename `resources/isometrie/koro/` →
-`kornhaus-roetelstrasse/` (KORO's admin list has no isometry until then),
-`iso-*` styles and the ko/ro layout, `.env` for the KORO domain, offer mail
-text by estate.
+Steps 1–4 done and pushed; KORO works locally end to end on its own `.test`
+domain. **Next: step 5, QA**: most of it ran with step 4 (`e2e.js` on both
+estates, Eglistrasse screenshots). Left: KORO screenshots of every admin view
+and the offer pages (mobile too), the user's look at the KORO pages; then the
+server checks and the deploy (`05` → Next).

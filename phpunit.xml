@@ -13,6 +13,7 @@
     <server name="SANCTUM_STATEFUL_DOMAINS" value="liegenschaften.aporta-stiftung.ch"/>
     <server name="ESTATE_DOMAIN_KEY" value="eglistrasse"/>
     <server name="ESTATE_EGLISTRASSE_URL" value="https://eglistrasse.aporta-stiftung.ch"/>
+    <server name="ESTATE_KORNHAUS_ROETELSTRASSE_URL" value="https://kornhaus-roetelstrasse.aporta-stiftung.ch"/>
     <server name="APORTA_REPLY_TO" value="vermietung@example.invalid"/>
     <server name="MAIL_FROM_ADDRESS" value="noreply@example.invalid"/>
     <server name="BCRYPT_ROUNDS" value="4"/>

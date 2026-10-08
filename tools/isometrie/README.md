@@ -4,11 +4,13 @@ Generates the interactive isometric SVGs from the architects' pictogram DWG.
 
 ```sh
 brew install libredwg   # provides dwgread
-python3 tools/isometrie/dwg2svg.py "<pictogram>.dwg" resources/isometrie/<estate> --preview
+python3 tools/isometrie/dwg2svg.py ".data/148_KORO PIKTOGRAMME DWG.dwg" resources/isometrie/kornhaus-roetelstrasse
+python3 tools/isometrie/dwg2svg.py ".data/148_KORO PIKTOGRAMME DWG.dwg" /tmp/iso --preview   # to check
 ```
 
-Writes one SVG per building (`ro.svg`, `ko.svg`) and, with `--preview`, a
-`preview.html` to check every apartment by hovering its number.
+Writes one SVG per building (`ko.svg`, `ro.svg`) and, with `--preview`, a
+`preview.html` to check every apartment by hovering its number (keep it out
+of `resources/`).
 
 ## Input
 
@@ -36,5 +38,6 @@ labelled RG but drawn as DG, H5_02 is labelled EG but drawn in the RG row).
 ```
 
 Paths use the classes `iso-face` (shaded through `fill-opacity`), `iso-line`
-and `iso-line-light`. Styling is left to the consuming component; see
-`PREVIEW_CSS` in the script for a starting point.
+and `iso-line-light`. Each SVG carries its styles (`SVG_CSS`): Eglistrasse's
+colours, an apartment shows when its group has `.is-visible`. The admin and
+the offer page show an estate's SVGs side by side, in file name order.

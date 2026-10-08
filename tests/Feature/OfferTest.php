@@ -113,6 +113,9 @@ class OfferTest extends TestCase
         // Loose: decimals are strings on MySQL, numbers on SQLite
         $this->assertEquals('6.3', $list->json('items.0.size_loggia'));
         $this->assertEquals('6.3', $item->json('item.size_loggia'));
+
+        // No example photos yet
+        $item->assertJsonPath('item.photos', []);
     }
 
     public function testShowWithPagination()
@@ -125,6 +128,8 @@ class OfferTest extends TestCase
             ->assertJsonPath('item.number', '1.01')
             ->assertJsonPath('item.estate', 'Wohnüberbauung Eglistrasse, 8004 Zürich')
             ->assertJsonPath('item.has_reply', false)
+            ->assertJsonPath('item.photos.0.src', '/assets/img/aporta-eglistrasse-wohnraum.jpg')
+            ->assertJsonCount(4, 'item.photos')
             ->assertJsonPath('pagination', ['index' => 1, 'count' => 3, 'prev' => $this->item(2)->uuid, 'next' => $this->item(1)->uuid])
             ->json('item');
         $this->assertEquals([1500, 200, 1700], [$item['rent_net'], $item['additional_cost'], $item['rent_gross']]);

@@ -228,6 +228,7 @@ def write_svg(building, items, units, path):
 
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
            f'class="iso" data-building="{building}">',
+           f'<style>{SVG_CSS}</style>',
            '<g class="iso-base">']
     out += [element(i, origin) for i in items if i['building'] == building and not i['unit']]
     out.append('</g>')
@@ -244,6 +245,18 @@ def write_svg(building, items, units, path):
     return sorted(u for u, ui in units.items() if ui[0]['building'] == building)
 
 
+# In every SVG, so it is styled wherever it is shown (as Eglistrasse's):
+# colours as Eglistrasse's isometry; an apartment shows when its group gets
+# .is-visible (the Isometrie component sets it)
+SVG_CSS = (
+    '.iso-base .iso-face{fill:#f4f4f4}'
+    '.iso-line{fill:none;stroke:#1d1d1b;stroke-width:.6;stroke-linejoin:round;stroke-linecap:round}'
+    '.iso-line-light{fill:none;stroke:#c8c8c8;stroke-width:.4;stroke-linejoin:round;stroke-linecap:round}'
+    '.iso-unit{opacity:0}'
+    '.iso-unit .iso-face{fill:#32648c}'
+    '.iso-unit.is-visible{opacity:1}'
+)
+
 PREVIEW_CSS = """
 body { font: 13px/1.4 -apple-system, sans-serif; margin: 24px; display: grid; gap: 48px; }
 section { display: grid; grid-template-columns: 1fr 220px; gap: 24px; align-items: start; }
@@ -251,12 +264,6 @@ ul { list-style: none; margin: 0; padding: 0; columns: 2; }
 li { padding: 2px 6px; cursor: default; }
 li:hover { background: #32648c; color: #fff; }
 .iso { width: 100%; height: auto; }
-.iso-base .iso-face { fill: #f4f4f4; }
-.iso-line { fill: none; stroke: #1d1d1b; stroke-width: 1; stroke-linejoin: round; }
-.iso-line-light { fill: none; stroke: #c8c8c8; stroke-width: .6; stroke-linejoin: round; }
-.iso-unit { opacity: 0; }
-.iso-unit .iso-face { fill: #32648c; }
-.iso-unit.is-visible { opacity: 1; }
 """
 
 PREVIEW_JS = """

@@ -1,11 +1,11 @@
 {
-  "_LinkExternal-CJ7hipQV.js": {
-    "file": "assets/LinkExternal-CJ7hipQV.js",
+  "_LinkExternal-BNdhrGzy.js": {
+    "file": "assets/LinkExternal-BNdhrGzy.js",
     "name": "LinkExternal",
     "dynamicImports": [
       "resources/isometrie/eglistrasse/eglistrasse.svg?raw",
-      "resources/isometrie/koro/ko.svg?raw",
-      "resources/isometrie/koro/ro.svg?raw"
+      "resources/isometrie/kornhaus-roetelstrasse/ko.svg?raw",
+      "resources/isometrie/kornhaus-roetelstrasse/ro.svg?raw"
     ]
   },
   "resources/isometrie/eglistrasse/eglistrasse.svg?raw": {
@@ -14,34 +14,34 @@
     "src": "resources/isometrie/eglistrasse/eglistrasse.svg?raw",
     "isDynamicEntry": true
   },
-  "resources/isometrie/koro/ko.svg?raw": {
-    "file": "assets/ko-CXS0XGBL.js",
+  "resources/isometrie/kornhaus-roetelstrasse/ko.svg?raw": {
+    "file": "assets/ko-CeOUeWDx.js",
     "name": "ko",
-    "src": "resources/isometrie/koro/ko.svg?raw",
+    "src": "resources/isometrie/kornhaus-roetelstrasse/ko.svg?raw",
     "isDynamicEntry": true
   },
-  "resources/isometrie/koro/ro.svg?raw": {
-    "file": "assets/ro-jh_jgcvO.js",
+  "resources/isometrie/kornhaus-roetelstrasse/ro.svg?raw": {
+    "file": "assets/ro-C9Amlqxn.js",
     "name": "ro",
-    "src": "resources/isometrie/koro/ro.svg?raw",
+    "src": "resources/isometrie/kornhaus-roetelstrasse/ro.svg?raw",
     "isDynamicEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-WRY8E5MY.js",
+    "file": "assets/app-DA2spCSP.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-CJ7hipQV.js"
+      "_LinkExternal-BNdhrGzy.js"
     ]
   },
   "resources/js/collection.js": {
-    "file": "assets/collection-WMZR0pFZ.js",
+    "file": "assets/collection-BM9lx60b.js",
     "name": "collection",
     "src": "resources/js/collection.js",
     "isEntry": true,
     "imports": [
-      "_LinkExternal-CJ7hipQV.js"
+      "_LinkExternal-BNdhrGzy.js"
     ]
   },
   "resources/js/validation.js": {
@@ -51,7 +51,7 @@
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-CfCpbasN.css",
+    "file": "assets/app-CQs4cUdG.css",
     "name": "app",
     "names": [
       "app.css"

@@ -1,4 +1,5 @@
-var e=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 777 620" class="iso" data-building="ro">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 777 620" class="iso" data-building="ro">
+<style>.iso-base .iso-face{fill:#f4f4f4}.iso-line{fill:none;stroke:#1d1d1b;stroke-width:.6;stroke-linejoin:round;stroke-linecap:round}.iso-line-light{fill:none;stroke:#c8c8c8;stroke-width:.4;stroke-linejoin:round;stroke-linecap:round}.iso-unit{opacity:0}.iso-unit .iso-face{fill:#32648c}.iso-unit.is-visible{opacity:1}</style>
 <g class="iso-base">
 <path class="iso-line-light" d="M703.7,283.3L703.5,282.1L713.4,281.6L710.1,261.9L700.2,262.5L691.9,212.7L552.6,220.4L564.3,291"/>
 <path class="iso-line-light" d="M703.7,283.3L564.3,291"/>
@@ -2057,4 +2058,3 @@ var e=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 777 620" class="iso"
 </g>
 </g>
 </svg>
-`;export{e as default};

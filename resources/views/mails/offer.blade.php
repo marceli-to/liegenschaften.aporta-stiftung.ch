@@ -1,7 +1,7 @@
 @component('mail::message')
 <h1>Wohnungsangebot {{$collection->estate->description}}</h1>
 <p>Guten Tag {{$collection->salutation}} {{$collection->name}}</p>
-<p>Sie haben sich für eine Wohnung in unserem Neubau «Eglistrasse» interessiert. Es freut uns Ihnen mitzuteilen, dass wir ein passendes Angebot für Sie haben.</p>
+<p>Sie haben sich für eine Wohnung in {{ app(\App\Support\CurrentEstate::class)->setting('mail_building', $collection->estate->domain) }} interessiert. Es freut uns Ihnen mitzuteilen, dass wir ein passendes Angebot für Sie haben.</p>
 <p>Sämtliche Informationen zu unserem Angebot sowie die Möglichkeit einer direkten Rückmeldung, finden Sie unter dem untenstehenden Link.</p>
 <p><strong>Achtung das Angebot ist nur 5 Tage gültig</strong>, wir bitten Sie um schnelle Rückmeldung.</p>
 <p style="padding: 12px 0"><a href="{{ app(\App\Support\CurrentEstate::class)->url($collection->estate->domain) . '/angebot/' . $collection->uuid . '/' . md5($collection->email) }}" class="button button-primary" target="_blank">Unser Angebot</a></p>

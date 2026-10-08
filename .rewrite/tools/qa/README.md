@@ -19,7 +19,7 @@ Against the Herd hosts (`*.test`, `ignoreHTTPSErrors`), local DB.
 - `interact.js` — 65 checks of every admin and offer action. Destructive:
   `mysqldump -h127.0.0.1 -uroot liegenschaften_aporta > db-before.sql`
   first, `mysql … < db-before.sql` after, then `fixtures.php down`.
-- `e2e.js` — the whole flow with real mail (MailHog) and `schedule:run`: send
+- `e2e.js [estate]` — the whole flow with real mail (MailHog) and `schedule:run`: send
   an offer, open the link from the mail, reply, assign, finalize, both exports
   (read with `xlsx.php`). Destructive, like `interact.js`.
 - `dev.js` — pages through the Vite dev server (`npx vite` running).
@@ -29,3 +29,5 @@ Against the Herd hosts (`*.test`, `ignoreHTTPSErrors`), local DB.
   list, Loggia column, offers and tenants scoped), switch back.
 - `tabs.js` — apartments picked on Eglistrasse, KORO chosen in a second tab,
   offer sent: the toast, no offer. Destructive, like `interact.js`.
+- `koroiso.js <outdir> [numbers…]` — KORO's isometry in the admin list
+  (switches to KORO), screenshots with each number hovered.

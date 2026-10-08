@@ -22,7 +22,7 @@ const col = '11111111-1111-4111-8111-111111111111';
     check(`${name}: one svg on the page`, await p.locator('.iso').count() === 1);
   }
   // A second estate: two buildings, two SVGs
-  await p.route(admin + '/administration/objekte', async r => { const res = await r.fetch(); r.fulfill({ response: res, body: (await res.text()).replace('data-estate="eglistrasse"', 'data-estate="koro"') }); });
+  await p.route(admin + '/administration/objekte', async r => { const res = await r.fetch(); r.fulfill({ response: res, body: (await res.text()).replace('data-estate="eglistrasse"', 'data-estate="kornhaus-roetelstrasse"') }); });
   await p.goto(admin + '/administration/objekte', { waitUntil: 'networkidle' });
   check('koro: two svgs (ko, ro)', JSON.stringify(await p.locator('.iso').evaluateAll(e => e.map(x => x.dataset.building))) === '["ko","ro"]');
   check('no page errors ' + errs.join('; '), errs.length === 0);

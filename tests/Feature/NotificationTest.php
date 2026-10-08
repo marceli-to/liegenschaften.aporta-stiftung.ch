@@ -70,6 +70,7 @@ class NotificationTest extends TestCase
             $this->assertSame('Wohnungsangebot Eglistrasse – à Porta Stiftung', $mail->subject);
             $this->assertTrue($mail->hasFrom('noreply@example.invalid', 'à Porta Stiftung'));
             $this->assertStringContainsString('Guten Tag Frau Beispiel', $html);
+            $this->assertStringContainsString('eine Wohnung in unserem Neubau «Eglistrasse» interessiert.', $html);
             $this->assertStringContainsString('href="' . $link . '"', $html);
             $this->assertStringContainsString("Besichtigung am Montag<br>\nab 17 Uhr", $html);
             $this->assertSame(
@@ -105,6 +106,9 @@ class NotificationTest extends TestCase
 
         Mail::assertSent(Offer::class, function (Offer $mail) use ($uuid) {
             $mail->build();
+            $html = $mail->render();
+            $this->assertStringContainsString('eine Wohnung in unserer Liegenschaft «Kornhaus-/Rötelstrasse» interessiert.', $html);
+            $this->assertStringContainsString('href="https://kornhaus-roetelstrasse.aporta-stiftung.ch/angebot/', $html);
             $this->assertSame([
                 public_path("assets/media/H1_101-{$uuid}.pdf"),
                 public_path("assets/media/H1_101-{$uuid}-moebliert.pdf"),

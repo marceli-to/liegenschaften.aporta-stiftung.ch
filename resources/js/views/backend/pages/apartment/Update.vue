@@ -93,7 +93,7 @@
                     </apartment-row>
                   </div>
                   <div class="span-6">
-                    <isometrie :estate="estateKey" :active="apartment.number" />
+                    <isometrie :estate="estateKey" :active="apartment.number" focus />
                   </div>
                 </div>
               </div>

@@ -23,6 +23,24 @@
   width: 100%;
 }
 
+// Several buildings (KORO: ko, ro) side by side, together at most 960px
+// wide; the component sets flex-grow to each drawing's width (one scale)
+.iso-wrapper.is-split {
+  align-items: center;
+  display: flex;
+  gap: $space-4x;
+  padding-left: max(0px, calc((100% - 960px) / 2));
+  padding-right: max(0px, calc((100% - 960px) / 2));
+
+  .iso {
+    flex-basis: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+    min-width: 0;
+  }
+}
+
 .apartment {
   @extend %content-block;
   width: 100%;

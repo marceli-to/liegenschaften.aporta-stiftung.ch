@@ -88,7 +88,7 @@
                     </apartment-row>
                   </div>
                   <div class="span-12 sm:span-6">
-                    <isometrie :estate="estateKey" :active="data.number" />
+                    <isometrie :estate="estateKey" :active="data.number" focus />
                   </div>
                 </div>
               </div>
@@ -195,21 +195,12 @@
                 </form>
               </div>
             </apartment-row>
-            <apartment-row class="grid-cols-none mt-15x">
+            <apartment-row class="grid-cols-none mt-15x" v-if="data.photos?.length">
               <div>
                 <h3>Beispielbilder</h3>
                 <div class="grid-cols-12 grid-row-gap">
-                  <figure class="span-12">
-                    <img src="/assets/img/aporta-eglistrasse-wohnraum.jpg" class="is-responsive" width="1016" height="718">
-                  </figure>
-                  <figure class="span-6">
-                    <img src="/assets/img/aporta-eglistrasse-nasszellen.jpg" class="is-responsive" width="1000" height="1415">
-                  </figure>
-                  <figure class="span-6">
-                    <img src="/assets/img/aporta-eglistrasse-treppenhaus.jpg" class="is-responsive" width="1000" height="1415">
-                  </figure>
-                  <figure class="span-12">
-                    <img src="/assets/img/aporta-eglistrasse-gartenblick.jpg" class="is-responsive" width="1016" height="718">
+                  <figure :class="`span-${photo.span}`" v-for="photo in data.photos" :key="photo.src">
+                    <img :src="photo.src" class="is-responsive" :width="photo.width" :height="photo.height">
                   </figure>
                 </div>
             </div>

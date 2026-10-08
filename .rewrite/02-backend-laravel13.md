@@ -128,6 +128,15 @@ Apply to **both** `.env` files (`.env` and `.env.eglistrasse.aporta-stiftung.ch`
   in config (`mysql`, `file`, `file`), so a missing line no longer breaks
   anything; `CACHE_DRIVER` is not read anymore (fallback is the same `file`).
 - Remove `BROADCAST_DRIVER`, `PUSHER_*`, `MIX_*`, unused `REDIS_*`, `AWS_*`.
+- KORO (`06-koro.md` step 4): a third domain, `kornhaus-roetelstrasse.aporta-stiftung.ch`
+  (DNS, vhost, certificate by the host). Its `.env.kornhaus-roetelstrasse.aporta-stiftung.ch`
+  as Eglistrasse's, with `ESTATE_DOMAIN_KEY=kornhaus-roetelstrasse`, its own
+  `APP_URL`, `SANCTUM_STATEFUL_DOMAINS`, `APORTA_DOMAIN`; storage folder
+  `storage/kornhaus-roetelstrasse_aporta-stiftung_ch` (`php artisan domain:add`
+  makes both); `config:cache` / `route:cache --domain=` for it too.
+  `ESTATE_KORNHAUS_ROETELSTRASSE_URL` is optional in every `.env` (default the
+  production URL). Then `php artisan migrate` (`size_loggia`) and
+  `php artisan estate:import database/data/kornhaus-roetelstrasse.json`.
 - `config/logging.php` `stack` = `single` + `slack`, so errors go to the
   Slack webhook in `LOG_SLACK_WEBHOOK_URL`. Keep that in the trimmed config
   (Laravel 13's default stack is `single` only). Check the webhook still works.
