@@ -15,7 +15,7 @@ class Notification
 
         // Reply
         if ($m->type == 'reply') {
-          \Mail::to(env('APORTA_REPLY_TO'))->send(new \App\Mail\Reply($data));
+          \Mail::to(config('client.email.reply_to'))->send(new \App\Mail\Reply($data));
           $m->processed = 1;
           $m->save();
         }

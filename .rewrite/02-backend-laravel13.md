@@ -119,7 +119,10 @@ Apply to **both** `.env` files (`.env` and `.env.eglistrasse.aporta-stiftung.ch`
 - `SESSION_DRIVER=cookie` is set today; keep it or move to `file`. Check that
   the admin login survives the switch.
 - `APP_URL` = exact origin per domain; `SANCTUM_STATEFUL_DOMAINS` checked.
-- New keys from the `env()` move (`ESTATE_*` stay, names may change).
+- From step 2: `ESTATE_DOMAIN_KEY` stays (picks the estate). `ESTATE_ID` and
+  `APP_FRONTEND_URL` are no longer read; remove them. `ESTATE_EGLISTRASSE_URL`
+  is optional; the default is `https://eglistrasse.aporta-stiftung.ch`. Set it
+  only if production differs. `APORTA_REPLY_TO` stays (now `client.email.reply_to`).
 - Remove `BROADCAST_DRIVER`, `PUSHER_*`, `MIX_*`, unused `REDIS_*`, `AWS_*`.
 - `config/logging.php` `stack` = `single` + `slack`, so errors go to the
   Slack webhook in `LOG_SLACK_WEBHOOK_URL`. Keep that in the trimmed config

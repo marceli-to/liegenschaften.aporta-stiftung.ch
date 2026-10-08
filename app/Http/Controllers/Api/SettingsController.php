@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
-use App\Models\Estate;
 use App\Models\Building;
 use App\Models\Room;
 use App\Models\Floor;
 use App\Models\State;
+use App\Support\CurrentEstate;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -16,9 +16,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function buildings()
+  public function buildings(CurrentEstate $estate)
   {
-    return response()->json(Building::where('estate_id', env('ESTATE_ID'))->orderBy('order')->get());
+    return response()->json(Building::where('estate_id', $estate->id())->orderBy('order')->get());
   }
 
   /**
@@ -27,10 +27,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function rooms()
+  public function rooms(CurrentEstate $estate)
   {
-    $estate = Estate::findOrFail(env('ESTATE_ID'));
-    return response()->json($estate->rooms->sortBy('order'));
+    return response()->json($estate->get()->rooms->sortBy('order'));
   }
 
   /**
@@ -39,10 +38,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function floors()
+  public function floors(CurrentEstate $estate)
   {
-    $estate = Estate::findOrFail(env('ESTATE_ID'));
-    return response()->json($estate->floors->sortBy('order'));
+    return response()->json($estate->get()->floors->sortBy('order'));
   }
 
   /**
@@ -51,9 +49,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function exteriors()
+  public function exteriors(CurrentEstate $estate)
   {
-    return response()->json(config(env('ESTATE_DOMAIN_KEY'). '.settings.exteriors'));
+    return response()->json($estate->setting('exteriors'));
   }
 
   /**
@@ -62,9 +60,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function states()
+  public function states(CurrentEstate $estate)
   {
-    return response()->json(State::whereIn('id', config(env('ESTATE_DOMAIN_KEY'). '.settings.states'))->get());
+    return response()->json(State::whereIn('id', $estate->setting('states'))->get());
   }
 
 
@@ -74,9 +72,9 @@ class SettingsController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function rent()
+  public function rent(CurrentEstate $estate)
   {
-    return response()->json(config(env('ESTATE_DOMAIN_KEY'). '.settings.rent_steps'));
+    return response()->json($estate->setting('rent_steps'));
   }
 
 

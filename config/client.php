@@ -20,6 +20,7 @@ return [
 
   'email' => [
     'from' => env('MAIL_FROM_ADDRESS', 'marcel@jamon.digital'),
+    'reply_to' => env('APORTA_REPLY_TO'),
   ],
 
   /*

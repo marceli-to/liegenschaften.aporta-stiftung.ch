@@ -19,5 +19,5 @@ Begründung:<br>
 @endif
 </p>
 <p style="padding: 12px 0"><a href="{{ url('/') . '/administration/angebote/' . $item->uuid}}" class="button button-primary">Antwort anzeigen</a></p>
-<p>Freundliche Grüsse<br><br>{{ env('APP_NAME') }}</p>
+<p>Freundliche Grüsse<br><br>{{ config('app.name') }}</p>
 @endcomponent

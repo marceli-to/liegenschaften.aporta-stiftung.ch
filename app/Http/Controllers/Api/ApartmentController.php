@@ -10,6 +10,7 @@ use App\Models\Tenant;
 use App\Models\CollectionItem;
 use App\Http\Requests\ApartmentStoreRequest;
 use App\Http\Requests\ApartmentUpdateRequest;
+use App\Support\CurrentEstate;
 use Illuminate\Http\Request;
 
 class ApartmentController extends Controller
@@ -17,19 +18,18 @@ class ApartmentController extends Controller
   /**
    * Get a list of apartments
    * 
-   * @todo Get estate_id from session
+   * @param  CurrentEstate $estate
    * @return \Illuminate\Http\Response
    */
-  public function get()
+  public function get(CurrentEstate $estate)
   { 
-    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->orderBy('order', 'DESC')->where('estate_id', env('ESTATE_ID'))->get();
+    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->orderBy('order', 'DESC')->where('estate_id', $estate->id())->get();
     return new DataCollection($data->sortBy('building.order'));
   }
 
   /**
    * Get a list of selected apartments
    * 
-   * @todo Get estate_id from session
    * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
@@ -43,12 +43,13 @@ class ApartmentController extends Controller
    * Get a filtered ist of apartments
    * 
    * @param  \Illuminate\Http\Request $request
+   * @param  CurrentEstate $estate
    * @return \Illuminate\Http\Response
    */
-  public function filter(Request $request)
+  public function filter(Request $request, CurrentEstate $estate)
   { 
     // Get all apartments
-    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->where('estate_id', env('ESTATE_ID'))->orderBy('order')->get();
+    $data = Apartment::with('building', 'floor', 'room', 'tenant', 'collectionItems')->where('estate_id', $estate->id())->orderBy('order')->get();
 
     // Buildings
     if ($request->input('buildings'))

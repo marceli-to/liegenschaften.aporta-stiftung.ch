@@ -4,6 +4,7 @@ use App\Http\Controllers\BaseController;
 use App\Exports\ApartmentExport;
 use App\Exports\TenantExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Support\CurrentEstate;
 use Illuminate\Http\Request;
 
 class DownloadController extends BaseController
@@ -27,9 +28,9 @@ class DownloadController extends BaseController
    * @return \Illuminate\Http\Response
    */
 
-  public function exportApartments()
+  public function exportApartments(CurrentEstate $estate)
   {
-    $filename = 'liegenschaft-eglistrasse-objekte' . date('d-m-Y-H:i:s') . '.xlsx';
+    $filename = 'liegenschaft-' . $estate->key() . '-objekte' . date('d-m-Y-H:i:s') . '.xlsx';
     return Excel::download(new ApartmentExport, $filename);
   }
 
@@ -39,9 +40,9 @@ class DownloadController extends BaseController
    * @return \Illuminate\Http\Response
    */
 
-   public function exportTenants()
+   public function exportTenants(CurrentEstate $estate)
    {
-     $filename = 'liegenschaft-eglistrasse-mieter' . date('d-m-Y-H:i:s') . '.xlsx';
+     $filename = 'liegenschaft-' . $estate->key() . '-mieter' . date('d-m-Y-H:i:s') . '.xlsx';
      return Excel::download(new TenantExport, $filename);
    }
 

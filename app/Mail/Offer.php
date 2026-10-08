@@ -29,8 +29,8 @@ class Offer extends Mailable
    */
   public function build()
   {
-    $mail = $this->from(\Config::get('client.email.from'), env('APP_NAME'))
-                ->subject('Wohnungsangebot '. $this->data->estate->description .' – '. env('APP_NAME'))
+    $mail = $this->from(\Config::get('client.email.from'), config('app.name'))
+                ->subject('Wohnungsangebot '. $this->data->estate->description .' – '. config('app.name'))
                 ->with(['collection' => $this->data])
                 ->markdown('mails.offer');
     

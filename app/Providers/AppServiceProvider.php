@@ -2,6 +2,7 @@
 namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Mail;
+use App\Support\CurrentEstate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
    */
   public function register()
   {
-    //
+    $this->app->scoped(CurrentEstate::class);
   }
 
   /**

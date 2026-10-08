@@ -16,5 +16,5 @@ Begründung:<br>
 @endif
 </p>
 <p>Wir werden Ihre unverbindliche Antwort prüfen und uns so schnell wie möglich bei Ihnen melden.</p>
-<p>Freundliche Grüsse<br><br>{{ env('APP_NAME') }}<br>Camilla Walker</p>
+<p>Freundliche Grüsse<br><br>{{ config('app.name') }}<br>Camilla Walker</p>
 @endcomponent

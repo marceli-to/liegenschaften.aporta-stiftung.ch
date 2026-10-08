@@ -7,6 +7,7 @@ use App\Models\CollectionItem;
 use App\Http\Requests\CollectionStoreRequest;
 use App\Models\Apartment;
 use App\Models\MailQueue;
+use App\Support\CurrentEstate;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
@@ -79,7 +80,7 @@ class CollectionController extends Controller
       'email' => $candidate['email'],
       'remarks' => $remarks,
       'valid_until' => \Carbon\Carbon::now()->addDays(5),
-      'estate_id' => env('ESTATE_ID'),
+      'estate_id' => app(CurrentEstate::class)->id(),
     ]);
     $collection->save();
 
