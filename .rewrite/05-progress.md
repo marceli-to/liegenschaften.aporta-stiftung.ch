@@ -358,10 +358,6 @@ Pre-existing, left as is:
 
 - `ApartmentExport`: `$apartments->sortBy('building.order')` discards its
   result, so the export is ordered by `order DESC` only.
-- Local DB: admin user 9 (`mail@0704.ch`, from 2023) is gone. It is in
-  the dump taken before the step 2–5 QA (`/tmp/aporta/qa/db-before.sql`),
-  not in this session's first one; nothing else differs. Lost during that
-  QA run, local only.
 - Local DB has one unprocessed mail-queue row (id 117, confirmation, from
   2025-03-12); the local cron would send it.
 
