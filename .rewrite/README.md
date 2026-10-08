@@ -21,6 +21,7 @@ re-litigating.
 | `03-frontend-vue3.md` | Admin + offer SPA: package-by-package table, step plan |
 | `04-open-questions.md` | What must be answered before (or while) starting |
 | `05-progress.md` | Logbook: what is done, verified, and left to do |
+| `06-koro.md` | KORO: decisions and steps |
 
 ## The 30-second version
 
