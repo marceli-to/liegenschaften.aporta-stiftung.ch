@@ -14,7 +14,7 @@ Ausbaubeschrieb (`.docx`).
   «Kornhaus-/Rötelstrasse», long «Liegenschaften Kornhaus-/Rötelstrasse»,
   city «8006 Zürich» (as on the plans), maps: Google Maps search for
   Kornhausstrasse 48.
-- **Apartments:** the 95 in the sheet. Not the atelier `H2_01` and the
+- **Apartments:** the 96 in the sheet. Not the atelier `H2_01` and the
   commercial unit `H4_GEW` (not in the drawings, no plans). Number as in the
   sheet (`H1_101`), so it is the isometry's `data-id`.
 - **Rents:** not in the sheet; placeholders by size, linear from 1000 (smallest,
@@ -74,6 +74,44 @@ Ausbaubeschrieb (`.docx`).
   identical; apartment export identical to `05cee05` (worktree, 134 rows,
   11 columns); `interact.js` 65/65 (DB dumped and restored).
 
+- 2026-10-08: **step 2, data + media.**
+  - `tools/koro/build.php` (README there): sheet → `database/data/kornhaus-roetelstrasse.json`
+    (estate, 7 floors incl. new «UG», 4 rooms, 7 buildings H1–H7, 96
+    apartments with fixed uuids and placeholder rents 1000–3000); media in
+    `public/assets/media`: 96 × plan PDF, furnished PDF, SVG (cut out of the
+    plan: 310–620 KB each after svgo, 26 MB in all; PDFs 15 MB), and
+    `estates/kornhaus-roetelstrasse/Ausbaubeschrieb.pdf` (3 pages; Word
+    couldn't be scripted, so `textutil` → HTML → Chrome, Helvetica).
+  - `php artisan estate:import {json}`: estate/apartments by uuid, buildings
+    by estate + description, floors/rooms by abbreviation; existing
+    apartments get only plan data, rents/state/tenant stay. Imported locally.
+  - Offer mail: per apartment the plan and, if there, the furnished plan;
+    plus every PDF in `assets/media/estates/{estate}/`. Eglistrasse: same
+    attachments as before.
+  - Tests: 72 (+1: KORO offer mail with both plans and the Ausbaubeschrieb).
+- Verified: import twice → second run changes nothing (full table dump
+  identical, incl. `updated_at`); a rent/state set in between survives a
+  re-import. All 96 apartments are in the drawing (`WB` is the only extra
+  id). Contact sheet of the 96 SVGs in a 600 × 600 box: only the plan, no
+  title, no «Lage» inset, no scale bar; maisonettes show both levels.
+  Rooms and m² cross-checked against the plans' titles (not their file
+  names, which are partly out of date).
+
 ## Left over
 
+- **H7_502:** sheet 124.2 m², its plans 113.1 (upper level) / 111.9 (lower).
+  The import uses the sheet; ask the architects.
+- `apartments.order` is a `tinyint`: Eglistrasse's 134 apartments stop at
+  127 (the last 7 share it; pre-existing). KORO's 96 fit.
+
 - Offer page list: the «Bezug» header sorts by `size_balcony` (pre-existing).
+
+## Where we are (paused 2026-10-08)
+
+Steps 1 and 2 done and pushed; KORO is imported in the local DB. **Next: step 3,
+the estate selector** (`CurrentEstate::key()` from the session on the admin
+domain, header selector next to the user icon, title = `data-estate-name`;
+scope tenants via apartment, offers, collection items, both exports; clear
+picked apartments on switch). Then step 4: rename
+`resources/isometrie/koro/` → `kornhaus-roetelstrasse/`, `iso-*` styles,
+`.env` for the KORO domain, offer mail text by estate.

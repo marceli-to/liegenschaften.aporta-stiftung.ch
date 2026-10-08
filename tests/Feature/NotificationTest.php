@@ -86,6 +86,35 @@ class NotificationTest extends TestCase
         }
     }
 
+    public function testOfferMailWithFurnishedPlansAndEstateDocuments()
+    {
+        // A real KORO apartment: its media are in public/assets/media
+        $data = json_decode(file_get_contents(base_path('database/data/kornhaus-roetelstrasse.json')), true);
+        $uuid = collect($data['apartments'])->firstWhere('number', 'H1_101')['uuid'];
+        config(['estates.current' => 'kornhaus-roetelstrasse']);
+        $this->app->forgetScopedInstances(); // CurrentEstate still holds the setUp request's estate
+        $koro = $this->estate(['domain' => 'kornhaus-roetelstrasse', 'description' => 'Kornhaus-/Rötelstrasse']);
+        $apartment = $this->apartment($this->building($koro), $this->floor($koro), $this->room($koro), ['number' => 'H1_101', 'uuid' => $uuid]);
+        $this->postJson('/api/collection', [
+            'candidates' => [['salutation' => 'Herr', 'firstname' => 'Max', 'name' => 'Muster', 'email' => 'max@example.invalid']],
+            'items' => [$apartment->uuid],
+        ])->assertOk();
+        MailQueue::where('data', 'not like', '%max@example.invalid%')->update(['processed' => 1]);
+
+        $this->sendNext();
+
+        Mail::assertSent(Offer::class, function (Offer $mail) use ($uuid) {
+            $mail->build();
+            $this->assertSame([
+                public_path("assets/media/H1_101-{$uuid}.pdf"),
+                public_path("assets/media/H1_101-{$uuid}-moebliert.pdf"),
+                public_path('assets/media/estates/kornhaus-roetelstrasse/Ausbaubeschrieb.pdf'),
+            ], collect($mail->attachments)->pluck('file')->all());
+
+            return $mail->hasTo('max@example.invalid');
+        });
+    }
+
     public function testOneMailPerRun()
     {
         $this->postJson('/api/user-collection', ['uuid' => $this->offer->items->first()->uuid, 'accepted' => 1, 'parking' => 0, 'comment' => null]);

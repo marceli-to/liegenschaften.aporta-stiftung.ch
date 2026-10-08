@@ -34,12 +34,21 @@ class Offer extends Mailable
                 ->with(['collection' => $this->data])
                 ->markdown('mails.offer');
     
+    // Per apartment its plan, and the furnished one if there is one
     foreach($this->data->items as $item)
     {
-      $mail->attach(
-        public_path() . '/assets/media/' . $item->apartment->number . '-' . $item->apartment->uuid . '.pdf',
-        ['mime' => 'application/pdf']
-      );
+      $plan = public_path() . '/assets/media/' . $item->apartment->number . '-' . $item->apartment->uuid;
+      $mail->attach($plan . '.pdf', ['mime' => 'application/pdf']);
+      if (is_file($plan . '-moebliert.pdf'))
+      {
+        $mail->attach($plan . '-moebliert.pdf', ['mime' => 'application/pdf']);
+      }
+    }
+
+    // The estate's documents (e.g. the Ausbaubeschrieb)
+    foreach(glob(public_path() . '/assets/media/estates/' . $this->data->estate->domain . '/*.pdf') as $file)
+    {
+      $mail->attach($file, ['mime' => 'application/pdf']);
     }
 
     return $mail;
