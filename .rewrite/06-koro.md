@@ -145,7 +145,7 @@ Ausbaubeschrieb (`.docx`).
   file before it writes; a second run changes no byte.
   - Backup of the old files (local, gitignored):
     `.data/backup/eglistrasse-plans-svg-2026-10-08/` (134, byte-identical;
-    also in git before `this commit`).
+    also in git before `3af0a02`).
   - Verified: each plan rendered old vs new (cropped to the plan) at 2 px/pt:
     at most 0.02 % of pixels differ (anti-aliasing of the sub-pixel offset).
     Contact sheet of the 134: same scale, nothing clipped. Admin detail and
