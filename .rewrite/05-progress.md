@@ -127,10 +127,22 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     (neither autoloadable since Laravel 8) + their composer autoload
     entries, both `ExampleTest`s.
 
+- 2026-10-08: **frontend step 1, dead code out.** Every file in
+  `resources/js` that no entry (`app.js`, `collection.js`, `validation.js`)
+  reaches through an import (traced by script, nothing is registered
+  dynamically): `components/files`, `components/images`, `config/tiny.js`,
+  `mixins/DateTime.js`, `Isometrie.Backup.vue`, `FileType`, `Separator`,
+  `Tabs`, `menu/Item`, `menu/Label`, form `Asterisk`/`Radio`/`Required`/
+  `Select`, 8 icons, `collection/components/Input.vue` (34 files).
+  `npm uninstall` of `moment`, `vue-moment`, `vue-upload-component`,
+  `vue2-dropzone`, `vuedraggable`, `raw-loader`, `postcss-loader`, `jquery`.
+  `npm audit`: 69 → 64. `lodash` (only `window._` in `bootstrap.js`) goes
+  with `bootstrap.js` in step 3.
+
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–6 done** (`ab468a6` … `c2cb5cb`, plus two fixes; pushed). The backend
-part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
+**Backend steps 1–6 done** (`ab468a6` … `c2cb5cb`, plus two fixes; pushed).
+**Frontend step 1 done.** Next: **frontend step 2, Vite** (`03` → Order).
 
 - `php artisan test` must stay green through the frontend steps (the API
   tests pin what the Vue 3 admin talks to).
@@ -139,7 +151,7 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
 
 ## Next
 
-1. Frontend steps 1–6 (`03`). Then `/logout` POST-only (adjust `AuthTest::testLogout`).
+1. Frontend steps 2–6 (`03`). Then `/logout` POST-only (adjust `AuthTest::testLogout`).
 2. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
 3. QA on both domains: login, every admin page, create + send a collection
@@ -203,6 +215,10 @@ part of the rework is complete; next is the **frontend** (`03`, steps 1–6).
   from `29638ed`) fails only `ApartmentApiTest::testUpdateValidation` (500);
   with the fix all 64 pass, alone and per class. The suite doesn't touch the
   local MySQL DB and removes Excel's temp files.
+
+- Frontend step 1: `npm ci && npm run production` from the new lockfile
+  still reproduces the committed `public/assets` byte for byte (so nothing
+  removed was in a bundle). `php artisan test` green.
 
 ## Left over / follow-ups
 
