@@ -129,6 +129,15 @@ Ausbaubeschrieb (`.docx`).
   Local data: reset `H1_101` (rent 1234 and reserved, left from step 2's
   re-import check) to the imported values.
 
+- 2026-10-08: **plans on one canvas** (on request: the cut-out SVGs were
+  each as big as their plan, so the views scaled a 30 m² flat as large as
+  a 124 m² one). `build.php` now gives all 96 the same outer `viewBox`
+  (554 × 455.5 pt = the widest and the tallest plan), centred on the plan;
+  the clip is unchanged. Runs on every build (a second run changes no byte).
+  Verified on a contact sheet of the 96 in equal boxes: same scale, nothing
+  clipped. Eglistrasse's SVGs (not ours) also vary in size (291–680 ×
+  263–518); left as they are.
+
 ## Left over
 
 - **H7_502:** sheet 124.2 m², its plans 113.1 (upper level) / 111.9 (lower).

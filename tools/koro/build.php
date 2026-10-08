@@ -162,6 +162,26 @@ foreach ($apartments as $a) {
   }
 }
 
+// One canvas for all plans: the largest plan's width and height, each plan
+// centred on it. All plans are 1:100 in pt, so they keep their size relative
+// to each other when shown in the same box. Only the outer viewBox changes
+// (the inner svg is the plan), so this runs again on every build.
+$svgs = array_map(fn($a) => "$media/{$a['number']}-{$a['uuid']}.svg", $apartments);
+$plan = function(string $file): array {
+  preg_match('/<svg width="([\d.]+)" height="([\d.]+)" x="([\d.-]+)" y="([\d.-]+)"/', file_get_contents($file), $m) or exit("No plan box in $file\n");
+  return array_map('floatval', array_slice($m, 1));
+};
+$boxes = array_map($plan, $svgs);
+$cw = max(array_column($boxes, 0));
+$ch = max(array_column($boxes, 1));
+foreach ($svgs as $i => $file) {
+  [$w, $h, $x, $y] = $boxes[$i];
+  $vb = implode(' ', [round($x + $w / 2 - $cw / 2, 2), round($y + $h / 2 - $ch / 2, 2), $cw, $ch]);
+  $svg = preg_replace('/^(<svg[^>]*?) viewBox="[^"]*"/', "$1 viewBox=\"$vb\"", file_get_contents($file), 1);
+  file_put_contents($file, $svg);
+}
+echo "Plans on one canvas: {$cw} × {$ch} pt\n";
+
 $docs = "$media/estates/kornhaus-roetelstrasse";
 @mkdir($docs, 0755, true);
 copy("$data/Ausbaubeschrieb Basis/Ausbaubeschrieb.pdf", "$docs/Ausbaubeschrieb.pdf");

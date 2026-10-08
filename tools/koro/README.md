@@ -25,7 +25,9 @@ Needs poppler (`pdftocairo`, `pdfunite`), ImageMagick and `npx` (svgo).
   lower first) and `.svg`: the plan cut out of the plain PDF. Every plan sits
   between «Grundriss, M 1:100» and the scale bar / north arrow at fixed
   positions, so the script trims that band (the two corners masked) and
-  clips the page's SVG to it.
+  clips the page's SVG to it. Then all 96 get one canvas (the widest and the
+  tallest plan: 554 × 455.5 pt), each plan centred: they are all 1:100, so
+  in the same box they keep their size relative to each other.
 - The file names of the plans are out of date in places (rooms / m²); the
   sheet and the plans' own titles agree, so the sheet wins.
 - `estate:import` is safe to run again: it updates only plan data (number,
