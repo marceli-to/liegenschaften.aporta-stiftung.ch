@@ -87,12 +87,31 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
     wrong credentials, lockout with seconds, unknown address, password too
     short / not confirmed, missing e-mail, invalid token.
 
+## Where we are (end of session 2026-10-08)
+
+**Backend steps 1–5 done** (`ab468a6` … `bbc5614`, pushed). Next session
+starts with **backend step 6: tests** (`02` → Steps → 6).
+
+- `npm ci && npm run production` (Mix 6, Vue 2) still builds and reproduces
+  the committed `public/assets` byte for byte, so the old frontend can be
+  rebuilt if needed before the Vite step.
+- Verification helpers used so far live in `/tmp/aporta/` (not committed,
+  gone after a reboot): before/after HTTP comparison against a `git worktree`
+  of the previous commit, auth flow with MailHog, Excel export dump. Step 6
+  turns them into real tests.
+
 ## Next
 
-1. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
+1. **Backend step 6: tests** (`02`): cra/oxid `AdminTestCase` (in-memory
+   SQLite; check the 2022 `alter`/`drop` migrations run on SQLite), one
+   test per API resource, public `user-collection` endpoints incl. hash,
+   `Tasks\Notification` with `Mail::fake()`, both exports with
+   `Excel::fake()`, `AuthTest` (cra has one; flow as in the step 5 check).
+   Replace `ExampleTest`. Admin routes need the admin host in requests
+   (`Route::domain`).
+2. Check `SERVER_NAME` and the cron's domain on the server (`04` #1);
    compare the production `migrations` table (`04` #5). Can run in parallel.
-2. Backend steps 1–6 (`02`).
-3. Frontend steps 1–6 (`03`).
+3. Frontend steps 1–6 (`03`). Then `/logout` POST-only.
 4. QA on both domains: login, every admin page, create + send a collection
    (mail queue → mail), open the offer link, reply, both Excel exports.
 5. Deploy (`02` → `.env` changes, both files).
