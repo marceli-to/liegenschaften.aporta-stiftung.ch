@@ -20,7 +20,8 @@ return [
   |--------------------------------------------------------------------------
   |
   | Per estate: the public url (offer links in mails) and the settings for
-  | the admin filters. Keyed by estates.domain.
+  | the admin filters; the exteriors are also the columns of the lists and
+  | the apartment export. Keyed by estates.domain.
   |
   */
 
@@ -45,6 +46,28 @@ return [
 
         // Available exteriors
         'exteriors' => ['terrace' => 'Terrasse', 'patio' => 'Sitzplatz', 'balcony' => 'Balkon'],
+      ],
+    ],
+
+    'kornhaus-roetelstrasse' => [
+
+      'url' => env('ESTATE_KORNHAUS_ROETELSTRASSE_URL', 'https://kornhaus-roetelstrasse.aporta-stiftung.ch'),
+
+      'settings' => [
+
+        // Available apartment states
+        'states' => [1, 2, 3, 5],
+
+        // Available rent filter options
+        'rent_steps' => [
+          'lt:1500' => 'bis 1500',
+          '1500:2000' => '1500 - 2000',
+          '2000:2500' => '2000 - 2500',
+          'gt:2500' => 'ab 2500',
+        ],
+
+        // Available exteriors
+        'exteriors' => ['balcony' => 'Balkon', 'loggia' => 'Loggia', 'patio' => 'Sitzplatz'],
       ],
     ],
   ],

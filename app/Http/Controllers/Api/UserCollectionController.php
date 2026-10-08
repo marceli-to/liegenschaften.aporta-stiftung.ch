@@ -29,7 +29,8 @@ class UserCollectionController extends Controller
       'valid' => $collection->valid(),
       'estate' => [
         'description' => $collection->estate->description_long . ', ' . $collection->estate->city,
-        'maps' => $collection->estate->maps
+        'maps' => $collection->estate->maps,
+        'exteriors' => $collection->estate->setting('exteriors')
       ],
       'items' => $collection->items->map(function($i) {
         return [
@@ -46,6 +47,7 @@ class UserCollectionController extends Controller
           'size_terrace' => $i->apartment->size_terrace,
           'size_patio' => $i->apartment->size_patio,
           'size_balcony' => $i->apartment->size_balcony,
+          'size_loggia' => $i->apartment->size_loggia,
           'available_at' => $i->apartment->available_at ? date('d.m.Y', strtotime($i->apartment->available_at)) : '–'
         ];
       })
@@ -88,6 +90,7 @@ class UserCollectionController extends Controller
       'size_terrace' => $item->apartment->size_terrace,
       'size_patio' => $item->apartment->size_patio,
       'size_balcony' => $item->apartment->size_balcony,
+      'size_loggia' => $item->apartment->size_loggia,
       'shared_exterior' => $item->apartment->shared_exterior,
       'accepted' => $item->accepted,
       'parking' => $item->parking,

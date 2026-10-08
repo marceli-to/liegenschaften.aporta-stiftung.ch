@@ -9,9 +9,12 @@ NProgress.configure({ showBar: false });
 
 handleErrors(router);
 
-// Key of the estate the admin works on (the isometry needs it)
+// The estate the admin works on: key (isometry), name (header), exteriors
+// (list columns)
 const el = document.getElementById('app');
 createApp(App)
   .provide('estateKey', el.dataset.estate)
+  .provide('estateName', el.dataset.estateName)
+  .provide('exteriors', JSON.parse(el.dataset.exteriors))
   .use(router)
   .mount(el);

@@ -17,6 +17,7 @@
 @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-<div id="app" data-estate="{{ app(\App\Support\CurrentEstate::class)->key() }}"></div>
+@php($estate = app(\App\Support\CurrentEstate::class))
+<div id="app" data-estate="{{ $estate->key() }}" data-estate-name="{{ $estate->get()->description }}" data-exteriors="{{ json_encode($estate->setting('exteriors')) }}"></div>
 </body>
 </html>

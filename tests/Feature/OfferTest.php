@@ -68,7 +68,11 @@ class OfferTest extends TestCase
             ->assertOk()
             ->assertJsonPath('uuid', $this->offer->uuid)
             ->assertJsonPath('valid', true)
-            ->assertJsonPath('estate', ['description' => 'Wohnüberbauung Eglistrasse, 8004 Zürich', 'maps' => 'https://maps.example.invalid'])
+            ->assertJsonPath('estate', [
+                'description' => 'Wohnüberbauung Eglistrasse, 8004 Zürich',
+                'maps' => 'https://maps.example.invalid',
+                'exteriors' => ['terrace' => 'Terrasse', 'patio' => 'Sitzplatz', 'balcony' => 'Balkon'],
+            ])
             ->assertJsonCount(3, 'items')
             ->assertJsonPath('items.1.size_balcony', '–')
             ->assertJsonPath('items.1.available_at', '–');
@@ -88,10 +92,27 @@ class OfferTest extends TestCase
             'size_terrace' => '–',
             'size_patio' => '–',
             'size_balcony' => '12',
+            'size_loggia' => '–',
             'available_at' => '01.11.2026',
         ], $response->json('items.0'));
 
         $this->getJson('/api/user-collection/nope')->assertNotFound();
+    }
+
+    public function testAnEstateWithLoggias()
+    {
+        $koro = $this->estate(['domain' => 'kornhaus-roetelstrasse', 'description' => 'Kornhaus-/Rötelstrasse']);
+        $offer = $this->collection($koro, [
+            $this->apartment($this->building($koro), $this->floor($koro), $this->room($koro), ['number' => 'H1_101', 'size_loggia' => '6.3']),
+        ]);
+
+        $list = $this->getJson("/api/user-collection/{$offer->uuid}")
+            ->assertJsonPath('estate.exteriors', ['balcony' => 'Balkon', 'loggia' => 'Loggia', 'patio' => 'Sitzplatz']);
+        $item = $this->getJson("/api/user-collection/{$offer->uuid}/item/{$offer->items[0]->uuid}");
+
+        // Loose: decimals are strings on MySQL, numbers on SQLite
+        $this->assertEquals('6.3', $list->json('items.0.size_loggia'));
+        $this->assertEquals('6.3', $item->json('item.size_loggia'));
     }
 
     public function testShowWithPagination()

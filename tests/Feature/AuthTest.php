@@ -14,6 +14,14 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // The admin page names the current estate
+        $this->estate();
+    }
+
     public function testLoginPageRenders()
     {
         $this->get('/login')->assertOk()->assertSee('Anmelden')->assertSee('Passwort vergessen?');

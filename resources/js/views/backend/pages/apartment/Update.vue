@@ -87,6 +87,10 @@
                       <div class="span-2"><label>Balkon</label></div>
                       <div class="span-2">{{ apartment.size_balcony }} m<sup>2</sup></div>
                     </apartment-row>
+                    <apartment-row v-if="apartment.size_loggia > 0">
+                      <div class="span-2"><label>Loggia</label></div>
+                      <div class="span-2">{{ apartment.size_loggia }} m<sup>2</sup></div>
+                    </apartment-row>
                   </div>
                   <div class="span-6">
                     <isometrie :estate="estateKey" :active="apartment.number" />

@@ -121,21 +121,12 @@
             <icon-sort />
           </a>
         </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Terrasse
-          <a href="" @click.prevent="sort('sortable_size_terrace')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header line-after'">
-          Sitzplatz
-          <a href="" @click.prevent="sort('sortable_size_patio')">
-            <icon-sort />
-          </a>
-        </list-item>
-        <list-item :class="'span-1 list-item-header'">
-          Balkon
-          <a href="" @click.prevent="sort('sortable_size_balcony')">
+        <list-item
+          v-for="(label, key, i) in exteriors"
+          :key="key"
+          :class="['span-1 list-item-header', i < Object.keys(exteriors).length - 1 ? 'line-after' : '']">
+          {{ label }}
+          <a href="" @click.prevent="sort(`sortable_size_${key}`)">
             <icon-sort />
           </a>
         </list-item>
@@ -192,19 +183,9 @@
             {{ apartment.size }} m<sup>2</sup>
           </router-link>
         </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+        <list-item v-for="(label, key) in exteriors" :key="key" :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
           <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
-            {{ apartment.size_terrace }} <span v-if="apartment.size_terrace > 0">m<sup>2</sup></span>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
-            {{ apartment.size_patio }} <span v-if="apartment.size_patio > 0">m<sup>2</sup></span>
-          </router-link>
-        </list-item>
-        <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-          <router-link :to="{name: 'apartment-show', params: { uuid: apartment.uuid, referrer: 'apartments' }}">
-            {{ apartment.size_balcony }} <span v-if="apartment.size_balcony > 0">m<sup>2</sup></span>
+            {{ apartment['size_' + key] }} <span v-if="apartment['size_' + key] > 0">m<sup>2</sup></span>
           </router-link>
         </list-item>
         <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item-state']">
@@ -243,6 +224,9 @@ import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Isometrie from '@/components/ui/misc/Isometrie.vue';
 
 const estateKey = inject('estateKey');
+
+// Columns of the list (key => label)
+const exteriors = inject('exteriors');
 
 // Highlighted in the isometry
 const hovered = ref(null);

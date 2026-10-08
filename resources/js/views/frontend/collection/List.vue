@@ -50,21 +50,12 @@
               <icon-sort />
             </a>
           </list-item>
-          <list-item :class="'span-1 list-item-header line-after'">
-            Terrasse
-            <a href="" @click.prevent="sort('size_terrace')">
-              <icon-sort />
-            </a>
-          </list-item>
-          <list-item :class="'span-1 list-item-header line-after'">
-            Sitzplatz
-            <a href="" @click.prevent="sort('size_patio')">
-              <icon-sort />
-            </a>
-          </list-item>
-          <list-item :class="'span-1 list-item-header line-after'">
-            Balkon
-            <a href="" @click.prevent="sort('size_balcony')">
+          <list-item
+            v-for="(label, key) in exteriors"
+            :key="key"
+            :class="'span-1 list-item-header line-after'">
+            {{ label }}
+            <a href="" @click.prevent="sort(`size_${key}`)">
               <icon-sort />
             </a>
           </list-item>
@@ -106,19 +97,9 @@
               {{ d.size }} m<sup>2</sup>
             </router-link>
           </list-item>
-          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
+          <list-item v-for="(label, key) in exteriors" :key="key" :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
             <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-              {{ d.size_terrace }} <span v-if="d.size_terrace > 0">m<sup>2</sup></span>
-            </router-link>
-          </list-item>
-          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-              {{ d.size_patio }} <span v-if="d.size_patio > 0">m<sup>2</sup></span>
-            </router-link>
-          </list-item>
-          <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item line-after']">
-            <router-link :to="{name: 'collection-show', params: { uuid: uuid, itemUuid: d.uuid }}">
-              {{ d.size_balcony }} <span v-if="d.size_balcony > 0">m<sup>2</sup></span>
+              {{ d['size_' + key] }} <span v-if="d['size_' + key] > 0">m<sup>2</sup></span>
             </router-link>
           </list-item>
           <list-item :class="[index == 0 ? 'is-first' : '', 'span-1 list-item']">
@@ -148,7 +129,7 @@
 </div>
 </template>
 <script setup>
-import { ref, inject, onMounted } from 'vue';
+import { ref, computed, inject, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NProgress from 'nprogress';
 import http from '@/lib/http';
@@ -172,6 +153,9 @@ const hovered = ref(null);
 const uuid = ref(null);
 const data = ref([]);
 const estate = ref({});
+
+// Columns of the list (key => label), the offer's estate
+const exteriors = computed(() => estate.value.exteriors || {});
 const isFetched = ref(false);
 const isValid = ref(false);
 

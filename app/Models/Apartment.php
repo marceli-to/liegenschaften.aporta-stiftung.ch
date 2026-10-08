@@ -22,6 +22,7 @@ class Apartment extends Base
     'size_terrace',
     'size_patio',
     'size_balcony',
+    'size_loggia',
     'shared_exterior',
     'order',
     'publish',
@@ -42,7 +43,8 @@ class Apartment extends Base
     'sortable_size', 
     'sortable_size_terrace', 
     'sortable_size_patio', 
-    'sortable_size_balcony'
+    'sortable_size_balcony',
+    'sortable_size_loggia'
   ];
 
   /**
@@ -174,6 +176,16 @@ class Apartment extends Base
   }
 
   /**
+   * Get the float value of size_loggia for sorting
+   *
+   * @return Float
+   */
+  public function getSortableSizeLoggiaAttribute()
+  {
+    return (float) $this->size_loggia;
+  }
+
+  /**
    * Get the formated size of an apartment
    *
    * @param  string  $value
@@ -213,6 +225,17 @@ class Apartment extends Base
    * @return string
    */
   public function getSizeBalconyAttribute($value)
+  {
+    return $value > 0 ? $value : '–';
+  }
+
+  /**
+   * Get the formated size of an apartment loggia
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getSizeLoggiaAttribute($value)
   {
     return $value > 0 ? $value : '–';
   }

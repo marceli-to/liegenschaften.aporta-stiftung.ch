@@ -33,4 +33,15 @@ class Estate extends Base
   {
     return $this->belongsToMany(Floor::class);
   }
+
+  /**
+   * A setting of this estate (estates.estates.{domain}.settings)
+   *
+   * @param string $name
+   * @return mixed
+   */
+  public function setting($name)
+  {
+    return config('estates.estates.' . $this->domain . '.settings.' . $name);
+  }
 }

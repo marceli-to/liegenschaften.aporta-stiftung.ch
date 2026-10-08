@@ -52,3 +52,28 @@ Ausbaubeschrieb (`.docx`).
    `iso-*` SVGs and the ko/ro layout.
 5. **QA** on both estates (`e2e.js` per estate, screenshots of Eglistrasse
    unchanged).
+
+## Done
+
+- 2026-10-08: **step 1, Loggia + exteriors per estate.**
+  - Migration `size_loggia` (as the other sizes: `decimal(8,1)`, default 0,
+    `'–'` accessor, `sortable_size_loggia`).
+  - `config/estates.php`: `kornhaus-roetelstrasse` (`ESTATE_KORNHAUS_ROETELSTRASSE_URL`,
+    states as Eglistrasse, rent steps 1500/2000/2500, exteriors Balkon, Loggia,
+    Sitzplatz). `Estate::setting()` for an estate that isn't the current one
+    (the offer's).
+  - The exteriors are now the columns: admin apartment list, offer create
+    and edit, offer page list (`v-for` over the setting), and the apartment
+    export (bold header range from the column count). The admin gets them
+    from `#app` (`data-exteriors`, with `data-estate-name` for step 3), the
+    offer page from `api/user-collection` (`estate.exteriors`). Detail views
+    (admin show/edit, offer detail): a «Loggia» row when > 0.
+  - Tests: 71 (+2: an estate with loggias, export and offer API). `AuthTest`
+    now creates an estate (the admin page names it).
+- Verified: Eglistrasse screenshots (14) pixel-identical to step 6, text
+  identical; apartment export identical to `05cee05` (worktree, 134 rows,
+  11 columns); `interact.js` 65/65 (DB dumped and restored).
+
+## Left over
+
+- Offer page list: the «Bezug» header sorts by `size_balcony` (pre-existing).
