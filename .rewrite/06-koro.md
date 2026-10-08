@@ -190,19 +190,35 @@ Ausbaubeschrieb (`.docx`).
   highlighted building and no photo block; reply, confirmation, assign,
   finalize, exports with 96 rows. Eglistrasse: 2 PDFs, 4 photos, as before.
 
-## Left over
+## Open before launch (others decide)
 
+- **Rents:** all 96 are placeholders (1000–3000 gross by size); set them in
+  the admin before the first offer.
+- **Mail wording:** «unserer Liegenschaft «Kornhaus-/Rötelstrasse»» is a
+  placeholder (`mail_building` in `config/estates.php`).
 - **H7_502:** sheet 124.2 m², its plans 113.1 (upper level) / 111.9 (lower).
   The import uses the sheet; ask the architects.
+- **Photos:** none for KORO; the offer page's «Beispielbilder» is hidden
+  until `photos` is filled.
+- **Ausbaubeschrieb PDF:** made from the docx via HTML + Chrome (Word
+  couldn't be scripted); have someone check it against the Word file.
+
+## Left over
+
 - `apartments.order` is a `tinyint`: Eglistrasse's 134 apartments stop at
   127 (the last 7 share it; pre-existing). KORO's 96 fit.
 
 - Offer page list: the «Bezug» header sorts by `size_balcony` (pre-existing).
 
-## Where we are (2026-10-08)
+## Where we are (end of session 2026-10-08)
 
-Steps 1–4 done and pushed; KORO works locally end to end on its own `.test`
-domain. **Next: step 5, QA**: most of it ran with step 4 (`e2e.js` on both
-estates, Eglistrasse screenshots). Left: KORO screenshots of every admin view
-and the offer pages (mobile too), the user's look at the KORO pages; then the
-server checks and the deploy (`05` → Next).
+Steps 1–4 done and pushed (last `d7fe66a`); KORO works locally end to end
+on its own `.test` domain. Also done on request: the estate choice moved into
+the title dropdown (the other estate, light blue), and both estates' floor
+plan SVGs sit on one canvas per estate (true relative size; Eglistrasse's
+originals backed up in `.data/backup/`).
+
+**Next: step 5, QA**: most of it ran with step 4 (`e2e.js` on both estates,
+Eglistrasse screenshots). Left: KORO screenshots of every admin view and the
+offer pages (desktop + mobile) for the user's review. Then «Open before
+launch» above, the server checks and the deploy (`05` → Next).

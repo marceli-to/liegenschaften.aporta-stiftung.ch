@@ -218,28 +218,36 @@ Branch: `rework/laravel-13-vue-3` (as cra/oxid), created 2026-10-08 from `3cfd57
 
 ## Where we are (end of session 2026-10-08)
 
-**Backend steps 1–6 done.** **Frontend steps 1–6 done** (Vite + Vue 3,
-Isometrie data-driven, pushed). **End-to-end QA done locally.** The
-server checks and the deploy wait until KORO is ready too (decided
-2026-10-08): next is KORO.
+**Rework done** (backend 1–6, frontend 1–6, end-to-end QA, all local).
+**KORO steps 1–4 done** (`06-koro.md`): KORO runs locally end to end on its
+own `.test` domain, the admin switches estates in the title dropdown, both
+estates' floor plans sit on one canvas each. Everything is committed and
+pushed (`d7fe66a`). Nothing has run on production yet.
 
-- `php artisan test` (69) stays green; it runs without a Vite build
+- `php artisan test` (83) stays green; it runs without a Vite build
   (`withoutVite()` in `TestCase`).
 - `npm ci && npm run build` reproduces `public/build` (hashes identical on
   rebuild). Dev: `npm run dev` serves HTTPS on the `.test` host (Herd
-  cert), both domains work.
+  cert), all three domains work.
 - QA scripts: `.rewrite/tools/qa/` (README there; screenshots, styles,
-  65 interaction checks, isometry checks, fixtures).
+  65 interaction checks, isometry checks, `e2e.js [estate]`, fixtures).
 
 ## Next
 
-1. KORO (estate switcher, its isometry styles/layout, scoping by estate).
-2. With KORO ready: check `SERVER_NAME` and the cron's domain on the server (`04` #1);
-   compare the production `migrations` table (`04` #5). Can run in parallel.
-3. Deploy (`02` → `.env` changes, both files). The server needs no Node:
+1. KORO step 5, QA: screenshots of every KORO admin view and the offer pages
+   (desktop + mobile) for the user to review. `e2e.js` already passes for
+   both estates.
+2. Open content for KORO (others decide, see `06-koro.md` → Open before
+   launch): rents, mail wording, H7_502's area, photos, Ausbaubeschrieb PDF.
+3. Server: check `SERVER_NAME` and the cron's domain (`04` #1); compare the
+   production `migrations` table (`04` #5); the KORO domain (DNS, vhost,
+   certificate) with the host.
+4. Deploy (`02` → `.env` changes, now three domains incl. KORO; `migrate`,
+   `estate:import`, config/route cache per domain). The server needs no Node:
    `public/build` is committed. Before: `select role, count(*) from users`
    on production; only `admin` and `editor` get into the admin now
-   (locally 7 admins, 1 editor).
+   (locally 7 admins, 1 editor). After: smoke test on production (login,
+   session cookie, one real offer mail per estate).
 
 ## Verified
 
