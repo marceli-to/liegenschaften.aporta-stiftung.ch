@@ -129,11 +129,16 @@ Apply to **both** `.env` files (`.env` and `.env.eglistrasse.aporta-stiftung.ch`
   anything; `CACHE_DRIVER` is not read anymore (fallback is the same `file`).
 - Remove `BROADCAST_DRIVER`, `PUSHER_*`, `MIX_*`, unused `REDIS_*`, `AWS_*`.
 - KORO (`06-koro.md` step 4): a third domain, `kornhaus-roetelstrasse.aporta-stiftung.ch`
-  (DNS, vhost, certificate by the host). Its `.env.kornhaus-roetelstrasse.aporta-stiftung.ch`
-  as Eglistrasse's, with `ESTATE_DOMAIN_KEY=kornhaus-roetelstrasse`, its own
-  `APP_URL`, `SANCTUM_STATEFUL_DOMAINS`, `APORTA_DOMAIN`; storage folder
-  `storage/kornhaus-roetelstrasse_aporta-stiftung_ch` (`php artisan domain:add`
-  makes both); `config:cache` / `route:cache --domain=` for it too.
+  (DNS, vhost, certificate by the host; set up 2026-11-09, same `public`
+  folder). Its `.env.kornhaus-roetelstrasse.aporta-stiftung.ch` is a copy of
+  Eglistrasse's with `ESTATE_DOMAIN_KEY=kornhaus-roetelstrasse` and its own
+  `APP_URL` (the public pages take the estate from the offer, mail goes out
+  under the admin's `.env`, so nothing else matters). Storage folder
+  `storage/kornhaus-roetelstrasse_aporta-stiftung_ch` with `app/public`,
+  `framework/{cache/data,testing,sessions,views}`, `logs`, made by hand:
+  `config/domain.php` is gone (2026-11-09; only the `domain:*` commands read
+  it, the env file and storage folder are found by hostname), so no
+  `domain:add`. `config:cache` / `route:cache --domain=` for it too.
   `ESTATE_KORNHAUS_ROETELSTRASSE_URL` is optional in every `.env` (default the
   production URL). Then `php artisan migrate` (`size_loggia`) and
   `php artisan estate:import database/data/kornhaus-roetelstrasse.json`.

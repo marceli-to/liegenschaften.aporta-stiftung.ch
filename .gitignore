@@ -17,6 +17,7 @@ INSTALL.TXT
 
 # tenants storage
 /storage/eglistrasse*
+/storage/kornhaus*
 # architect source files
 /.data
 
